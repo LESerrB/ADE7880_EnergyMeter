@@ -1,0 +1,78 @@
+\documentclass[letterpaper,12pt,oneside]{book}
+\usepackage[top=1in, left=1.25in, right=1.25in, bottom=1in]{geometry}
+\usepackage{bachelorstitlepageUNAM}
+
+\author{Luis Esteban Serrano Bermúdez}
+\title{}
+\faculty{Facultad de Ingeniería}
+\degree{Ingeniero en Computación}
+\supervisor{Dr. ... Tutor}
+\cityandyear{Ciudad Universitaria, Cd. Mx., 2020}
+\logouni{Escudo-UNAM}
+\logofac{Escudo-FING}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot,es-tabla]{babel}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+\graphicspath{{./figs/}}
+\usepackage{setspace}
+
+\begin{document}
+	\frontmatter
+	\maketitle
+	\chapter*{}
+
+	\begin{flushright}%
+	  \emph{Dedicatoria ...}
+	  \thispagestyle{empty}
+	\end{flushright}
+
+	\chapter{Agradecimientos}
+	\spacing{1.5}
+
+	\chapter{Resumen}
+
+	\tableofcontents
+	\listoffigures
+
+	\chapter{Prólogo}
+	    
+	\mainmatter
+
+	\chapter{Introducción}
+		
+		\section{Computadora}
+			Una computadora esta conformada por hardware y software. La parte de Hardware consta de 4 componentes: el procesador, que funciona como el cerebro; la unidad de entrada, por la cual los programas y los datos son ingresados; la unidad de salida por donde son presentados los los resultados y la memoria que es en donde se almacena el software y los datos.
+
+			\subsection{Procesador}
+				El procesador, tambien llamada como la Unidad Central de Procesamiento se puede clasificar en tres partes:
+				
+				\begin{itemize}
+					\item \textbf{Registros}: Es una locación de almacenamiento dentro de la CPU en la cual se mantienem los datos y las direcciones de memoria durante la ejecución de una instrucción. Accesar a los registros de datos es más rápido que acceder a los datos en la memoria externa. Estos registros varían dependiendo del modelo del procesador.
+
+					\item \textbf{Unidad Lógica Aritmética}: Es la calculadora numérica y evaluadora lógica de operaciones. Aquí se reciben los datos provenientes de la memoria principal o de los registros, realiza una operación lógica y si es necesario reescribe el resultado de vuelta al registro o memoria.
+
+					\item \textbf{Unidad de Control}: Contiene las instrucciones lógicas del hardware, esta se encarga de decodificar y monitorear la ejecución de las instrucciones. Tambien funciona como árbitro de varios de los servicios del CPU, los cuiales se encuentran sincronizados por un reloj de sistema.
+				\end{itemize}
+	
+	\section{Microprocesador}
+		El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU.
+
+		Los microprocesadores vienen en diferentes presentaciones, 4-Bits, 8-Bits, 16-bits, 32-Bits e incluso en 64-Bits aunque estos últimos no son demasiado comunes como los anteriores. El número de bits corresponde al número de digitos binarios que el microprocesador puede manipular en las operaciones.
+
+		El acceso de la memoria principal toma mucho más tiempo que el tiempo de reloj disponible por el CPU, por ello es que los microprocesadores de 32 y 64 Bits poseen una textit{memoria caché} de alta velocidad
+
+	\section{Firmware}
+
+	\chapter{Resultados}
+
+	\chapter{Conclusiones}
+
+	%\bibliographystyle{humannat}
+	%\bibliography{references}
+
+	\backmatter%@sglvgdor
+\end{document}
