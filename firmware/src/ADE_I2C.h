@@ -73,7 +73,18 @@ extern "C" {
 // Section: Type Definitions
 // *****************************************************************************
 // *****************************************************************************
-
+    
+/* I2C Address */
+#define RTCC_SLAVE_ADDRESS              0xDE
+#define ADE7880_SLAVE_ADDRESS           0x70
+/* ADE7880 Registers */
+#define CONFIG2                         0xEC01
+#define HSDC_CFG                        0xE706
+#define CONFIG                          0xE618
+#define RUN                             0xE228
+#define LOCK_RAM1                       0xE7FE
+#define LOCK_RAM2                       0xE7E3
+    
 // *****************************************************************************
 /* Application states
 
@@ -91,7 +102,19 @@ typedef enum{
 	ADE_I2C_STATE_SERVICE_TASKS,
 
 	/* TODO: Define states used by the application state machine. */
-    
+    ADE_I2C_STATE_SERVICE_IDLE,
+    ADE_I2C_STATE_SERVICE_TEST0,
+    ADE_I2C_STATE_SERVICE_TEST1,
+    ADE_I2C_STATE_SERVICE_TEST2,
+    ADE_I2C_STATE_SERVICE_TEST3,
+    ADE_I2C_STATE_SERVICE_TEST4,
+    ADE_I2C_STATE_SERVICE_TEST5,
+    ADE7880_STATE_SERVICE_TEST6,
+    ADE7880_STATE_SERVICE_TEST7,
+    ADE7880_STATE_SERVICE_TEST8,
+    ADE7880_STATE_SERVICE_TEST9,
+    ADE7880_STATE_SERVICE_TEST10,
+    ADE7880_STATE_SERVICE_TEST11,
 }ADE_I2C_STATES;
 
 // *****************************************************************************

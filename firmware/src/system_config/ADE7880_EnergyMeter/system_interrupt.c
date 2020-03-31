@@ -96,6 +96,11 @@ void __ISR(_I2C2_BUS_VECTOR, ipl7AUTO) _IntHandlerDrvI2CErrorInstance0(void)
 
  
  
-/*******************************************************************************
+
+void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
+{
+    DRV_TMR_Tasks(sysObj.drvTmr0);
+}
+ /*******************************************************************************
  End of File
 */
