@@ -137,10 +137,6 @@ static DRV_I2C_BUFFER_EVENT I2C_WriteReg_x8(WORD reg_address, BYTE reg_dat){
             
             if(eventWR == DRV_I2C_BUFFER_EVENT_COMPLETE){
                 FailsCount = 0;
-                delayH = SYS_TMR_DelayMS(1);
-                
-                while(!SYS_TMR_DelayStatusGet(delayH))
-                    
                 ade_i2cData.I2CWR_x8_state = I2CW8_STATE_SEND_CMD;
             }
             else if(eventWR == DRV_I2C_BUFFER_EVENT_PENDING){
@@ -193,11 +189,7 @@ static DRV_I2C_BUFFER_EVENT I2C_WriteReg_x16(WORD reg_address, WORD reg_dat){
                                                );
             
             if(eventWR == DRV_I2C_BUFFER_EVENT_COMPLETE){
-                FailsCount = 0;
-                delayH = SYS_TMR_DelayMS(1);
-                
-                while(!SYS_TMR_DelayStatusGet(delayH))
-                    
+                FailsCount = 0;    
                 ade_i2cData.I2CWR_x16_state = I2CW16_STATE_SEND_CMD;
             }
             else if(eventWR == DRV_I2C_BUFFER_EVENT_PENDING){
@@ -252,11 +244,7 @@ static DRV_I2C_BUFFER_EVENT I2C_WriteReg_x32(WORD reg_address, DWORD reg_dat){
                                                );
             
             if(eventWR == DRV_I2C_BUFFER_EVENT_COMPLETE){
-                FailsCount = 0;
-                delayH = SYS_TMR_DelayMS(1);
-                
-                while(!SYS_TMR_DelayStatusGet(delayH))
-                    
+                FailsCount = 0;    
                 ade_i2cData.I2CWR_x32_state = I2CW32_STATE_SEND_CMD;
             }
             else if(eventWR == DRV_I2C_BUFFER_EVENT_PENDING){
@@ -281,16 +269,15 @@ static DRV_I2C_BUFFER_EVENT I2C_ReadReg_x8(WORD reg_address){
     switch(ade_i2cData.I2CRR_x8_state){        
         case I2CR8_STATE_SEND_CMD:{
             I2C_TxBuffer[0] = reg_address;
-//            RegAddress.Val = reg_address;
+            RegAddress.Val = reg_address;
             /*----- Address -----*/
-//            I2C_TxBuffer[0] = RegAddress.byte.HB;
-//            I2C_TxBuffer[1] = RegAddress.byte.LB;
+            I2C_TxBuffer[0] = RegAddress.byte.HB;
+            I2C_TxBuffer[1] = RegAddress.byte.LB;
             
             if (DRV_I2C_Status(sysObj.drvI2C0) == SYS_STATUS_READY){
                 ade_i2cData.I2C_BuffHandle = DRV_I2C_TransmitThenReceive(
-                                                        ade_i2cData.I2C_Handle, // Handle for ADE7880
-                                                        RTCC_SLAVE_ADDRESS,                                
-                                                        //ADE7880_SLAVE_ADDRESS,  // Address of the device
+                                                        ade_i2cData.I2C_Handle, // Handle for ADE7880                  
+                                                        ADE7880_SLAVE_ADDRESS,  // Address of the device
                                                         &I2C_TxBuffer[0],       // Tx Buffer
                                                         1,                      // Register size
                                                         &I2C_RxBuffer[0],       // Rx Buffer
@@ -309,10 +296,6 @@ static DRV_I2C_BUFFER_EVENT I2C_ReadReg_x8(WORD reg_address){
             
             if(RRevent == DRV_I2C_BUFFER_EVENT_COMPLETE){
                 FailsCount = 0;
-                delayH = SYS_TMR_DelayMS(1);
-                
-                while(!SYS_TMR_DelayStatusGet(delayH))
-                
                 ade_i2cData.I2CRR_x8_state = I2CR8_STATE_SEND_CMD;
             }
             else if(RRevent == DRV_I2C_BUFFER_EVENT_PENDING){
@@ -363,10 +346,6 @@ static DRV_I2C_BUFFER_EVENT I2C_ReadReg_x16(WORD reg_address){
             
             if(RRevent == DRV_I2C_BUFFER_EVENT_COMPLETE){
                 FailsCount = 0;
-                delayH = SYS_TMR_DelayMS(1);
-                
-                while(!SYS_TMR_DelayStatusGet(delayH))
-                
                 ade_i2cData.I2CRR_x16_state = I2CR16_STATE_SEND_CMD;
             }
             else if(RRevent == DRV_I2C_BUFFER_EVENT_PENDING){
@@ -417,10 +396,6 @@ static DRV_I2C_BUFFER_EVENT I2C_ReadReg_x32(WORD reg_address){
             
             if(RRevent == DRV_I2C_BUFFER_EVENT_COMPLETE){
                 FailsCount = 0;
-                delayH = SYS_TMR_DelayMS(1);
-                
-                while(!SYS_TMR_DelayStatusGet(delayH))
-                
                 ade_i2cData.I2CRR_x32_state = I2CR32_STATE_SEND_CMD;
             }
             else if(RRevent == DRV_I2C_BUFFER_EVENT_PENDING){
@@ -500,22 +475,46 @@ void ADE_I2C_Tasks(void){
         }break;
 
         case ADE_I2C_STATE_SERVICE_TASKS:{
-            /* Lock I2C as active serial port */
-            event = I2C_WriteReg_x8(CONFIG2, 0x02);
+            /******************************************************************/
+            I2C_TxBuffer[0] = 0xEC;
+            I2C_TxBuffer[1] = 0x01;
+            I2C_TxBuffer[2] = 0x02;            
             
-            if(event == DRV_I2C_BUFFER_EVENT_COMPLETE){
+            if(DRV_I2C_Status(sysObj.drvI2C0) == SYS_STATUS_READY){
+                ade_i2cData.I2C_BuffHandle = DRV_I2C_Transmit(
+                                                        ade_i2cData.I2C_Handle,
+                                                        ADE7880_SLAVE_ADDRESS,
+                                                        &I2C_TxBuffer[0],
+                                                        3,
+                                                        NULL
+                                                             );
                 ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST0;
             }
-            else if(event == DRV_I2C_SEND_RESTART_EVENT){
-                DRV_I2C_Close(ade_i2cData.I2C_Handle);
-                ade_i2cData.state = ADE_I2C_STATE_INIT;
-            }
+            /******************************************************************/
         }break;
 
         /* TODO: implement your application state machine.*/
         case ADE_I2C_STATE_SERVICE_TEST0:{
+            event = DRV_I2C_TransferStatusGet(
+                                              ade_i2cData.I2C_Handle,
+                                              ade_i2cData.I2C_BuffHandle
+                                               );
+            
+            if(event == DRV_I2C_BUFFER_EVENT_COMPLETE){
+                delayH = SYS_TMR_DelayMS(1);                    
+                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST1;
+            }
+        }break;
+        
+        case ADE_I2C_STATE_SERVICE_TEST1:{
+            if(SYS_TMR_DelayStatusGet(delayH))
+                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST2;
+        }break;
+        
+        case ADE_I2C_STATE_SERVICE_TEST2:{
             LED_1On();
             LED_2Off();
+            ade_i2cData.state = ADE_I2C_STATE_SERVICE_TASKS;
         }break;
         
         /* The default state should never be executed. */
