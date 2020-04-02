@@ -66,6 +66,14 @@
 		El acceso de la memoria principal toma mucho más tiempo que el tiempo de reloj disponible por el CPU, por ello es que los microprocesadores de 32 y 64 Bits poseen una textit{memoria caché} de alta velocidad
 
 	\section{Firmware}
+		\subsection{HSDC}
+			En un principio el sistema medidor de energía estaba pensado para realizar la comunicación entre el microprocesador y el medidor ADE7880 con interfaz SPI sin embargo al momento de realizar las primeras pruebas, los registros correspondientes a los canales de medición de voltaje y corriente pasado un tiempo los valores que se recuperan de los registros pierden coherencia lo que hace que los resultados sean inutiles para la cantidad de valores que se desean medir.
+
+			Debido a que para este proyecto es necesario el recopilar una gran cantidad de muestras a alta velocidad la documentación del Circuito Integrado ADE7880 recomienda, para la lectura de estos registros en específico, utilizar una interfaz propia de Analog Devices para este circuito High Speed Data Capture (HSDC) por lo que es necesario configurar el microprocesador de manera que se pueda usar la comunicación I2C como interfaz serial principal y la comunicación HSDC ya que este tipo de comunicación necesita interactuar con un dispositivo esclavo SPI que en este caso será el PIC32MZ que recibirá toda la información de los registros.
+
+			Para configurar el puerto HSDC se debe escribir primero al registro HSDC\_CFG [0xE706] a traves del puerto I2C la configuración con la que se van a estar enviando los datos a traves del puerto HSDC. Ya que se configura el puerto se habilita colocando el bit 6 (HSDCEN) en el registro CONFIG [0xE618] a 1, con esto se activa la comunicación, para terminar la comunicación se debe colocar a 0.
+
+			La configuracion que se ha decidido usar es tener el relog a 8[MHz] con la transmision de registros en paquetes de 32-bits, no se agrega una brecha de 7 ciclos de reloj entre transmisiones y unicamente se transmitira el contenido de los registros de voltaje y corriente: IAWV, VAWV, IBWV, VBWV, ICWV, VCWV, e INWV. lo que permite que se realice la comunicación de manera más rápida. El pin de selccion de esclavo (SS ó Chip Select) se mantiene como activo en bajo.
 
 	\chapter{Resultados}
 
