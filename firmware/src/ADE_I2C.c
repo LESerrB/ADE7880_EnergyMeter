@@ -104,23 +104,30 @@ int FailsCount = 0;
 /* TODO:  Add any necessary local functions.
 */
 
-static DRV_I2C_BUFFER_EVENT I2C_WriteReg_x8(WORD reg_address, BYTE reg_dat){
+static DRV_I2C_BUFFER_EVENT I2C_WriteReg_x8(uint16_t dev_address, WORD reg_address, BYTE reg_dat){
     DRV_I2C_BUFFER_EVENT eventWR = DRV_I2C_BUFFER_EVENT_PENDING;
     WORD_VAL RegAddress;
         
     switch(ade_i2cData.I2CWR_x8_state){
         case I2CW8_STATE_SEND_CMD:{
             RegAddress.Val = reg_address;
-            /*----- Address -----*/
-            I2C_TxBuffer[0] = RegAddress.byte.HB;
-            I2C_TxBuffer[1] = RegAddress.byte.LB;
-            /*----- Data -----*/
-            I2C_TxBuffer[2] = reg_dat;
             
+            /*----- Register Address -----*/
+            if(dev_address == RTCC_SLAVE_ADDRESS){
+                I2C_TxBuffer[0] = RegAddress.byte.LB;
+            }
+            else if(dev_address == ADE7880_SLAVE_ADDRESS){
+                I2C_TxBuffer[0] = RegAddress.byte.HB;
+                I2C_TxBuffer[1] = RegAddress.byte.LB;
+            }
+            
+            /*----- Register Data -----*/
+            I2C_TxBuffer[2] = reg_dat;
+                        
             if(DRV_I2C_Status(sysObj.drvI2C0) == SYS_STATUS_READY){
                 ade_i2cData.I2C_BuffHandle = DRV_I2C_Transmit(
                                                         ade_i2cData.I2C_Handle,
-                                                        ADE7880_SLAVE_ADDRESS,
+                                                        dev_address,
                                                         &I2C_TxBuffer[0],
                                                         3,
                                                         NULL
@@ -262,22 +269,26 @@ static DRV_I2C_BUFFER_EVENT I2C_WriteReg_x32(WORD reg_address, DWORD reg_dat){
     return eventWR;
 }
 
-static DRV_I2C_BUFFER_EVENT I2C_ReadReg_x8(WORD reg_address){    
+static DRV_I2C_BUFFER_EVENT I2C_ReadReg_x8(uint16_t dev_address, WORD reg_address){    
     DRV_I2C_BUFFER_EVENT RRevent = DRV_I2C_BUFFER_EVENT_PENDING;
     WORD_VAL RegAddress;
     
     switch(ade_i2cData.I2CRR_x8_state){        
         case I2CR8_STATE_SEND_CMD:{
-            I2C_TxBuffer[0] = reg_address;
             RegAddress.Val = reg_address;
-            /*----- Address -----*/
-            I2C_TxBuffer[0] = RegAddress.byte.HB;
-            I2C_TxBuffer[1] = RegAddress.byte.LB;
+            /*----- Register Address -----*/
+            if(dev_address == RTCC_SLAVE_ADDRESS){
+                I2C_TxBuffer[0] = RegAddress.byte.LB;
+            }
+            else if(dev_address == ADE7880_SLAVE_ADDRESS){
+                I2C_TxBuffer[0] = RegAddress.byte.HB;
+                I2C_TxBuffer[1] = RegAddress.byte.LB;
+            }
             
             if (DRV_I2C_Status(sysObj.drvI2C0) == SYS_STATUS_READY){
                 ade_i2cData.I2C_BuffHandle = DRV_I2C_TransmitThenReceive(
                                                         ade_i2cData.I2C_Handle, // Handle for ADE7880                  
-                                                        ADE7880_SLAVE_ADDRESS,  // Address of the device
+                                                        dev_address,            // Address of the device
                                                         &I2C_TxBuffer[0],       // Tx Buffer
                                                         1,                      // Register size
                                                         &I2C_RxBuffer[0],       // Rx Buffer
