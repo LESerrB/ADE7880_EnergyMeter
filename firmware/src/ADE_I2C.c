@@ -486,35 +486,16 @@ void ADE_I2C_Tasks(void){
         }break;
 
         case ADE_I2C_STATE_SERVICE_TASKS:{
-            /******************************************************************/
-            I2C_TxBuffer[0] = 0xEC;
-            I2C_TxBuffer[1] = 0x01;
-            I2C_TxBuffer[2] = 0x02;            
+            if(I2C_WriteReg_x8(RTCC_SLAVE_ADDRESS, 0x00, 0x12) == DRV_I2C_BUFFER_EVENT_COMPLETE)
             
-            if(DRV_I2C_Status(sysObj.drvI2C0) == SYS_STATUS_READY){
-                ade_i2cData.I2C_BuffHandle = DRV_I2C_Transmit(
-                                                        ade_i2cData.I2C_Handle,
-                                                        ADE7880_SLAVE_ADDRESS,
-                                                        &I2C_TxBuffer[0],
-                                                        3,
-                                                        NULL
-                                                             );
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST0;
-            }
             /******************************************************************/
+            ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST0;
         }break;
 
         /* TODO: implement your application state machine.*/
         case ADE_I2C_STATE_SERVICE_TEST0:{
-            event = DRV_I2C_TransferStatusGet(
-                                              ade_i2cData.I2C_Handle,
-                                              ade_i2cData.I2C_BuffHandle
-                                               );
-            
-            if(event == DRV_I2C_BUFFER_EVENT_COMPLETE){
-                delayH = SYS_TMR_DelayMS(1);                    
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST1;
-            }
+            delayH = SYS_TMR_DelayMS(1);
+            ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST1;
         }break;
         
         case ADE_I2C_STATE_SERVICE_TEST1:{
@@ -525,7 +506,24 @@ void ADE_I2C_Tasks(void){
         case ADE_I2C_STATE_SERVICE_TEST2:{
             LED_1On();
             LED_2Off();
-            ade_i2cData.state = ADE_I2C_STATE_SERVICE_TASKS;
+            ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST3;
+        }break;
+        
+        case ADE_I2C_STATE_SERVICE_TEST3:{
+//            LED_2Toggle();
+            if(I2C_WriteReg_x8(ADE7880_SLAVE_ADDRESS, HSDC_CFG, 0x28)
+                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
+                delayH = SYS_TMR_DelayMS(1);
+                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST4;
+            }
+        }break;
+        
+        case ADE_I2C_STATE_SERVICE_TEST4:{
+            if(SYS_TMR_DelayStatusGet(delayH)){
+                LED_1Off();
+                LED_2Off();
+//                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TASKS;
+            }
         }break;
         
         /* The default state should never be executed. */

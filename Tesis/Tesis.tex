@@ -43,6 +43,9 @@
 
 	\mainmatter
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTRODUCCIÓN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Introducción}
 		
 		\section{Computadora}
@@ -59,25 +62,74 @@
 					\item \textbf{Unidad de Control}: Contiene las instrucciones lógicas del hardware, esta se encarga de decodificar y monitorear la ejecución de las instrucciones. Tambien funciona como árbitro de varios de los servicios del CPU, los cuiales se encuentran sincronizados por un reloj de sistema.
 				\end{itemize}
 	
-	\section{Microprocesador}
-		El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU.
+		\section{Microprocesador}
+			El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU.
 
-		Los microprocesadores vienen en diferentes presentaciones, 4-Bits, 8-Bits, 16-bits, 32-Bits e incluso en 64-Bits aunque estos últimos no son demasiado comunes como los anteriores. El número de bits corresponde al número de digitos binarios que el microprocesador puede manipular en las operaciones.
+			Los microprocesadores vienen en diferentes presentaciones, 4-Bits, 8-Bits, 16-bits, 32-Bits e incluso en 64-Bits aunque estos últimos no son demasiado comunes como los anteriores. El número de bits corresponde al número de digitos binarios que el microprocesador puede manipular en las operaciones.
 
-		El acceso de la memoria principal toma mucho más tiempo que el tiempo de reloj disponible por el CPU, por ello es que los microprocesadores de 32 y 64 Bits poseen una textit{memoria caché} de alta velocidad
+			El acceso de la memoria principal toma mucho más tiempo que el tiempo de reloj disponible por el CPU, por ello es que los microprocesadores de 32 y 64 Bits poseen una textit{memoria caché} de alta velocidad.
 
+		\section{Medidor de Energía ADE7880}
+			Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el Circuito Integrado.
+
+			\subsection{Interfaces de Comunicación}
+				El ADE7880 posee 3 puertos de comunicación serial SPI, I$^2$C Y HSDC, sin embargo por la configuración de los pines solo se pueden usar 2 tipos de configuraciones, una utilizando el puerto SPI únicamente y la segunda es usando los puertos I$^2$C Y HSDC.
+
+				Se incluyen un conjunto de 3 registros que permiten verificar la comunicación con el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar}. Los regsitros LAST\_OP (Address 0xEA01), LAST\_ADD (Address 0xE9FE) and LAST\_RWDATA se encargan de almacenar los datos, la dirección de registro y la naturaleza del acceso al registro (Lectura/Escritura) de la última comunicación exitosa respectivamente. El registro LAST\_RWDATA tiene 3 diferentes direcciones dependiendo de la longitud del registro de la última comunicación.
+
+				\begin{table}[h]
+					\begin{tabular}{ l | c }
+						\textbf{Tipo de comunicación} & \textbf{Dirección de registro} \\
+						\hline
+						Lectura/ Escritura de 8-Bit & 0xE7FD \\
+						Lectura/ Escritura de 16-Bit & 0xE9FF \\
+						Lectura/ Escritura de 32-Bit & 0xE5FF \\
+					\end{tabular}
+					\caption{Direcciones de los registros de LAST\_RWDATA}
+				\end{table}
+
+				Después de cada comunicación exitosa los registros se actualizan con la información de la operación, 0xCA si fue escritura y 0x35 si es escritura y el dato que se leyó o escribió. Las operciones no completadas no se reflejan en estos registros asi como cuando se leen estos registros.
+
+				\subsubsection{SPI (Serial Peripheral Interface)}
+					El SPI de este CI siempre es esclavo en la comunicación y consiste en 4 pines de comunicación SCLK, MOSI, MISO Y SSA.
+					El reloj para la transferencia de datos debe aplicarse al pin SCLK y todas las transferencias de datos se sincronizan con este reloj. El intercambio de información entrante en el CI se realiza en el pin MOSI en los flancos descendentes del reloj serial y el CI lo muestrea en los flancos ascendentes del reloj. Por el contrario la información saliente del CI se transfiere por el pin MISO en los flancos descendentes del reloj serial y el dispositivo maestro muestrea la información en los flancos ascendentes. El bit más significante de la palabra es intercambiado a la entrada. La másima frecuencia del reloj serial soportada por esta interfaz es de 2.5[MHz], el pin MISO se mantiene en alta impedancia mientras no hay intercambio de información.
+
+					EL pin $\overline{SS}$ es utilizado para seleccionar entra más de un dispositivo si es que los hay. Para poder utilizar el dispositivo y realizar la comunicación entre ete y el dispositivo maestro este pin debe llevarse a un voltaje lógico bajo y permanecer así mientras dure la comunicación. Al cambiar el nivel lógico de este pin aborta la transferencia y para iniciar una nueva este se debe volver a poner a un voltaje lógico bajo.
+
+				\subsubsection{I$^2$C (Inter Integrated Circuits)}
+					Este CI posee una interfaz I$^2$C para la comunicación, implementada completamente como un hadware esclavo. El pin de intercambio de información SDA se encuentra localizado en el pin 38 y se encuentra compartido con el pin MOSI del puerto SPI, de igual manera el reloj serial SCL se encuentra compartido con el reloj serial del puerto SPI en el pin 36. La máxima frecuencia soportada por el reloj serial es de 400[kHz].
+
+					La secuencia de transferencia del sistema I$^2$C consiste en el dispositivo maestro generando un condición de inicio para la transferencia cuando el bus se encuantra desocupado. El dispositivo maestro entonces transmite la direccion del dispositivo esclavo (0x70) y la dirección del regitro de la transferencia de datos en la transferencia de dirección inicial si el dispositivo esclavo reconoce entonces empieza la transferencia de datos. Esto continua hasta que el maestro emite una condición de parada y el bus queda de nuevo desocupado.
+
+				\subsubsection{HSDC (High Speed Data Capture)}
+					Debido a que para este proyecto es necesario el recopilar una gran cantidad de muestras a alta velocidad la documentación del Circuito Integrado ADE7880 recomienda, para la lectura de estos registros en específico, utilizar una interfaz propia de Analog Devices para este circuito llamada High Speed Data Capture (Captura de Datos a Alta Velocidad) por lo que es necesario configurar el microprocesador de manera que se pueda usar la comunicación I$^2$C como interfaz serial principal y la comunicación HSDC como secundaria usando el canal SPI del microcontrolador como esclavo, que recibirá toda la información de los registros de voltaje y corriente enviados por esta interfaz.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FIRMWARE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\section{Firmware}
-		\subsection{Interfaces}
-			\subsubsection{SPI (Serial Peripheral Interface)}
+		\subsection{Configuración del puerto I$^2$C}
+			Este puerto se activa al encender el dispositivo o al realizar un reinicio de hardware, entonces el puerto I$^2$C queda seleccionado como interfaz de comunicación. Para evitar que al hacer cambios en el nivel de voltaje del pin $\overline{SS}$/HSA se cambie a la interfaz de comunicación SPI, se debe bloquear el puerto I$^2$C para ello se debe poner a 1 el Bit 1 (I2C\_LOCK) del registro CONFIG2, esto previene que al realizar cambios de voltaje en el pin $\overline{SS}$/HSA y el cambio a SPI no es posible hasta que se realize un reinicio de hardware o se reinicie todo el sistema.
 
-			\subsubsection{Interfaz HSDC (High Speed Data Capture)}
-				Debido a que para este proyecto es necesario el recopilar una gran cantidad de muestras a alta velocidad la documentación del Circuito Integrado ADE7880 recomienda, para la lectura de estos registros en específico, utilizar una interfaz propia de Analog Devices para este circuito llamada High Speed Data Capture (Captura de Datos a Alta Velocidad) por lo que es necesario configurar el microprocesador de manera que se pueda usar la comunicación I2C como interfaz serial principal y la comunicación HSDC como secundaria usando el canal SPI del microcontrolador como esclavo, que recibirá toda la información de los registros de voltaje y corriente enviados por esta interfaz.
+			\begin{table}[h]
+				\begin{tabular}{c | c | c}
+					\textbf{Bit} & \textbf{Mnemonico} & \textbf{Valor predeterminado} \\
+					\hline
+					0 & EXTREFEN & 0 \\
+					\hline
+					1 & I2C\_LOCK & 1 \\
+					\hline
+					7:2 & Reservados & 0 \\
+				\end{tabular}
+				\caption{Valores del registro CONFIG2 que se deben transmitir para bloquear el puerto I$^2$C}
+			\end{table}
 
-				Para configurar el puerto HSDC se debe escribir primero al registro HSDC\_CFG [0xE706] a traves del puerto I2C la configuración con la que se van a estar enviando los datos a traves del puerto HSDC. Ya que se configura el puerto se habilita colocando el bit 6 (HSDCEN) en el registro CONFIG [0xE618] a 1, con esto se activa la comunicación	.
+			Este registro se accesa como si fuera un registro de 8-Bits por lo que los 6 Bits más significativos deben permanecer como 0. En este caso en particular se transmite 0x02 a la dirección de registro 0xEC01.
 
-				La configuracion que se ha decidido usar es tener el relog a 8[MHz] con la transmision de registros en paquetes de 32-bits, no se agrega una brecha de 7 ciclos de reloj entre transmisiones y unicamente se transmitira el contenido de los registros de voltaje y corriente: IAWV, VAWV, IBWV, VBWV, ICWV, VCWV, e INWV, lo que permite que se realice la comunicación de manera más rápida. El pin de selccion de esclavo (SS ó Chip Select) se mantiene como activo en bajo. %AUN SE ESTA PROBNADO SI FUNCIONARIA CON ACYIVO E BAJO O SE DEBE USAR COMO ACTIVO EN ALTO
+		\subsection{Configuración del puerto HSDC}
+			Para configurar el puerto HSDC se debe escribir primero al registro HSDC\_CFG [0xE706] a traves del puerto I$^2$C la configuración con la que se van a estar enviando los datos a traves del puerto HSDC. Ya que se configura el puerto se habilita colocando el bit 6 (HSDCEN) en el registro CONFIG [0xE618] a 1, con esto se activa la comunicación.
 
-			\subsubsection{Interfaz I2C (Inter Integrated Circuits)}
+			La configuracion que se ha decidido usar es tener el reloj a 8[MHz] con la transmision de registros en paquetes de 32-bits, no se agrega una brecha de 7 ciclos de reloj entre transmisiones y unicamente se transmitira el contenido de los registros de voltaje y corriente: IAWV, VAWV, IBWV, VBWV, ICWV, VCWV, e INWV, lo que permite que se realice la comunicación de manera más rápida. El pin de selccion de esclavo ($\overline{SS}$ ó Chip Select) se mantiene como activo en bajo. %AUN SE ESTA PROBNADO SI FUNCIONARIA CON ACYIVO E BAJO O SE DEBE USAR COMO ACTIVO EN ALTO
 
 
 	\chapter{Resultados}
