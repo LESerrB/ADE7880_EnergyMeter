@@ -103,6 +103,33 @@ int FailsCount = 0;
 
 /* TODO:  Add any necessary local functions.
 */
+static BOOL ADE7880_HWReset(void){
+    BOOL ST = FALSE;
+    
+    switch(ade_i2cData.HWR_state){
+        case ENTRY_RST_MODE:{
+            ADE_RSTOff();
+            ade_i2cData.HWR_state = RST_PROCESS;
+            delayH = SYS_TMR_DelayMS(10000);
+        }break;
+        
+        case RST_PROCESS:{
+            if(SYS_TMR_DelayStatusGet(delayH)){
+                ADE_RSTOn();
+                ade_i2cData.HWR_state = RST_COMPLETE;
+            }
+        }break;
+        
+        case RST_COMPLETE:{
+            if(!ADE_IRQ1StateGet()){
+                ST = TRUE;
+                ade_i2cData.HWR_state = ENTRY_RST_MODE;
+            }
+        }break;
+    }
+    
+    return ST;
+}
 
 static DRV_I2C_BUFFER_EVENT I2C_WriteReg_x8(uint16_t dev_address, WORD reg_address, BYTE reg_dat){
     DRV_I2C_BUFFER_EVENT eventWR = DRV_I2C_BUFFER_EVENT_PENDING;
@@ -486,20 +513,21 @@ void ADE_I2C_Tasks(void){
         }break;
 
         case ADE_I2C_STATE_SERVICE_TASKS:{
-            if(I2C_WriteReg_x8(RTCC_SLAVE_ADDRESS, 0x00, 0x12) == DRV_I2C_BUFFER_EVENT_COMPLETE)
-            
-            /******************************************************************/
-            ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST0;
+            if(I2C_WriteReg_x8(RTCC_SLAVE_ADDRESS, 0x00, 0x12)
+                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
+                delayH = SYS_TMR_DelayMS(1);
+                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST0;
+            }
         }break;
 
         /* TODO: implement your application state machine.*/
         case ADE_I2C_STATE_SERVICE_TEST0:{
-            delayH = SYS_TMR_DelayMS(1);
-            ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST1;
+            if(SYS_TMR_DelayStatusGet(delayH))
+                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST1;
         }break;
         
         case ADE_I2C_STATE_SERVICE_TEST1:{
-            if(SYS_TMR_DelayStatusGet(delayH))
+            if(ADE7880_HWReset())
                 ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST2;
         }break;
         
@@ -510,7 +538,6 @@ void ADE_I2C_Tasks(void){
         }break;
         
         case ADE_I2C_STATE_SERVICE_TEST3:{
-//            LED_2Toggle();
             if(I2C_WriteReg_x8(ADE7880_SLAVE_ADDRESS, HSDC_CFG, 0x28)
                                             == DRV_I2C_BUFFER_EVENT_COMPLETE){
                 delayH = SYS_TMR_DelayMS(1);

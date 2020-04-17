@@ -181,6 +181,7 @@ typedef struct{
     ADE_I2C_STATES state;
 
     /* TODO: Define any additional data used by the application. */
+    HWReset_State               HWR_state;                                      // State for the Hardware Reset application
     I2C_WriteReg_x8_State       I2CWR_x8_state;                                 // State for the I2C 8-Bit register Write function
     I2C_ReadReg_x8_State        I2CRR_x8_state;                                 // State for the I2C 8-Bit register Read function
     I2C_WriteReg_x16_State      I2CWR_x16_state;                                // State for the I2C 16-Bit register Write function
