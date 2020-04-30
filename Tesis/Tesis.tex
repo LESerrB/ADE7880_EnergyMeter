@@ -139,6 +139,24 @@
 		\section{Lectura de Datos Usando el Canal SPI}
 			En un principio el sistema medidor de energía estaba pensado para realizar la comunicación entre el microprocesador y el medidor ADE7880 con interfaz SPI sin embargo al momento de realizar las primeras pruebas, los registros correspondientes a los canales de medición de voltaje y corriente, pasado un tiempo los valores que se recuperan de los registros pierden coherencia lo que hace que los resultados sean inutiles para su análisis.
 
+			La lectura de los registros se configuró para que el microprocesador lo realizara a la mayor velocidad posible utilizando un reloj de 150000[Hz] por el canal 6 SPI \ref{ConfigSPI}.
+
+			\begin{figure}
+				\centering
+				\includegraphics[scale = 1.0]{Pruebas de Comunicación/ConfigSPI.PNG}
+				\caption[Configuración SPI del PIC32MZ]{Configuración SPI del PIC32MZ}
+				\label{ConfigSPI} 
+			\end{figure}
+
+			En la siguiente gráfica \ref{ComSPI} se puede ver como la velocidad de comunicación es bastante rápida al leer los valores de registro a pesar de tener que leer el registro DREADY para asegurarse que los registros de voltaje y corriente esten listos se obtenían demasiado rápido, pero como se había mencinado estos valores no demostraban valores que puedan ser útiles.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.6]{Pruebas de Comunicación/DREADY_TimeComp.PNG}
+				\caption[Comunicación SPI con los registros de voltaje y corriente]{Comunicación SPI con los registros de voltaje y corriente}
+				\label{ComSPI} 
+			\end{figure}
+
 			Como se pueden ver en las graficas de voltaje (Graficas \ref{CanalVoltaje}) y corriente (Graficas \ref{CanalCorriente}) al usar el canal SPI para muestrear los registros de voltaje y corriente de los 3 canales estos entregaban valores que no reflejaban la energía que se suministraba y en algunos casos ni siquiera se actualizaban los valores que el dispositivo tiene inicialmente, ya que las pruebas que se hacían se realizaban con un simulador de voltaje y corriente controlado con lo cual era posible conocer el valor que se deseaba obtener.
 
 			Después de realizar un par de pruebas más y obtener valores similares en todas las pruebas y siguiendo la recomendación que el manual del dispositivo para la lectura de esos registros se decidió cambiar el canal de comunicación de SPI por el HSDC con el cual se planea tener una lectura más rápida de los registros así como poder mantener la comunicación únicamente con los registros de voltaje y corriente de manera continua sin interaciones con los otros módulos del sistema de medición de energía.

@@ -71,13 +71,13 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 
  
-void __ISR(_I2C2_MASTER_VECTOR, ipl7AUTO) _IntHandlerDrvI2CMasterInstance0(void)
+void __ISR(_I2C2_MASTER_VECTOR, ipl5AUTO) _IntHandlerDrvI2CMasterInstance0(void)
 {
     DRV_I2C_Tasks(sysObj.drvI2C0);
 }
 
 
-void __ISR(_I2C2_BUS_VECTOR, ipl7AUTO) _IntHandlerDrvI2CErrorInstance0(void)
+void __ISR(_I2C2_BUS_VECTOR, ipl5AUTO) _IntHandlerDrvI2CErrorInstance0(void)
 {
     SYS_ASSERT(false, "I2C Driver Instance 0 Error");
 }
@@ -94,6 +94,31 @@ void __ISR(_I2C2_BUS_VECTOR, ipl7AUTO) _IntHandlerDrvI2CErrorInstance0(void)
 
 
 
+  
+void __ISR(_UART2_TX_VECTOR, ipl5AUTO) _IntHandlerDrvUsartTransmitInstance0(void)
+{
+    DRV_USART_TasksTransmit(sysObj.drvUsart0);
+}
+void __ISR(_UART2_RX_VECTOR, ipl5AUTO) _IntHandlerDrvUsartReceiveInstance0(void)
+{
+    DRV_USART_TasksReceive(sysObj.drvUsart0);
+}
+void __ISR(_UART2_FAULT_VECTOR, ipl5AUTO) _IntHandlerDrvUsartErrorInstance0(void)
+{
+    DRV_USART_TasksError(sysObj.drvUsart0);
+}
+ 
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
  
  
 
@@ -101,6 +126,47 @@ void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
 {
     DRV_TMR_Tasks(sysObj.drvTmr0);
 }
- /*******************************************************************************
+ 
+void __ISR(_SPI4_RX_VECTOR, ipl3AUTO) _IntHandlerSPIRxInstance0(void)
+{
+    DRV_SPI_Tasks(sysObj.spiObjectIdx0);
+}
+void __ISR(_SPI4_TX_VECTOR, ipl3AUTO) _IntHandlerSPITxInstance0(void)
+{
+    DRV_SPI_Tasks(sysObj.spiObjectIdx0);
+}
+void __ISR(_SPI4_FAULT_VECTOR, ipl3AUTO) _IntHandlerSPIFaultInstance0(void)
+{
+    DRV_SPI_Tasks(sysObj.spiObjectIdx0);
+}
+void __ISR(_SPI6_RX_VECTOR, ipl4AUTO) _IntHandlerSPIRxInstance1(void)
+{
+    DRV_SPI_Tasks(sysObj.spiObjectIdx1);
+}
+void __ISR(_SPI6_TX_VECTOR, ipl4AUTO) _IntHandlerSPITxInstance1(void)
+{
+    DRV_SPI_Tasks(sysObj.spiObjectIdx1);
+}
+void __ISR(_SPI6_FAULT_VECTOR, ipl4AUTO) _IntHandlerSPIFaultInstance1(void)
+{
+    DRV_SPI_Tasks(sysObj.spiObjectIdx1);
+}
+void __ISR(_ETHERNET_VECTOR, ipl5AUTO) _IntHandler_ETHMAC(void)
+{
+    DRV_ETHMAC_Tasks_ISR((SYS_MODULE_OBJ)0);
+}
+
+/* This function is used by ETHMAC driver */
+bool SYS_INT_SourceRestore(INT_SOURCE src, int level)
+{
+    if(level)
+    {
+        SYS_INT_SourceEnable(src);
+    }
+
+    return level;
+}
+
+/*******************************************************************************
  End of File
 */

@@ -55,11 +55,27 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  
  
  #include "system/devcon/sys_devcon.h"
+      #include "system/reset/sys_reset.h"
 #include "system/clk/sys_clk.h"
 #include "system/int/sys_int.h"
+#include "system/fs/sys_fs.h"
+#include "system/fs/sys_fs_media_manager.h"
+#include "system/console/sys_console.h"
+#include "system/random/sys_random.h"
+#include "system/fs/fat_fs/src/file_system/ff.h"
+#include "system/fs/fat_fs/src/file_system/ffconf.h"
+#include "system/fs/fat_fs/src/hardware_access/diskio.h"
 #include "system/tmr/sys_tmr.h"
 #include "driver/tmr/drv_tmr.h"
+#include "driver/usart/drv_usart.h"
 #include "system/ports/sys_ports.h"
+#include "driver/sdcard/drv_sdcard.h"
+#include "driver/spi/drv_spi.h"
+#include "system/debug/sys_debug.h"
+#include "system/command/sys_command.h"
+#include "tcpip/tcpip.h"
+#include "driver/ethmac/drv_ethmac.h"
+#include "driver/miim/drv_miim.h"
 #include "ade_i2c.h"
 
 
@@ -97,7 +113,19 @@ typedef struct
     SYS_MODULE_OBJ  sysTmr;
     SYS_MODULE_OBJ  drvTmr0;
 
+    SYS_MODULE_OBJ  drvUsart0;
     SYS_MODULE_OBJ  drvI2C0;
+    SYS_MODULE_OBJ  drvSDCard;
+    SYS_MODULE_OBJ  sysDebug;
+    SYS_MODULE_OBJ  sysConsole0;
+
+    /*** SPI Object for Index 0 ***/
+    SYS_MODULE_OBJ				spiObjectIdx0;
+    
+    /*** SPI Object for Index 1 ***/
+    SYS_MODULE_OBJ				spiObjectIdx1;
+    SYS_MODULE_OBJ  tcpip;
+    SYS_MODULE_OBJ  drvMiim;
 
 } SYSTEM_OBJECTS;
 

@@ -72,12 +72,21 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 void SYS_Tasks ( void )
 {
     /* Maintain system services */
+    /* SYS_COMMAND layer tasks routine */ 
+    SYS_CMD_Tasks();
+    SYS_CONSOLE_Tasks(sysObj.sysConsole0);
+    /* Maintain the file system state machine. */
+    SYS_FS_Tasks();
     /* SYS_TMR Device layer tasks routine */ 
     SYS_TMR_Tasks(sysObj.sysTmr);
 
     /* Maintain Device Drivers */
+    DRV_MIIM_Tasks (sysObj.drvMiim);
+    DRV_SDCARD_Tasks(sysObj.drvSDCard);
 
     /* Maintain Middleware & Other Libraries */
+    /* Maintain the TCP/IP Stack*/
+    TCPIP_STACK_Task(sysObj.tcpip);
 
     /* Maintain the application's state machine. */
     ADE_I2C_Tasks();

@@ -74,10 +74,15 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
     
-/* I2C Address */
+/* I2C Device Address */
 #define RTCC_SLAVE_ADDRESS              0xDE
 #define ADE7880_SLAVE_ADDRESS           0x70
 /* ADE7880 Registers */
+#define LAST_OP                         0xEA01
+#define LAST_ADD                        0xE9FE
+#define LAST_RWDATA_8B                  0xE7FD
+#define LAST_RWDATA_16B                 0xE9FF
+#define LAST_RWDATA_32B                 0xE5FF
 #define CONFIG2                         0xEC01
 #define HSDC_CFG                        0xE706
 #define CONFIG                          0xE618
@@ -100,21 +105,21 @@ typedef enum{
 	/* Application's state machine's initial state. */
 	ADE_I2C_STATE_INIT = 0,
 	ADE_I2C_STATE_SERVICE_TASKS,
+    ADE_I2C_STATE_SERVICE_IDLE,
 
 	/* TODO: Define states used by the application state machine. */
-    ADE_I2C_STATE_SERVICE_IDLE,
     ADE_I2C_STATE_SERVICE_TEST0,
     ADE_I2C_STATE_SERVICE_TEST1,
     ADE_I2C_STATE_SERVICE_TEST2,
     ADE_I2C_STATE_SERVICE_TEST3,
     ADE_I2C_STATE_SERVICE_TEST4,
     ADE_I2C_STATE_SERVICE_TEST5,
-    ADE7880_STATE_SERVICE_TEST6,
-    ADE7880_STATE_SERVICE_TEST7,
-    ADE7880_STATE_SERVICE_TEST8,
-    ADE7880_STATE_SERVICE_TEST9,
-    ADE7880_STATE_SERVICE_TEST10,
-    ADE7880_STATE_SERVICE_TEST11,
+    ADE_I2C_STATE_SERVICE_TEST6,
+    ADE_I2C_STATE_SERVICE_TEST7,
+    ADE_I2C_STATE_SERVICE_TEST8,
+    ADE_I2C_STATE_SERVICE_TEST9,
+    ADE_I2C_STATE_SERVICE_TEST10,
+    ADE_I2C_STATE_SERVICE_TEST11,
 }ADE_I2C_STATES;
 
 // *****************************************************************************
