@@ -5,7 +5,7 @@
     Microchip Technology Inc.
 
   File Name:
-    ade_i2c.h
+    ade_hsdc.h
 
   Summary:
     This header file provides prototypes and definitions for the application.
@@ -43,8 +43,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  *******************************************************************************/
 //DOM-IGNORE-END
 
-#ifndef _ADE_I2C_H
-#define _ADE_I2C_H
+#ifndef _ADE_HSDC_H
+#define _ADE_HSDC_H
 
 // *****************************************************************************
 // *****************************************************************************
@@ -58,7 +58,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
-#include "GenericTypeDefs.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -73,20 +72,8 @@ extern "C" {
 // Section: Type Definitions
 // *****************************************************************************
 // *****************************************************************************
-    
-/* I2C Device Address */
-#define RTCC_SLAVE_ADDRESS              0xDE
-#define ADE7880_SLAVE_ADDRESS           0x70
-/* ADE7880 Registers */
-#define LAST_OP                         0xEA01
-#define LAST_ADD                        0xE9FE
-#define LAST_RWDATA_8B                  0xE7FD
-#define LAST_RWDATA_16B                 0xE9FF
-#define LAST_RWDATA_32B                 0xE5FF
-#define CONFIG2                         0xEC01
-#define HSDC_CFG                        0xE706
-#define CONFIG                          0xE618
-#define RUN                             0xE228
+
+typedef unsigned char SPI_DATA_TYPE;
     
 // *****************************************************************************
 /* Application states
@@ -99,80 +86,18 @@ extern "C" {
     determine the behavior of the application at various times.
 */
 
-typedef enum{
+typedef enum
+{
 	/* Application's state machine's initial state. */
-	ADE_I2C_STATE_INIT = 0,
-	ADE_I2C_STATE_SERVICE_TASKS,
-    ADE_I2C_STATE_SERVICE_IDLE,
+	ADE_HSDC_STATE_INIT = 0,
+	ADE_HSDC_STATE_SERVICE_TASKS,
 
 	/* TODO: Define states used by the application state machine. */
-    ADE_I2C_STATE_SERVICE_TEST0,
-    ADE_I2C_STATE_SERVICE_TEST1,
-    ADE_I2C_STATE_SERVICE_TEST2,
-    ADE_I2C_STATE_SERVICE_TEST3,
-    ADE_I2C_STATE_SERVICE_TEST4,
-    ADE_I2C_STATE_SERVICE_TEST5,
-    ADE_I2C_STATE_SERVICE_TEST6,
-    ADE_I2C_STATE_SERVICE_TEST7,
-    ADE_I2C_STATE_SERVICE_TEST8,
-    ADE_I2C_STATE_SERVICE_TEST9,
-    ADE_I2C_STATE_SERVICE_TEST10,
-    ADE_I2C_STATE_RST_ADE,
-    ADE_I2C_STATE_LOCK_I2C,
-    ADE_I2C_STATE_CON_HSDC,
-    ADE_I2C_STATE_EN_HSDC,
-    ADE_I2C_STATE_EN_DSP,
-    ADE_I2C_STATE_DELAY1,
-    ADE_I2C_STATE_DELAY2,
-    ADE_I2C_STATE_DELAY3,
-    ADE_I2C_STATE_DELAY4,
-}ADE_I2C_STATES;
+    ADE_HSDC_STATE_CAPT_DATA,
+    ADE_HSDC_STATE_WAIT_REQUEST,
+    ADE_HSDC_STATE_SERVICE_IDLE,
+} ADE_HSDC_STATES;
 
-// *****************************************************************************
-/* Functions states
- * Summary:
- *  Functions states enumeration
- *
- * Description:
- *  Functions for the Hardware Reset, I2C Read Register and the I2C Write
- *  Register
- */
-
-typedef enum{
-    ENTRY_RST_MODE = 0,
-    RST_PROCESS,
-    RST_COMPLETE,
-}HWReset_State;
-
-typedef enum{
-    I2CW8_STATE_SEND_CMD = 0,
-    I2CW8_STATE_WAIT_REPLY,
-}I2C_WriteReg_x8_State;
-
-typedef enum{
-    I2CW16_STATE_SEND_CMD = 0,
-    I2CW16_STATE_WAIT_REPLY,
-}I2C_WriteReg_x16_State;
-
-typedef enum{
-    I2CW32_STATE_SEND_CMD = 0,
-    I2CW32_STATE_WAIT_REPLY,
-}I2C_WriteReg_x32_State;
-
-typedef enum{
-    I2CR8_STATE_SEND_CMD = 0,
-    I2CR8_STATE_WAIT_REPLY,
-}I2C_ReadReg_x8_State;
-
-typedef enum{
-    I2CR16_STATE_SEND_CMD = 0,
-    I2CR16_STATE_WAIT_REPLY,
-}I2C_ReadReg_x16_State;
-
-typedef enum{
-    I2CR32_STATE_SEND_CMD = 0,
-    I2CR32_STATE_WAIT_REPLY,
-}I2C_ReadReg_x32_State;
 
 // *****************************************************************************
 /* Application Data
@@ -187,26 +112,19 @@ typedef enum{
     Application strings and buffers are be defined outside this structure.
  */
 
-typedef struct{
+typedef struct
+{
     /* The application's current state */
-    ADE_I2C_STATES state;
+    ADE_HSDC_STATES state;
 
     /* TODO: Define any additional data used by the application. */
-    HWReset_State               HWR_state;                                      // State for the Hardware Reset application
-    I2C_WriteReg_x8_State       I2CWR_x8_state;                                 // State for the I2C 8-Bit register Write function
-    I2C_ReadReg_x8_State        I2CRR_x8_state;                                 // State for the I2C 8-Bit register Read function
-    I2C_WriteReg_x16_State      I2CWR_x16_state;                                // State for the I2C 16-Bit register Write function
-    I2C_ReadReg_x16_State       I2CRR_x16_state;                                // State for the I2C 16-Bit register Read function
-    I2C_WriteReg_x32_State      I2CWR_x32_state;                                // State for the I2C 32-Bit register Write function
-    I2C_ReadReg_x32_State       I2CRR_x32_state;                                // State for the I2C 32-Bit register Read function
-
-    /* TODO: Define any additional data used by the application. */
-    DRV_HANDLE                  I2C_Handle;                                     // Handle for ADE7880 I2C communication
-    
-    DRV_I2C_BUFFER_HANDLE       I2C_BuffHandle;                                 // Handle for I2C Buffer communication
-    
-    BOOL                        hsdc_enabled;                                   // Indicates the status of the HSDC communication
-} ADE_I2C_DATA;
+    DRV_HANDLE  SPIHandle;
+    DRV_SPI_BUFFER_HANDLE Buffer_Handle;
+    DRV_SPI_BUFFER_HANDLE Write_Buffer_Handle;
+    DRV_SPI_BUFFER_HANDLE Read_Buffer_Handle;
+    SPI_DATA_TYPE TXbuffer[7];
+    SPI_DATA_TYPE RXbuffer[6];
+} ADE_HSDC_DATA;
 
 
 // *****************************************************************************
@@ -225,7 +143,7 @@ typedef struct{
 
 /*******************************************************************************
   Function:
-    void ADE_I2C_Initialize ( void )
+    void ADE_HSDC_Initialize ( void )
 
   Summary:
      MPLAB Harmony application initialization routine.
@@ -247,19 +165,19 @@ typedef struct{
 
   Example:
     <code>
-    ADE_I2C_Initialize();
+    ADE_HSDC_Initialize();
     </code>
 
   Remarks:
     This routine must be called from the SYS_Initialize function.
 */
 
-void ADE_I2C_Initialize(void);
+void ADE_HSDC_Initialize ( void );
 
 
 /*******************************************************************************
   Function:
-    void ADE_I2C_Tasks ( void )
+    void ADE_HSDC_Tasks ( void )
 
   Summary:
     MPLAB Harmony Demo application tasks function
@@ -280,18 +198,17 @@ void ADE_I2C_Initialize(void);
 
   Example:
     <code>
-    ADE_I2C_Tasks();
+    ADE_HSDC_Tasks();
     </code>
 
   Remarks:
     This routine must be called from SYS_Tasks() routine.
  */
 
-void ADE_I2C_Tasks(void);
+void ADE_HSDC_Tasks( void );
 
-ADE_I2C_DATA ade_i2cData;
 
-#endif /* _ADE_I2C_H */
+#endif /* _ADE_HSDC_H */
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

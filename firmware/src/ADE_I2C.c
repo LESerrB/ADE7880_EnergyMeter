@@ -75,8 +75,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     
     Application strings and buffers are be defined outside this structure.
 */
-ADE_I2C_DATA ade_i2cData;
-
 SYS_TMR_HANDLE delayH;
 
 BYTE __attribute__ ((coherent)) I2C_RxBuffer[5];
@@ -95,7 +93,6 @@ BYTE __attribute__ ((coherent)) I2C_TxBuffer[5];
 // Section: Application Local Functions
 // *****************************************************************************
 // *****************************************************************************
-
 
 /* TODO:  Add any necessary local functions.
 */
@@ -412,6 +409,8 @@ void ADE_I2C_Initialize(void){
     ade_i2cData.I2CWR_x32_state = I2CW32_STATE_SEND_CMD;
     ade_i2cData.I2CRR_x32_state = I2CR32_STATE_SEND_CMD;
     ade_i2cData.hsdc_enabled = FALSE;
+    
+    ade_i2cData.hsdc_enabled = false;
 }
 
 
@@ -425,7 +424,7 @@ void ADE_I2C_Initialize(void){
 
 void ADE_I2C_Tasks(void){
     static uint32_t startTick = 0;
-    DRV_I2C_BUFFER_EVENT event = DRV_I2C_BUFFER_EVENT_PENDING;
+    //DRV_I2C_BUFFER_EVENT event = DRV_I2C_BUFFER_EVENT_PENDING;
     
     switch(ade_i2cData.state){
         case ADE_I2C_STATE_INIT:{
@@ -438,14 +437,14 @@ void ADE_I2C_Tasks(void){
             if(ade_i2cData.I2C_Handle != DRV_HANDLE_INVALID){
                 LED_1On();
                 LED_2On();
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TASKS;
+                ade_i2cData.state = ADE_I2C_STATE_RST_ADE;
             }
             // O
             // O
         }break;
         
         /* Reset the ADE, needed for properly work after power up */
-        case ADE_I2C_STATE_SERVICE_TASKS:{
+        case ADE_I2C_STATE_RST_ADE:{
             if(ADE7880_HWReset()){
                 LED_1Off();
                 LED_2Off();
@@ -467,15 +466,87 @@ void ADE_I2C_Tasks(void){
         case ADE_I2C_STATE_SERVICE_TEST1:{
             if(SYS_TMR_DelayStatusGet(delayH)){
                 LED_1On();  
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST2;
+                ade_i2cData.state = ADE_I2C_STATE_LOCK_I2C;
             }
             // -
             // O
         }break;
 
         /* Lock I2C */
+        case ADE_I2C_STATE_LOCK_I2C:{
+            if(I2C_WriteReg_x8(ADE7880_SLAVE_ADDRESS, CONFIG2, 0x02)
+                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
+                delayH = SYS_TMR_DelayMS(1);
+                ade_i2cData.state = ADE_I2C_STATE_DELAY1;
+            }
+        }break;
+        
+        case ADE_I2C_STATE_DELAY1:{
+            if(SYS_TMR_DelayStatusGet(delayH)){
+                LED_2On();
+                ade_i2cData.state = ADE_I2C_STATE_CON_HSDC;
+            }
+            // O
+            // O
+        }break;
+        
+        /* Config HSDC */
+        case ADE_I2C_STATE_CON_HSDC:{
+            if(I2C_WriteReg_x8(ADE7880_SLAVE_ADDRESS, HSDC_CFG, 0x08)
+                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
+                delayH = SYS_TMR_DelayMS(1);
+                ade_i2cData.state = ADE_I2C_STATE_DELAY2;
+            }
+        }break;
+        
+        case ADE_I2C_STATE_DELAY2:{
+            if(SYS_TMR_DelayStatusGet(delayH)){
+                LED_1Off();
+                ade_i2cData.state = ADE_I2C_STATE_EN_HSDC;
+            }
+            // O
+            // -
+        }break;
+        
+        /* Enable HSDC */
+        case ADE_I2C_STATE_EN_HSDC:{
+            if(I2C_WriteReg_x16(CONFIG, 0x0042)
+                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
+                delayH = SYS_TMR_DelayMS(1);
+                ade_i2cData.state = ADE_I2C_STATE_DELAY3;
+            }
+        }break;
+        
+        case ADE_I2C_STATE_DELAY3:{
+            if(SYS_TMR_DelayStatusGet(delayH)){
+                LED_2Off();
+                ade_i2cData.state = ADE_I2C_STATE_EN_DSP;
+            }
+            // -
+            // -
+        }break;
+        
+        case ADE_I2C_STATE_EN_DSP:{
+            if(I2C_WriteReg_x16(RUN, 0x0001)
+                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
+                delayH = SYS_TMR_DelayMS(1);
+                ade_i2cData.state = ADE_I2C_STATE_DELAY4;
+            }
+        }break;
+        
+        case ADE_I2C_STATE_DELAY4:{
+            if(SYS_TMR_DelayStatusGet(delayH)){
+                LED_1On();
+                LED_2On();
+                ade_i2cData.hsdc_enabled = true;
+                ade_i2cData.state = ADE_I2C_STATE_SERVICE_IDLE;
+            }
+            // O
+            // O
+        }break;
+
         case ADE_I2C_STATE_SERVICE_TEST2:{
-            if(I2C_WriteReg_x8(ADE7880_SLAVE_ADDRESS, 0xEC01, 0x02)
+            if(I2C_ReadReg_x16(LAST_ADD)
                                             == DRV_I2C_BUFFER_EVENT_COMPLETE){
                 delayH = SYS_TMR_DelayMS(1);
                 ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST3;
@@ -484,53 +555,16 @@ void ADE_I2C_Tasks(void){
         
         case ADE_I2C_STATE_SERVICE_TEST3:{
             if(SYS_TMR_DelayStatusGet(delayH)){
-                LED_2On();
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST4;
-            }
-            // O
-            // O
-        }break;
-        
-        /* Config HSDC */
-        case ADE_I2C_STATE_SERVICE_TEST4:{
-            if(I2C_WriteReg_x8(ADE7880_SLAVE_ADDRESS, 0xE706, 0x08)
-                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
-                delayH = SYS_TMR_DelayMS(1);
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST5;
-            }
-        }break;
-        
-        case ADE_I2C_STATE_SERVICE_TEST5:{
-            if(SYS_TMR_DelayStatusGet(delayH)){
-                LED_1Off();
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST6;
-            }
-            // O
-            // -
-        }break;
-        
-        /* Enable HSDC */
-        case ADE_I2C_STATE_SERVICE_TEST6:{
-            if(I2C_WriteReg_x16(0xE618, 0x0042)
-                                            == DRV_I2C_BUFFER_EVENT_COMPLETE){
-                delayH = SYS_TMR_DelayMS(1);
-                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST7;
-            }
-        }break;
-        
-        case ADE_I2C_STATE_SERVICE_TEST7:{
-            if(SYS_TMR_DelayStatusGet(delayH)){
                 LED_2Off();
                 ade_i2cData.state = ADE_I2C_STATE_SERVICE_IDLE;
             }
-            // -
-            // -
         }break;
         
         case ADE_I2C_STATE_SERVICE_IDLE:{
             if(SYS_TMR_TickCountGet() - startTick >= SYS_TMR_TickCounterFrequencyGet()/2ul){
                 startTick = SYS_TMR_TickCountGet();
                 LED_1Toggle();
+//                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST2;
             }
         }break;
         

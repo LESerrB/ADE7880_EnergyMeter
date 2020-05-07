@@ -61,6 +61,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "system/common/sys_common.h"
 #include "ade_i2c.h"
+#include "ade_hsdc.h"
 #include "system_definitions.h"
 
 // *****************************************************************************

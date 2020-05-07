@@ -1502,6 +1502,7 @@
         <Name dnOrder="0">custom_http_app.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app</Path>
         <Checksum dnOrder="2">EF4E0ED6389E667672861DB5A25230D0</Checksum>
+        <ProjectFileChecksum dnOrder="3">E0C0BB8F4022D252563318B330D95D87</ProjectFileChecksum>
       </Template>
       <Template dnOrder="8">
         <Name dnOrder="0">ADE_I2C.c</Name>
@@ -1510,7 +1511,7 @@
       <Template dnOrder="9">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/ADE7880_EnergyMeter</Path>
-        <Checksum dnOrder="2">6DC8EE1F82C9FA43BE561A2366DA13B1</Checksum>
+        <Checksum dnOrder="2">E9A71D400C2CF9BB2ED1DC3775957EC2</Checksum>
       </Template>
       <Template dnOrder="10">
         <Name dnOrder="0">drv_spi_tasks.c</Name>
@@ -1535,67 +1536,75 @@
       <Template dnOrder="14">
         <Name dnOrder="0">system_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/ADE7880_EnergyMeter</Path>
-        <Checksum dnOrder="2">ED2CFD0E2E3BFC1A960B5C944D17DFAB</Checksum>
+        <Checksum dnOrder="2">194904FE0DF06DA7D07A4CE7198C9C64</Checksum>
       </Template>
       <Template dnOrder="15">
+        <Name dnOrder="0">ADE_HSDC.h</Name>
+        <Path dnOrder="1">Header&amp;#160;Files/app</Path>
+      </Template>
+      <Template dnOrder="16">
         <Name dnOrder="0">sys_devcon_local.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/ADE7880_EnergyMeter/framework/system/devcon/src</Path>
         <Checksum dnOrder="2">B66F9B4DBD85DA7F9DE775E864E01395</Checksum>
       </Template>
-      <Template dnOrder="16">
+      <Template dnOrder="17">
         <Name dnOrder="0">nvm_disk_images.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/ADE7880_EnergyMeter/framework/system/fs</Path>
         <Checksum dnOrder="2">B00B90E021F15FFD6B0B1B7F2D0650A5</Checksum>
       </Template>
-      <Template dnOrder="17">
+      <Template dnOrder="18">
         <Name dnOrder="0">sram_disk_images.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/ADE7880_EnergyMeter/framework/system/fs</Path>
         <Checksum dnOrder="2">A58BD5BF8E05EF7FF97B8F41007499C4</Checksum>
       </Template>
-      <Template dnOrder="18">
+      <Template dnOrder="19">
         <Name dnOrder="0">sys_reset.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/ADE7880_EnergyMeter/framework/system/reset/src</Path>
         <Checksum dnOrder="2">BE66429899862E1E38250CA4006D5F46</Checksum>
       </Template>
-      <Template dnOrder="19">
+      <Template dnOrder="20">
         <Name dnOrder="0">system_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/ADE7880_EnergyMeter</Path>
-        <Checksum dnOrder="2">893AC78F9BDCB212FE1DC21EB9F27DD2</Checksum>
+        <Checksum dnOrder="2">43851C286AB23C1AD13494F8D4E86C6F</Checksum>
       </Template>
-      <Template dnOrder="20">
+      <Template dnOrder="21">
         <Name dnOrder="0">http_print.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app</Path>
         <Checksum dnOrder="2">4DDEE61F0B54A7C58907AAF949A0AA46</Checksum>
       </Template>
-      <Template dnOrder="21">
+      <Template dnOrder="22">
         <Name dnOrder="0">main.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app</Path>
       </Template>
-      <Template dnOrder="22">
+      <Template dnOrder="23">
+        <Name dnOrder="0">ADE_HSDC.c</Name>
+        <Path dnOrder="1">Source&amp;#160;Files/app</Path>
+      </Template>
+      <Template dnOrder="24">
         <Name dnOrder="0">drv_spi_master_ebm_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/ADE7880_EnergyMeter/framework/driver/spi/dynamic</Path>
         <Checksum dnOrder="2">DF2E896C1FA81F4B5056E3B22DD340B6</Checksum>
       </Template>
-      <Template dnOrder="23">
+      <Template dnOrder="25">
         <Name dnOrder="0">ADE_I2C.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app</Path>
       </Template>
-      <Template dnOrder="24">
+      <Template dnOrder="26">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/ADE7880_EnergyMeter</Path>
-        <Checksum dnOrder="2">10BDDB677464C1722D8AB59AE1245449</Checksum>
+        <Checksum dnOrder="2">82FEF42ED1D995FA29A5FD4B64E75753</Checksum>
       </Template>
-      <Template dnOrder="25">
+      <Template dnOrder="27">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/ADE7880_EnergyMeter</Path>
-        <Checksum dnOrder="2">9BB8E6A218C251EDD00CFFEE88E8B1D2</Checksum>
+        <Checksum dnOrder="2">C91084284FBA676C86721522018C21BD</Checksum>
       </Template>
-      <Template dnOrder="26">
+      <Template dnOrder="28">
         <Name dnOrder="0">drv_spi_slave_ebm_tasks.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/ADE7880_EnergyMeter/framework/driver/spi/dynamic</Path>
         <Checksum dnOrder="2">41A7DB1850449421F016C48B15439819</Checksum>
       </Template>
-      <Template dnOrder="27">
+      <Template dnOrder="29">
         <Name dnOrder="0">system_exceptions.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/ADE7880_EnergyMeter</Path>
         <Checksum dnOrder="2">9836A04F3E98D3971DB91DF539160F34</Checksum>

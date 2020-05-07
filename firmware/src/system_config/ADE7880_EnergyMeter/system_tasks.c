@@ -90,6 +90,7 @@ void SYS_Tasks ( void )
 
     /* Maintain the application's state machine. */
     ADE_I2C_Tasks();
+    ADE_HSDC_Tasks();
 }
 
 
