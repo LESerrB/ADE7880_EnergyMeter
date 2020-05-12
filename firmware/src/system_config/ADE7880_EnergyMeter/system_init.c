@@ -662,6 +662,7 @@ void SYS_Initialize ( void* data )
     /* Initialize the Application */
     ADE_I2C_Initialize();
     ADE_HSDC_Initialize();
+    TCPIP_SERVER_Initialize();
 }
 
 

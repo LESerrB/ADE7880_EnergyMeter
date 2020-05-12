@@ -1,11 +1,14 @@
 /*******************************************************************************
   MPLAB Harmony Application Source File
   
+  Company:/*******************************************************************************
+  MPLAB Harmony Application Source File
+  
   Company:
     Microchip Technology Inc.
   
   File Name:
-    ade_hsdc.c
+    tcpip_server.c
 
   Summary:
     This file contains the source code for the MPLAB Harmony application.
@@ -53,7 +56,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
-#include "ade_hsdc.h"
+#include "tcpip_server.h"
+#include "system_definitions.h"
+#if !defined(SYS_CMD_ENABLE)
+#include "system/command/sys_command.h"
+#endif
+#include "system/console/sys_console.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -76,13 +84,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
     Application strings and buffers are be defined outside this structure.
 */
 
-ADE_HSDC_DATA ade_hsdcData;
-
-int SampCount;
-
-signed long BigBuffer[20000];
-
-char buffer[32];                                                                // Buffer that stores the mount name of uSD Card
+TCPIP_SERVER_DATA tcpip_serverData;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -112,129 +114,134 @@ char buffer[32];                                                                
 
 /*******************************************************************************
   Function:
-    void ADE_HSDC_Initialize ( void )
+    void TCPIP_SERVER_Initialize ( void )
 
   Remarks:
-    See prototype in ade_hsdc.h.
+    See prototype in tcpip_server.h.
  */
 
-void ADE_HSDC_Initialize ( void )
+void TCPIP_SERVER_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    ade_hsdcData.state = ADE_HSDC_STATE_INIT;
+    tcpip_serverData.state = MOUNT_DISK;
 
     
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    SampCount = 0;
 }
 
 
 /******************************************************************************
   Function:
-    void ADE_HSDC_Tasks ( void )
+    void TCPIP_SERVER_Tasks ( void )
 
   Remarks:
-    See prototype in ade_hsdc.h.
+    See prototype in tcpip_server.h.
  */
 
-void ADE_HSDC_Tasks(void){
-    static uint32_t startTick = 0;
-    DRV_SPI_BUFFER_EVENT event = DRV_SPI_BUFFER_EVENT_PENDING;
-    
+void TCPIP_SERVER_Tasks(void){
+    SYS_STATUS          tcpipStat;
+    TCPIP_NET_HANDLE    netH;
+    int                 nNets;
+    static IPV4_ADDR    dwLastIP[2] = { {-1}, {-1} };
+    IPV4_ADDR           ipAddr;
+    int                 i;
+    const char          *netName, *netBiosName;
+    static uint32_t     startTick=0;
     /* Check the application's current state. */
-    switch(ade_hsdcData.state){
-        /* Application's initial state. */
-        case ADE_HSDC_STATE_INIT:{
-            ade_hsdcData.SPIHandle = DRV_SPI_Open(DRV_SPI_INDEX_1,
-                                                  DRV_IO_INTENT_READWRITE);
-            
-            if(ade_hsdcData.SPIHandle != NULL){
-                ade_hsdcData.state = ADE_HSDC_STATE_SERVICE_TASKS;
-            }            
-        }break;
+    switch(tcpip_serverData.state){
+        case MOUNT_DISK:
+            if(SYS_FS_Mount(SYS_FS_SD_VOL, LOCAL_WEBSITE_PATH_FS, FAT, 0, NULL) == 0){
+                SYS_CONSOLE_PRINT("SYS_Initialize: The %s File System is mounted.\r\n", SYS_FS_FATFS_STRING);
+                tcpip_serverData.state = TCPIP_WAIT_INIT;
+            }
+            else{
+                //SYS_CONSOLE_PRINT("SYS_Initialize: Mount the %s File System: pending! \r\n", SYS_FS_FATFS_STRING);
+            }
+        break;
 
-        case ADE_HSDC_STATE_SERVICE_TASKS:{
-            if(ade_i2cData.hsdc_enabled == true){
-                LED_2Off();
-                ade_hsdcData.state = ADE_HSDC_STATE_CAPT_DATA;
+        case TCPIP_WAIT_INIT:
+            tcpipStat = TCPIP_STACK_Status(sysObj.tcpip);
+            
+            if(tcpipStat < 0){
+            // some error occurred
+                SYS_CONSOLE_MESSAGE(" APP: TCP/IP stack initialization failed!\r\n");
+                tcpip_serverData.state = TCPIP_ERROR;
             }
-        }break;
+            
+            else if(tcpipStat == SYS_STATUS_READY){
+            // now that the stack is ready we can check the
+            // available interfaces and register
+            // a Bonjour service
 
-        /* TODO: implement your application state machine.*/
-        case ADE_HSDC_STATE_CAPT_DATA:{
-            ade_hsdcData.Buffer_Handle = DRV_SPI_BufferAddRead(ade_hsdcData.SPIHandle,
-                                                               (SPI_DATA_TYPE*)&ade_hsdcData.RXbuffer[0],
-                                                               4,
-                                                               NULL,
-                                                               NULL);
-            
-            ade_hsdcData.state = ADE_HSDC_STATE_WAIT_REQUEST;
-        }break;
-        
-        case ADE_HSDC_STATE_WAIT_REQUEST:{
-            event = DRV_SPI_BufferStatus(ade_hsdcData.Buffer_Handle);
-            
-            if(event == DRV_SPI_BUFFER_EVENT_COMPLETE){
-                BigBuffer[SampCount] = ade_hsdcData.RXbuffer[0];
-                BigBuffer[SampCount + 1] = ade_hsdcData.RXbuffer[1];
-                BigBuffer[SampCount + 2] = ade_hsdcData.RXbuffer[2];
-                BigBuffer[SampCount + 3] = ade_hsdcData.RXbuffer[3];
-                SampCount++;
-                
-                if(SampCount < 400)
-                    ade_hsdcData.state = ADE_HSDC_STATE_CAPT_DATA;
-                else
-                    ade_hsdcData.state = ADE_HSDC_STATE_CHECK_SD;
+                nNets = TCPIP_STACK_NumberOfNetworksGet();
+
+                for(i = 0; i < nNets; i++){
+                    netH = TCPIP_STACK_IndexToNet(i);
+                    netName = TCPIP_STACK_NetNameGet(netH);
+                    netBiosName = TCPIP_STACK_NetBIOSName(netH);
+
+//#if defined(TCPIP_STACK_USE_NBNS)
+//                    SYS_CONSOLE_PRINT("    Interface %s on host %s - NBNS enabled\r\n", netName, netBiosName);
+//#else
+//                    SYS_CONSOLE_PRINT("    Interface %s on host %s - NBNS disabled\r\n", netName, netBiosName);
+//#endif  // defined(TCPIP_STACK_USE_NBNS)
+//
+//#if defined (TCPIP_STACK_USE_ZEROCONF_MDNS_SD)
+//                    char mDNSServiceName[] = "MyWebServiceNameX "; // base name of the service Must not exceed 16 bytes long
+//                    // the last digit will be incremented by interface
+//
+//                    mDNSServiceName[sizeof(mDNSServiceName) - 2] = '1' + i;
+//                    TCPIP_MDNS_ServiceRegister( netH
+//                            , mDNSServiceName                   // name of the service
+//                            ,"_http._tcp.local"                 // type of the service
+//                            ,80                                 // TCP or UDP port, at which this service is available
+//                            ,((const uint8_t *)"path=/index.htm")  // TXT info
+//                            ,1                                  // auto rename the service when if needed
+//                            ,NULL                               // no callback function
+//                            ,NULL);                             // no application context
+//#endif //TCPIP_STACK_USE_ZEROCONF_MDNS_SD
+                }
+
+                tcpip_serverData.state = TCPIP_TRANSACT;
             }
-        }break;
-        
-        case ADE_HSDC_STATE_CHECK_SD:{
-            if(SYS_FS_CurrentDriveGet(buffer) == SYS_FS_RES_SUCCESS){           // Checks if the volume is attached
-               ade_hsdcData.state = ADE_HSDC_STATE_OPEN_DIR;
-            }
-        }break;
-        
-        case ADE_HSDC_STATE_OPEN_DIR:{
-            ade_hsdcData.dirHandle = SYS_FS_DirOpen("Muestras Rapidas");
-            
-            if(ade_hsdcData.dirHandle != SYS_FS_HANDLE_INVALID)
-                SYS_FS_DirClose(ade_hsdcData.dirHandle);
-            else 
-                SYS_FS_DirectoryMake("Muestras Rapidas");
-            
-            ade_hsdcData.fileHandle = SYS_FS_FileOpen("Muestras Rapidas/QS_01.txt", (SYS_FS_FILE_OPEN_WRITE));
-            
-            if(ade_hsdcData.fileHandle != SYS_FS_HANDLE_INVALID){
-                //SampCount = 0;
-                ade_hsdcData.state = ADE_HSDC_STATE_SAVE_DATA;
-            }
-        }break;
-        
-        case ADE_HSDC_STATE_SAVE_DATA:{
-            for(SampCount = 0; SampCount < 400; SampCount++){
-                SYS_FS_FilePrintf(ade_hsdcData.fileHandle, "%d", BigBuffer[SampCount]);
-                SYS_FS_FilePrintf(ade_hsdcData.fileHandle, "%d", BigBuffer[SampCount + 1]);
-                SYS_FS_FilePrintf(ade_hsdcData.fileHandle, "%d", BigBuffer[SampCount + 2]);
-                SYS_FS_FilePrintf(ade_hsdcData.fileHandle, "%d", BigBuffer[SampCount + 3]);                
-            }
-            
-            SYS_FS_FileClose(ade_hsdcData.fileHandle);
-            ade_hsdcData.state = ADE_HSDC_STATE_SERVICE_IDLE;
-        }break;
-        
-        case ADE_HSDC_STATE_SERVICE_IDLE:{
-            if(SYS_TMR_TickCountGet() - startTick >= SYS_TMR_TickCounterFrequencyGet()/10ul){
+
+            break;
+
+        case TCPIP_TRANSACT:
+            // if the IP address of an interface has changed
+            // display the new value on the system console
+            nNets = TCPIP_STACK_NumberOfNetworksGet();
+            if(SYS_TMR_TickCountGet() - startTick >= SYS_TMR_TickCounterFrequencyGet()/5ul){
                 startTick = SYS_TMR_TickCountGet();
-                LED_2Toggle();
+                LED_1Toggle();
             }
-        }break;
 
+            
+            for (i = 0; i < nNets; i++){
+                netH = TCPIP_STACK_IndexToNet(i);
+                
+                if(!TCPIP_STACK_NetIsReady(netH)){
+                    return;    // interface not ready yet!
+                }
+                
+                ipAddr.Val = TCPIP_STACK_NetAddress(netH);
+                
+                if(dwLastIP[i].Val != ipAddr.Val){
+                    dwLastIP[i].Val = ipAddr.Val;
+                    SYS_CONSOLE_MESSAGE(TCPIP_STACK_NetNameGet(netH));
+                    SYS_CONSOLE_MESSAGE(" IP Address: ");
+                    SYS_CONSOLE_PRINT("%d.%d.%d.%d \r\n", ipAddr.v[0], ipAddr.v[1], ipAddr.v[2], ipAddr.v[3]);
+                }
+            }
+            SYS_CMD_READY_TO_READ();
+        break;
+        
         /* The default state should never be executed. */
-        default:{
+        default:
             /* TODO: Handle error in application's state machine. */
-        }break;
+        break;
     }
 }
 

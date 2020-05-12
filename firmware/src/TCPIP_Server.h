@@ -5,7 +5,7 @@
     Microchip Technology Inc.
 
   File Name:
-    ade_hsdc.h
+    tcpip_server.h
 
   Summary:
     This header file provides prototypes and definitions for the application.
@@ -43,8 +43,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
  *******************************************************************************/
 //DOM-IGNORE-END
 
-#ifndef _ADE_HSDC_H
-#define _ADE_HSDC_H
+#ifndef _TCPIP_SERVER_H
+#define _TCPIP_SERVER_H
 
 // *****************************************************************************
 // *****************************************************************************
@@ -52,12 +52,21 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
-#include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdlib.h>
-#include "system_config.h"
-#include "system_definitions.h"
+#include "system/int/sys_int.h"
+#include "system/ports/sys_ports.h"
+#include "system/fs/sys_fs_media_manager.h"
+#include "system/fs/fat_fs/src/hardware_access/diskio.h"
+#include "system/fs/fat_fs/src/file_system/ff.h"
+#include "system/fs/mpfs/mpfs.h"
+#include "system/fs/sys_fs.h"
+#include "system/debug/sys_debug.h"
+#include "tcpip/src/common/sys_fs_wrapper.h"
+#include "tcpip/tcpip.h"
+#include "driver/ethmac/drv_ethmac.h"
+#include "driver/nvm/drv_nvm.h"
+#include "driver/tmr/drv_tmr.h"
+
+extern const uint8_t MPFS_IMAGE_DATA[];
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -73,8 +82,6 @@ extern "C" {
 // *****************************************************************************
 // *****************************************************************************
 
-typedef unsigned char SPI_DATA_TYPE;
-    
 // *****************************************************************************
 /* Application states
 
@@ -88,18 +95,34 @@ typedef unsigned char SPI_DATA_TYPE;
 
 typedef enum
 {
-	/* Application's state machine's initial state. */
-	ADE_HSDC_STATE_INIT = 0,
-	ADE_HSDC_STATE_SERVICE_TASKS,
+    /* The app mounts the disk */
+    MOUNT_DISK = 0,
 
-	/* TODO: Define states used by the application state machine. */
-    ADE_HSDC_STATE_CAPT_DATA,
-    ADE_HSDC_STATE_WAIT_REQUEST,
-    ADE_HSDC_STATE_CHECK_SD,
-    ADE_HSDC_STATE_OPEN_DIR,
-    ADE_HSDC_STATE_SAVE_DATA,
-    ADE_HSDC_STATE_SERVICE_IDLE,
-} ADE_HSDC_STATES;
+    /* In this state, the application waits for the initialization of the TCP/IP stack
+     * to complete. */
+    TCPIP_WAIT_INIT,
+
+    /* In this state, the application can do TCP/IP transactions. */
+    TCPIP_TRANSACT,
+
+    /* The application waits in this state for the driver to be ready
+       before sending the "hello world" message. */
+    //APP_STATE_WAIT_FOR_READY,
+
+    /* The application waits in this state for the driver to finish
+       sending the message. */
+    //APP_STATE_WAIT_FOR_DONE,
+
+    /* The application does nothing in the idle state. */
+    STATE_IDLE,
+
+    //
+    USERIO_LED_DEASSERTED,
+
+    USERIO_LED_ASSERTED,
+
+    TCPIP_ERROR,
+} TCPIP_SERVER_STATES;
 
 
 // *****************************************************************************
@@ -118,21 +141,11 @@ typedef enum
 typedef struct
 {
     /* The application's current state */
-    ADE_HSDC_STATES         state;
+    TCPIP_SERVER_STATES state;
 
     /* TODO: Define any additional data used by the application. */
-    DRV_HANDLE              SPIHandle;
-    
-    SYS_FS_HANDLE           dirHandle;                                          // Handle for the directory to work
-    SYS_FS_HANDLE           fileHandle;                                         // Handle for the directory file
-    
-    DRV_SPI_BUFFER_HANDLE   Buffer_Handle;
-    DRV_SPI_BUFFER_HANDLE   Write_Buffer_Handle;
-    DRV_SPI_BUFFER_HANDLE   Read_Buffer_Handle;
-    
-    SPI_DATA_TYPE           TXbuffer[7];
-    SPI_DATA_TYPE           RXbuffer[6];
-} ADE_HSDC_DATA;
+    SYS_FS_HANDLE           fileHandle;
+} TCPIP_SERVER_DATA;
 
 
 // *****************************************************************************
@@ -151,7 +164,7 @@ typedef struct
 
 /*******************************************************************************
   Function:
-    void ADE_HSDC_Initialize ( void )
+    void TCPIP_SERVER_Initialize ( void )
 
   Summary:
      MPLAB Harmony application initialization routine.
@@ -173,19 +186,19 @@ typedef struct
 
   Example:
     <code>
-    ADE_HSDC_Initialize();
+    TCPIP_SERVER_Initialize();
     </code>
 
   Remarks:
     This routine must be called from the SYS_Initialize function.
 */
 
-void ADE_HSDC_Initialize ( void );
+void TCPIP_SERVER_Initialize ( void );
 
 
 /*******************************************************************************
   Function:
-    void ADE_HSDC_Tasks ( void )
+    void TCPIP_SERVER_Tasks ( void )
 
   Summary:
     MPLAB Harmony Demo application tasks function
@@ -206,17 +219,17 @@ void ADE_HSDC_Initialize ( void );
 
   Example:
     <code>
-    ADE_HSDC_Tasks();
+    TCPIP_SERVER_Tasks();
     </code>
 
   Remarks:
     This routine must be called from SYS_Tasks() routine.
  */
 
-void ADE_HSDC_Tasks( void );
+void TCPIP_SERVER_Tasks( void );
 
 
-#endif /* _ADE_HSDC_H */
+#endif /* _TCPIP_SERVER_H */
 
 //DOM-IGNORE-BEGIN
 #ifdef __cplusplus

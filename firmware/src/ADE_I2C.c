@@ -564,7 +564,6 @@ void ADE_I2C_Tasks(void){
             if(SYS_TMR_TickCountGet() - startTick >= SYS_TMR_TickCounterFrequencyGet()/2ul){
                 startTick = SYS_TMR_TickCountGet();
                 LED_1Toggle();
-//                ade_i2cData.state = ADE_I2C_STATE_SERVICE_TEST2;
             }
         }break;
         

@@ -78,6 +78,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "driver/miim/drv_miim.h"
 #include "ade_i2c.h"
 #include "ade_hsdc.h"
+#include "tcpip_server.h"
 
 
 // DOM-IGNORE-BEGIN
