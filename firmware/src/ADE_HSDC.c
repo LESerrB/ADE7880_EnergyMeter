@@ -80,7 +80,7 @@ ADE_HSDC_DATA ade_hsdcData;
 
 int SampCount;
 
-signed long BigBuffer[20000];
+/*signed long*/ int BigBuffer[20000];
 
 char buffer[32];                                                                // Buffer that stores the mount name of uSD Card
 
@@ -166,7 +166,7 @@ void ADE_HSDC_Tasks(void){
         case ADE_HSDC_STATE_CAPT_DATA:{
             ade_hsdcData.Buffer_Handle = DRV_SPI_BufferAddRead(ade_hsdcData.SPIHandle,
                                                                (SPI_DATA_TYPE*)&ade_hsdcData.RXbuffer[0],
-                                                               4,
+                                                               1,
                                                                NULL,
                                                                NULL);
             
@@ -178,12 +178,9 @@ void ADE_HSDC_Tasks(void){
             
             if(event == DRV_SPI_BUFFER_EVENT_COMPLETE){
                 BigBuffer[SampCount] = ade_hsdcData.RXbuffer[0];
-                BigBuffer[SampCount + 1] = ade_hsdcData.RXbuffer[1];
-                BigBuffer[SampCount + 2] = ade_hsdcData.RXbuffer[2];
-                BigBuffer[SampCount + 3] = ade_hsdcData.RXbuffer[3];
                 SampCount++;
                 
-                if(SampCount < 400)
+                if(SampCount < 20000)
                     ade_hsdcData.state = ADE_HSDC_STATE_CAPT_DATA;
                 else
                     ade_hsdcData.state = ADE_HSDC_STATE_CHECK_SD;
