@@ -17,6 +17,7 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{tikz}
+\usepackage{pdfpages}
 
 \graphicspath{{./figs/}}
 \usepackage{setspace}
@@ -26,8 +27,8 @@
 	\maketitle
 	\chapter*{}
 
-	\begin{flushright}%
-	  \emph{Dedicatoria ...}
+	\begin{flushright}
+	  \emph{Dedicatoria ...} 
 	  \thispagestyle{empty}
 	\end{flushright}
 
@@ -38,9 +39,10 @@
 
 	\tableofcontents
 	\listoffigures
+	\listoftables
 
 	\chapter{Prólogo}
-	    Este proyecto se ha desarrollado con la finalidad de añadir una mejora a los medidores de energía previamente realizados en el Instituto de Ingeniería de la UNAM. La finalidad de esta mejora es agregar una función de lectura de datos de registros del medidor de energía ADE7880 para poder analizar una gran cantidad de datos en poco tiempo.
+    Este proyecto se ha desarrollado con la finalidad de añadir una mejora a los medidores de energía previamente realizados en el Instituto de Ingeniería de la UNAM. La finalidad de esta mejora es agregar una función de lectura de datos de registros del medidor de energía ADE7880 para poder analizar una gran cantidad de datos en poco tiempo.
 
 	\mainmatter
 
@@ -48,71 +50,217 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTRODUCCIÓN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Introducción}
-		
+
 		\section{Computadora}
-			Una computadora esta conformada por hardware y software. La parte de Hardware consta de 4 componentes: el procesador, que funciona como el cerebro; la unidad de entrada, por la cual los programas y los datos son ingresados; la unidad de salida por donde son presentados los los resultados y la memoria que es en donde se almacena el software y los datos.
+		Una computadora esta conformada por hardware y software. La parte de Hardware consta de 4 componentes: el procesador, que funciona como el cerebro; la unidad de entrada, por la cual los programas y los datos son ingresados; la unidad de salida por donde son presentados los los resultados y la memoria que es en donde se almacena el software y los datos.
 
 			\subsection{Procesador}
-				El procesador, tambien llamada como la Unidad Central de Procesamiento se puede clasificar en tres partes:
-				
-				\begin{itemize}
-					\item \textbf{Registros}: Es una locación de almacenamiento dentro de la CPU en la cual se mantienem los datos y las direcciones de memoria durante la ejecución de una instrucción. Accesar a los registros de datos es más rápido que acceder a los datos en la memoria externa. Estos registros varían dependiendo del modelo del procesador.
+			El procesador, tambien llamada como la Unidad Central de Procesamiento se puede clasificar en tres partes:
+		
+			\begin{itemize}
+				\item \textbf{Registros}: Es una locación de almacenamiento dentro de la CPU en la cual se mantienem los datos y las direcciones de memoria durante la ejecución de una instrucción. Accesar a los registros de datos es más rápido que acceder a los datos en la memoria externa. Estos registros varían dependiendo del modelo del procesador.
 
-					\item \textbf{Unidad Lógica Aritmética}: Es la calculadora numérica y evaluadora lógica de operaciones. Aquí se reciben los datos provenientes de la memoria principal o de los registros, realiza una operación lógica y si es necesario reescribe el resultado de vuelta al registro o memoria.
+				\item \textbf{Unidad Lógica Aritmética}: Es la calculadora numérica y evaluadora lógica de operaciones. Aquí se reciben los datos provenientes de la memoria principal o de los registros, realiza una operación lógica y si es necesario reescribe el resultado de vuelta al registro o memoria.
 
-					\item \textbf{Unidad de Control}: Contiene las instrucciones lógicas del hardware, esta se encarga de decodificar y monitorear la ejecución de las instrucciones. Tambien funciona como árbitro de varios de los servicios del CPU, los cuiales se encuentran sincronizados por un reloj de sistema.
-				\end{itemize}
-	
+				\item \textbf{Unidad de Control}: Contiene las instrucciones lógicas del hardware, esta se encarga de decodificar y monitorear la ejecución de las instrucciones. Tambien funciona como árbitro de varios de los servicios del CPU, los cuiales se encuentran sincronizados por un reloj de sistema.
+			\end{itemize}
+
 		\section{Microprocesador}
-			El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU.
+		El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU.
 
-			Los microprocesadores vienen en diferentes presentaciones, 4-Bits, 8-Bits, 16-bits, 32-Bits e incluso en 64-Bits aunque estos últimos no son demasiado comunes como los anteriores. El número de bits corresponde al número de digitos binarios que el microprocesador puede manipular en las operaciones.
+		Los microprocesadores vienen en diferentes presentaciones, 4-Bits, 8-Bits, 16-bits, 32-Bits e incluso en 64-Bits aunque estos últimos no son demasiado comunes como los anteriores. El número de bits corresponde al número de digitos binarios que el microprocesador puede manipular en las operaciones.
 
-			El acceso de la memoria principal toma mucho más tiempo que el tiempo de reloj disponible por el CPU, por ello es que los microprocesadores de 32 y 64 Bits poseen una textit{memoria caché} de alta velocidad.
+		El acceso de la memoria principal toma mucho más tiempo que el tiempo de reloj disponible por el CPU, por ello es que los microprocesadores de 32 y 64 Bits poseen una textit{memoria caché} de alta velocidad.
+
+		\section{Microcontrolador}
+		Una microcomputadora se compone de 3 bloques fundamentales: CPU, Memoria y los puertos de entrada/salida. Estos se conectan entre si mediante grupos de lineas eléctricas denominados buses; los cuales pueden ser de direcciones, si transportan direcciones de memoria, o de datos, si en cambio transportan datos o instrucciones, o de control si estos conducen diversas señales de control.
+
+		\begin{figure}[!htpb]
+			\centering
+			\includegraphics[scale = 1.0]{Material de Consulta/EsqMicro.PNG}
+			\caption[Esquema básico general de un microprocesador]{Esquema básico general de un microprocesador}
+			\label{EsqMicro}
+		\end{figure}
+
+		El CPU es el encargado en traer las instrucciones alojadas en la memoria, interpretarlas y hacer que se ejecuten. En una micromputadora la CPU es el microprocesador por lo cual un Microcontrolador es una Microcomputadora fabricada en un Circuito Integrado.
+
+		Los microcontroladores son construidos fundamentalmente para aplicaciones puntuales en automoción, equipos de comunicaciones y telefonía, instrumentación electrónica, equipos médicos e industriales, electrodomésticos, etc. donde se deben realizar un pequeño número de tareas al menor costo posible. En estas el microcontrolador ejecuta un programa almacenado permenentemente en la memoria interactuando con datos almacenados temporalmente e interactua con el exterior a traves de las líneas de entrada/salida. El microcontrolador es parte de la aplicación(Controlador Embebido).
+
+			\subsection{Elementos Principales}
+			Además de la microcomputadora (CPU, memori y lineas de entrada/salida) los microcontroladores disponen de más componentes para poder realizar el funcionamiento requerido por las aplicaciones.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 1.0]{Material de Consulta/BloqMicro.PNG}
+				\caption[Esquema de bloques de un microprocesador]{Esquema de bloques de un microprocesador}
+				\label{BloqMicro}
+			\end{figure}
+
+				\subsubsection{Oscilador}
+				Para poder realizar las operaciones internas el microcontrolador depende de un oscilador que genera los impulsos que permiten la sincronización de todas ellas. En la mayoría de los microcontroladores se utiliza como oscilador a un cristal de cuarzo debido a la gran estabilidad de frecuencia que ofrecen estos cristales ya que de estos dependen la velocidad de ejecucion de las tareas.
+
+				\subsubsection{Watchdog Timer (Perro Guardián)}
+				Es un recurso disponible en la mayoría de los microcontroladores, consta de un oscilador (puede ser el principal) y de un contador binario de N-bits. La salida del contador va conctada al circuito \textit{reset} del microcontrolador(\ref{BloqWDT}). El funcionamiento se define como un contador de pulsos que al llegar al desbordamiento reinicia el dispositivo, el fin de este bloque es que el programador evite el desbordamiento y por ende el reinicio del dispositivo, por ello se debe reiniciar el contador desde el programador. En cambio si existe un error en alguna parte del código que evita que se reinicie el contador del perro guardián este reiniciará el microcontrolador y será posible retomar el control y redirigir el programa por la ruta correcta.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/BloqWDT.PNG}
+					\caption[Bloque WatchDog Timer]{Bloque WatchDog Timer}
+					\label{BloqWDT}
+				\end{figure}
+
+				Es importante que cuando no se limpie el contador WDT a tiempo, se realice la acción de \textit{reset} ya que entonces significa que se ha encontrado un fallo en la secuencia de las instrucciones y para remediarlo se redirecciona a una direccion de memoria determinada y no una aleatoria como podría suceder en estos casos.
+
+				En algunos microcontroladores como los PIC se señaliza la causa del reset por medio de bits de un registro del microcontrolador con lo cual se puede remediar el origen del fallo.
+
+				\subsubsection{Reset}
+				El reset es una función con la cual se inician los microprocesadores y los microcontroladores. Esta acción se ejecuta cuando una señal de reset es aplicada de manera manual a una terminal en el CI con lo cual se pone el contador de programa (PC) a un valor predeterminado comunmente 0 haciendo que el microprocesador comienze a ejecutar las instrucciones a partir de esa posición.
+
+				En un microcomputador la señal de \textit{reset} se genera e forma manual al pulsar un botón o al iniciar el sistema (\textit{Reset} por encendido), sin embargo tambien pueden haber otras fuentes de \textit{reset} como lo son por "Fallo de Alimentación" o por "Desbordamiento del WatchDog Timer".
+
+				El segundo caso, como se explicó anteriormente sucede cuando el contador WDT se desborda al no reiniciar el contador por lo que el microcontrolador ha perdido la secuencia de las instrucciones o ha entrado en un bucle demasiado largo. El primer caso sucede cuando el valor de voltaje cae por debajo del umbral de operación momentáneamente con lo que el capacitor se descarga parcialmente y se produce el reinicio del dispositivo.
+
+		\section{PIC32MZ2048EFM100}
+		Es un microcontrolador de 32-bits que permite la conectividad embebida con una unidad de Punto Flotante\cite{PIC32MZ}, esta familia de microcontroladores poseen una gran cantidad de puertos de comunicación lo que permite que sea una opción bastante adecuada para proyectos en los que se necesite el intercambio de información entre varios dispositivos.
+
+		La especificaciones del microcontrolador se pueden ver en la tabla.
+
+		\begin{table}[ht]
+				\centering
+				\begin{tabular}{ l | c }
+					\textbf{Nombre} & \textbf{Valor} \\
+					\hline
+					Familia & PIC32MZEF \\
+					\hline
+					Velocidad Max CPU [MHz] & 200 \\
+					\hline
+					Tamaño de Memoria Programable [KB] & 2048 \\
+					\hline
+					SRAM [KB] & 512\\
+					\hline
+					Auxiliary Flash [KB] & 160 \\
+					\hline
+					Crypto Engine & Yes \\
+					\hline
+					Range Temperatura [°C] & -40 to 125 \\
+					\hline
+					Rango de Voltaje Operacional [V] & 2.2 to 3.6 \\
+					\hline
+					Direct Memory Access Channels & 8 \\
+					\hline
+					Canales SPI & 6 \\
+					\hline
+					Canales I2C & 5 \\
+					\hline
+					Interfaz CODEC (I2S,AC97) & Yes \\
+					\hline
+					Peripheral Pin Select / Pin Muxing & Yes \\
+					\hline
+					Ethernet & 10/100 Base-TX Mac \\
+					\hline
+					Número de Puertos Ethernet  & 1 \\
+					\hline
+					Número de Modulos USB & 1 \\
+					\hline
+					Interfaz USB & High Speed \\
+					\hline
+					Números de Modulos CAN & 2 \\
+					\hline
+					Tipo de Modulos CAN & CAN \\
+					\hline
+					Entrada ADC & 40 \\
+					\hline
+					Resolucion Max ADC (Bits) & 12 \\
+					\hline
+					Max Rango de Muestreo ADC [ksps] & 18000 \\
+					\hline
+					Entradas de Captura & 9 \\
+					\hline
+					Standalone Output Compare/Standard PWM & 9 \\
+					\hline
+					Max 16-bit Digital Timers & 9 \\
+					\hline
+					Parallel Port & PMP \\
+					\hline
+					Number of Comparators & 2 \\
+					\hline
+					Internal Oscillator & 8 [MHz], 32 [kHz] \\
+					\hline
+					Hardware RTCC/RTC & Yes \\
+					\hline
+					Max I/O Pins & 78 \\
+					\hline
+					Pincount & 100 \\
+					\hline
+					Serial Quad Interface & Yes \\
+				\end{tabular}
+				\caption{Especificaciones PIC32MZ2048EFM100}
+		\end{table}
 
 		\section{Medidor de Energía ADE7880}
-			Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el Circuito Integrado.
+		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el Circuito Integrado.
 
 			\subsection{Interfaces de Comunicación}
-				El ADE7880 posee 3 puertos de comunicación serial SPI, I$^2$C Y HSDC, sin embargo por la configuración de los pines solo se pueden usar 2 tipos de configuraciones, una utilizando el puerto SPI únicamente y la segunda es usando los puertos I$^2$C Y HSDC.
+			El ADE7880 posee 3 puertos de comunicación serial SPI, I$^2$C Y HSDC, sin embargo por la configuración de los pines solo se pueden usar 2 tipos de configuraciones, una utilizando el puerto SPI únicamente y la segunda es usando los puertos I$^2$C Y HSDC.
 
-				Se incluyen un conjunto de 3 registros que permiten verificar la comunicación con el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar}. Los regsitros LAST\_OP (Address 0xEA01), LAST\_ADD (Address 0xE9FE) and LAST\_RWDATA se encargan de almacenar los datos, la dirección de registro y la naturaleza del acceso al registro (Lectura/Escritura) de la última comunicación exitosa respectivamente. El registro LAST\_RWDATA tiene 3 diferentes direcciones dependiendo de la longitud del registro de la última comunicación.
+			Se incluyen un conjunto de 3 registros que permiten verificar la comunicación con el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar}. Los regsitros LAST\_OP (Address 0xEA01), LAST\_ADD (Address 0xE9FE) and LAST\_RWDATA se encargan de almacenar los datos, la dirección de registro y la naturaleza del acceso al registro (Lectura/Escritura) de la última comunicación exitosa respectivamente. El registro LAST\_RWDATA tiene 3 diferentes direcciones dependiendo de la longitud del registro de la última comunicación.
 
-				\begin{table}[h]
-					\begin{tabular}{ l | c }
-						\textbf{Tipo de comunicación} & \textbf{Dirección de registro} \\
-						\hline
-						Lectura/ Escritura de 8-Bit & 0xE7FD \\
-						Lectura/ Escritura de 16-Bit & 0xE9FF \\
-						Lectura/ Escritura de 32-Bit & 0xE5FF \\
-					\end{tabular}
-					\caption{Direcciones de los registros de LAST\_RWDATA}
-				\end{table}
+			\begin{table}[ht]
+				\centering
+				\begin{tabular}{ l | c }
+					\textbf{Tipo de comunicación} & \textbf{Dirección de registro} \\
+					\hline
+					Lectura/ Escritura de 8-Bit & 0xE7FD \\
+					Lectura/ Escritura de 16-Bit & 0xE9FF \\
+					Lectura/ Escritura de 32-Bit & 0xE5FF \\
+				\end{tabular}
+				\caption{Direcciones de los registros de última escritura (LAST\_RWDATA)}
+			\end{table}
 
-				Después de cada comunicación exitosa los registros se actualizan con la información de la operación, 0xCA si fue escritura y 0x35 si es escritura y el dato que se leyó o escribió. Las operciones no completadas no se reflejan en estos registros asi como cuando se leen estos registros.
+			Después de cada comunicación exitosa los registros se actualizan con la información de la operación, 0xCA si fue escritura y 0x35 si es escritura y el dato que se leyó o escribió. Las operciones no completadas no se reflejan en estos registros asi como cuando se leen estos registros.
 
-				\subsubsection{SPI (Serial Peripheral Interface)}
-					El SPI de este CI siempre es esclavo en la comunicación y consiste en 4 pines de comunicación SCLK, MOSI, MISO Y SSA.
-					El reloj para la transferencia de datos debe aplicarse al pin SCLK y todas las transferencias de datos se sincronizan con este reloj. El intercambio de información entrante en el CI se realiza en el pin MOSI en los flancos descendentes del reloj serial y el CI lo muestrea en los flancos ascendentes del reloj. Por el contrario la información saliente del CI se transfiere por el pin MISO en los flancos descendentes del reloj serial y el dispositivo maestro muestrea la información en los flancos ascendentes. El bit más significante de la palabra es intercambiado a la entrada. La másima frecuencia del reloj serial soportada por esta interfaz es de 2.5[MHz], el pin MISO se mantiene en alta impedancia mientras no hay intercambio de información.
+			\subsubsection{SPI (Serial Peripheral Interface)}
+			El SPI de este CI siempre es esclavo en la comunicación y consiste en 4 pines de comunicación SCLK, MOSI, MISO Y SSA.
 
-					EL pin $\overline{SS}$ es utilizado para seleccionar entra más de un dispositivo si es que los hay. Para poder utilizar el dispositivo y realizar la comunicación entre ete y el dispositivo maestro este pin debe llevarse a un voltaje lógico bajo y permanecer así mientras dure la comunicación. Al cambiar el nivel lógico de este pin aborta la transferencia y para iniciar una nueva este se debe volver a poner a un voltaje lógico bajo.
+			El reloj para la transferencia de datos debe aplicarse al pin SCLK y todas las transferencias de datos se sincronizan con este reloj. El intercambio de información entrante en el CI se realiza en el pin MOSI en los flancos descendentes del reloj serial y el CI lo muestrea en los flancos ascendentes del reloj. Por el contrario la información saliente del CI se transfiere por el pin MISO en los flancos descendentes del reloj serial y el dispositivo maestro muestrea la información en los flancos ascendentes. El bit más significante de la palabra es intercambiado a la entrada. La másima frecuencia del reloj serial soportada por esta interfaz es de 2.5[MHz], el pin MISO se mantiene en alta impedancia mientras no hay intercambio de información.
 
-				\subsubsection{I$^2$C (Inter Integrated Circuits)}
-					Este CI posee una interfaz I$^2$C para la comunicación, implementada completamente como un hadware esclavo. El pin de intercambio de información SDA se encuentra localizado en el pin 38 y se encuentra compartido con el pin MOSI del puerto SPI, de igual manera el reloj serial SCL se encuentra compartido con el reloj serial del puerto SPI en el pin 36. La máxima frecuencia soportada por el reloj serial es de 400[kHz].
+			EL pin $\overline{SS}$ es utilizado para seleccionar entra más de un dispositivo si es que los hay. Para poder utilizar el dispositivo y realizar la comunicación entre ete y el dispositivo maestro este pin debe llevarse a un voltaje lógico bajo y permanecer así mientras dure la comunicación. Al cambiar el nivel lógico de este pin aborta la transferencia y para iniciar una nueva este se debe volver a poner a un voltaje lógico bajo.
 
-					La secuencia de transferencia del sistema I$^2$C consiste en el dispositivo maestro generando un condición de inicio para la transferencia cuando el bus se encuantra desocupado. El dispositivo maestro entonces transmite la direccion del dispositivo esclavo (0x70) y la dirección del regitro de la transferencia de datos en la transferencia de dirección inicial si el dispositivo esclavo reconoce entonces empieza la transferencia de datos. Esto continua hasta que el maestro emite una condición de parada y el bus queda de nuevo desocupado.
+			\subsubsection{I$^2$C (Inter Integrated Circuits)}
+			Este CI posee una interfaz I$^2$C para la comunicación, implementada completamente como un hadware esclavo. El pin de intercambio de información SDA se encuentra localizado en el pin 38 y se encuentra compartido con el pin MOSI del puerto SPI, de igual manera el reloj serial SCL se encuentra compartido con el reloj serial del puerto SPI en el pin 36. La máxima frecuencia soportada por el reloj serial es de 400[kHz].
 
-				\subsubsection{HSDC (High Speed Data Capture)}
-					Debido a que para este proyecto es necesario el recopilar una gran cantidad de muestras a alta velocidad la documentación del Circuito Integrado ADE7880 recomienda, para la lectura de estos registros en específico, utilizar una interfaz propia de Analog Devices para este circuito llamada High Speed Data Capture (Captura de Datos a Alta Velocidad) por lo que es necesario configurar el microprocesador de manera que se pueda usar la comunicación I$^2$C como interfaz serial principal y la comunicación HSDC como secundaria usando el canal SPI del microcontrolador como esclavo, que recibirá toda la información de los registros de voltaje y corriente enviados por esta interfaz.
+			La secuencia de transferencia del sistema I$^2$C consiste en el dispositivo maestro generando un condición de inicio para la transferencia cuando el bus se encuantra desocupado. El dispositivo maestro entonces transmite la direccion del dispositivo esclavo (0x70) y la dirección del regitro de la transferencia de datos en la transferencia de dirección inicial si el dispositivo esclavo reconoce entonces empieza la transferencia de datos. Esto continua hasta que el maestro emite una condición de parada y el bus queda de nuevo desocupado.
+
+			\subsubsection{HSDC (High Speed Data Capture)}
+			Debido a que para este proyecto es necesario el recopilar una gran cantidad de muestras a alta velocidad la documentación del Circuito Integrado ADE7880 recomienda, para la lectura de estos registros en específico, utilizar una interfaz propia de Analog Devices para este circuito llamada High Speed Data Capture (Captura de Datos a Alta Velocidad) por lo que es necesario configurar el microprocesador de manera que se pueda usar la comunicación I$^2$C como interfaz serial principal y la comunicación HSDC como secundaria usando el canal SPI del microcontrolador como esclavo, que recibirá toda la información de los registros de voltaje y corriente enviados por esta interfaz.
+
+		\section{Entorno de Desarrollo MPLABX}
+		Microchip provee un entorno de desarrollo y un compilador 
+			\subsection{Herramienta de configuración MPLAB Harmony}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FIRMWARE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\section{Firmware}
-		\subsection{Configuración del puerto I$^2$C}
+		\section{Firmware}
+			\subsection{Inicialización}
+			La programación del proyecto se realiza por parte del entorno de desarrollo de Microchip MPLAB X, mientras que la conficuración de los puertos se realiza con la herramienta proporcionada por el mismo MPLAB Harmony debido a que la configuración manual sería demasiado complicada debido a la cantidad de puertos, pines y servicios disponibles por parte del microcontrolador. ya que esta es una actualización del módulo de medición de energía por lo que la inicialización esta parcialmente completa, sin embargo al realizar el cambio de canal de comunicación principal de SPI (\ref{ConfigSPI}) a I2C(\ref{ConfigI2C}) y HSDC(Este puerto utiliza la interfaz SPI del microcontrolador por lo que se reconectan los pines pero se deja la configuración ) se cambió las configuraciones de estos canales. Todas las demás siguieron igual a como se tenían en la primer versión del módulo.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Pruebas de Comunicación/ConfigSPI.PNG}
+				\caption[Configuración SPI del PIC32MZ]{Configuración SPI del PIC32MZ}
+				\label{ConfigSPI} 
+				\hfill \break
+				\includegraphics[scale = 0.8]{Pruebas de Comunicación/ConfigI2C.PNG}
+				\caption[Configuración I2C del PIC32MZ]{Configuración I2C del PIC32MZ}
+				\label{ConfigI2C}
+			\end{figure}
+
+			\subsection{Configuración del puerto I$^2$C}
 			Este puerto se activa al encender el dispositivo o al realizar un reinicio de hardware, entonces el puerto I$^2$C queda seleccionado como interfaz de comunicación. Para evitar que al hacer cambios en el nivel de voltaje del pin $\overline{SS}$/HSA se cambie a la interfaz de comunicación SPI, se debe bloquear el puerto I$^2$C para ello se debe poner a 1 el Bit 1 (I2C\_LOCK) del registro CONFIG2, esto previene que al realizar cambios de voltaje en el pin $\overline{SS}$/HSA y el cambio a SPI no es posible hasta que se realize un reinicio de hardware o se reinicie todo el sistema.
 
-			\begin{table}[h]
+			\begin{table}[ht]
+				\centering
 				\begin{tabular}{c | c | c}
 					\textbf{Bit} & \textbf{Mnemonico} & \textbf{Valor predeterminado} \\
 					\hline
@@ -127,74 +275,84 @@
 
 			Este registro se accesa como si fuera un registro de 8-Bits por lo que los 6 Bits más significativos deben permanecer como 0. En este caso en particular se transmite 0x02 a la dirección de registro 0xEC01.
 
-		\subsection{Configuración del puerto HSDC}
+			\subsection{Configuración del puerto HSDC}
 			Para configurar el puerto HSDC se debe escribir primero al registro HSDC\_CFG [0xE706] a traves del puerto I$^2$C la configuración con la que se van a estar enviando los datos a traves del puerto HSDC. Ya que se configura el puerto se habilita colocando el bit 6 (HSDCEN) en el registro CONFIG [0xE618] a 1, con esto se activa la comunicación.
 
 			La configuracion que se ha decidido usar es tener el reloj a 8[MHz] con la transmision de registros en paquetes de 32-bits, no se agrega una brecha de 7 ciclos de reloj entre transmisiones y unicamente se transmitira el contenido de los registros de voltaje y corriente: IAWV, VAWV, IBWV, VBWV, ICWV, VCWV, e INWV, lo que permite que se realice la comunicación de manera más rápida. El pin de selccion de esclavo ($\overline{SS}$ ó Chip Select) se mantiene como activo en bajo. %AUN SE ESTA PROBNADO SI FUNCIONARIA CON ACYIVO E BAJO O SE DEBE USAR COMO ACTIVO EN ALTO
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% RESULTADOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Resultados}
-		Como se explicó al principio el desarrollo de este proyecto se pensó como una mejora a los medidores de energía anteriormente fabricados por el Instituto de Ingeniería por lo que este, solo se centró únicamente en la lectura de muestras a alta velocidad por parte del microcontrolador.
+	Como se explicó al principio el desarrollo de este proyecto se pensó como una mejora a los medidores de energía anteriormente fabricados por el Instituto de Ingeniería por lo que este, solo se centró únicamente en la lectura de muestras a alta velocidad por parte del microcontrolador.
 
 		\section{Lectura de Datos Usando el Canal SPI}
-			En un principio el sistema medidor de energía estaba pensado para realizar la comunicación entre el microprocesador y el medidor ADE7880 con interfaz SPI sin embargo al momento de realizar las primeras pruebas, los registros correspondientes a los canales de medición de voltaje y corriente, pasado un tiempo los valores que se recuperan de los registros pierden coherencia lo que hace que los resultados sean inutiles para su análisis.
+		En un principio el sistema medidor de energía estaba pensado para realizar la comunicación entre el microprocesador y el medidor ADE7880 con interfaz SPI sin embargo al momento de realizar las primeras pruebas, los registros correspondientes a los canales de medición de voltaje y corriente, pasado un tiempo los valores que se recuperan de los registros pierden coherencia lo que hace que los resultados sean inutiles para su análisis.
 
-			La lectura de los registros se configuró para que el microprocesador lo realizara a la mayor velocidad posible utilizando un reloj de 150000[Hz] por el canal 6 SPI \ref{ConfigSPI}.
+		La lectura de los registros se configuró para que el microprocesador lo realizara a la mayor velocidad posible utilizando un reloj de 150000[Hz] por el canal 6 SPI \ref{ConfigSPI}.
 
-			\begin{figure}
-				\centering
-				\includegraphics[scale = 1.0]{Pruebas de Comunicación/ConfigSPI.PNG}
-				\caption[Configuración SPI del PIC32MZ]{Configuración SPI del PIC32MZ}
-				\label{ConfigSPI} 
-			\end{figure}
+		En la siguiente gráfica \ref{ComSPI} se puede ver como la velocidad de comunicación es bastante rápida al leer los valores de registro a pesar de tener que leer el registro DREADY para asegurarse que los registros de voltaje y corriente esten listos se obtenían demasiado rápido, pero como se había mencinado estos valores no demostraban valores que puedan ser útiles.
 
-			En la siguiente gráfica \ref{ComSPI} se puede ver como la velocidad de comunicación es bastante rápida al leer los valores de registro a pesar de tener que leer el registro DREADY para asegurarse que los registros de voltaje y corriente esten listos se obtenían demasiado rápido, pero como se había mencinado estos valores no demostraban valores que puedan ser útiles.
+		\begin{figure}[!htpb]
+			\centering
+			\includegraphics[scale = 0.5]{Pruebas de Comunicación/DREADY_TimeComp.PNG}
+			\caption[Comunicación SPI con los registros de voltaje y corriente]{Comunicación SPI con los registros de voltaje y corriente}
+			\label{ComSPI} 
+		\end{figure}
 
-			\begin{figure}[!htpb]
-				\centering
-				\includegraphics[scale = 0.6]{Pruebas de Comunicación/DREADY_TimeComp.PNG}
-				\caption[Comunicación SPI con los registros de voltaje y corriente]{Comunicación SPI con los registros de voltaje y corriente}
-				\label{ComSPI} 
-			\end{figure}
+		Como se pueden ver en las graficas de voltaje (Graficas \ref{CanalVoltaje}) y corriente (Graficas \ref{CanalCorriente}) al usar el canal SPI para muestrear los registros de voltaje y corriente de los 3 canales estos entregaban valores que no reflejaban la energía que se suministraba y en algunos casos ni siquiera se actualizaban los valores que el dispositivo tiene inicialmente, ya que las pruebas que se hacían se realizaban con un simulador de voltaje y corriente controlado con lo cual era posible conocer el valor que se deseaba obtener.
 
-			Como se pueden ver en las graficas de voltaje (Graficas \ref{CanalVoltaje}) y corriente (Graficas \ref{CanalCorriente}) al usar el canal SPI para muestrear los registros de voltaje y corriente de los 3 canales estos entregaban valores que no reflejaban la energía que se suministraba y en algunos casos ni siquiera se actualizaban los valores que el dispositivo tiene inicialmente, ya que las pruebas que se hacían se realizaban con un simulador de voltaje y corriente controlado con lo cual era posible conocer el valor que se deseaba obtener.
+		Después de realizar un par de pruebas más y obtener valores similares en todas las pruebas y siguiendo la recomendación que el manual del dispositivo para la lectura de esos registros se decidió cambiar el canal de comunicación de SPI por el HSDC con el cual se planea tener una lectura más rápida de los registros así como poder mantener la comunicación únicamente con los registros de voltaje y corriente de manera continua sin interaciones con los otros módulos del sistema de medición de energía.
 
-			Después de realizar un par de pruebas más y obtener valores similares en todas las pruebas y siguiendo la recomendación que el manual del dispositivo para la lectura de esos registros se decidió cambiar el canal de comunicación de SPI por el HSDC con el cual se planea tener una lectura más rápida de los registros así como poder mantener la comunicación únicamente con los registros de voltaje y corriente de manera continua sin interaciones con los otros módulos del sistema de medición de energía.
+		\begin{figure}[!htbp]
+			\subfigure[Canal de Voltaje A]{
+				\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140220.png}
+			}
+			\subfigure[Canal de Voltaje B]{
+				\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140220-000000.png}
+			}
+			\subfigure[Canal de Voltaje C]{
+				\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140220-000001.png}
+			}
+			\caption[Gráficas de la primer prueba de los Canales de Voltaje]{Gráficas de la primer prueba de los Canales de Voltaje}
+			\label{CanalVoltaje}
+		\end{figure}
 
-			\begin{figure}[htbp]
-				\subfigure[Canal de Voltaje A]{
-					\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140220.png}
-				}
-				\subfigure[Canal de Voltaje B]{
-					\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140220-000000.png}
-				}
-				\subfigure[Canal de Voltaje C]{
-					\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140220-000001.png}
-				}
-				\caption[Gráficas de la primer prueba de los Canales de Voltaje]{Gráficas de la primer prueba de los Canales de Voltaje}
-				\label{CanalVoltaje}
-			\end{figure}
+		\begin{figure}[!htbp]
+			\subfigure[Canal de Corriente A]{
+				\includegraphics[width = 8.6cm, height = 6.7cm]{Pruebas de Muestreo/QS.png}
+			}
+			\subfigure[Canal de Corriente B]{
+				\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140221.png}
+			}
+			\subfigure[Canal de Corriente C]{
+				\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS2.png}
+			}
+			\caption[Gráficas de la primer prueba de los Canales de Corriente]{Gráficas de la primer prueba de los Canales de Corriente}
+			\label{CanalCorriente}
+		\end{figure}
 
-			\begin{figure}[htbp]
-				\subfigure[Canal de Corriente A]{
-					\includegraphics[width = 8.6cm, height = 6.7cm]{Pruebas de Muestreo/QS.png}
-				}
-				\subfigure[Canal de Corriente B]{
-					\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140221.png}
-				}
-				\subfigure[Canal de Corriente C]{
-					\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS2.png}
-				}
-				\caption[Gráficas de la primer prueba de los Canales de Corriente]{Gráficas de la primer prueba de los Canales de Corriente}
-				\label{CanalCorriente}
-			\end{figure}
-
-		%\section{Lectura de }
-
+		\section{Lectura de Datos usando el canal HSDC}
+		Las primeras pruebas que se realizaron usando este canal de comunicación inicia de manera correcta al configurar los valores necesarios en el registro correspondiente del ADE7880, se comprobó usando el osciloscopio que los paquetes de datos se envíen y reciban de manera correcta por el canal I2C para despues comprobar que el puerto HSDC realmente envíe información.
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%COLOCAR IMAGEN DEL OSCILOSCOPIO DE LOS DATOS ENVIADOS POR EL I2C%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		Al iniciar el DSP se comprobó que el puerto HSDC enviaba la información proveniente de los registros de corriente y voltaje del medidor de energía.
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		%COLOCAR IMAGEN DEL OSCILOSCOPIO DE LOS DATOS ENVIADOS POR EL HSDC%
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	\chapter{Conclusiones}
+	\chapter{Glosario}
+	
+	\bibliography{Bibliografia}
+	\bibliographystyle{apalike}
+	
+	\appendix
+	\chapter{Hojas de Datos de la Familia PIC32MZ}
+		\includepdf[pages = {1,5,6,19,327,365,366,652,653,654,657,658,659,660,676,677,678,679}]{Material de Consulta/PIC32MZ}
 
-	%\bibliographystyle{humannat}
-	%\bibliography{references}
+	\chapter{Hojas de Datos del Medidor de Energía ADE7880}
+		\includepdf[pages = {1,4,5,6,7,8,9,10,12,13,19,23,24,66,76,77,78,79,80,81,82,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106}]{Material de Consulta/ADE7880}
 
 	\backmatter%@sglvgdor
 \end{document}
