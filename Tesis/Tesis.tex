@@ -58,11 +58,11 @@
 			El procesador, tambien llamada como la Unidad Central de Procesamiento se puede clasificar en tres partes:
 		
 			\begin{itemize}
-				\item \textbf{Registros}: Es una locación de almacenamiento dentro de la CPU en la cual se mantienem los datos y las direcciones de memoria durante la ejecución de una instrucción. Accesar a los registros de datos es más rápido que acceder a los datos en la memoria externa. Estos registros varían dependiendo del modelo del procesador.
+				\item \textbf{Registros:} Es una locación de almacenamiento dentro de la CPU en la cual se mantienem los datos y las direcciones de memoria durante la ejecución de una instrucción. Accesar a los registros de datos es más rápido que acceder a los datos en la memoria externa. Estos registros varían dependiendo del modelo del procesador.
 
-				\item \textbf{Unidad Lógica Aritmética}: Es la calculadora numérica y evaluadora lógica de operaciones. Aquí se reciben los datos provenientes de la memoria principal o de los registros, realiza una operación lógica y si es necesario reescribe el resultado de vuelta al registro o memoria.
+				\item \textbf{Unidad Lógica Aritmética:} Es la calculadora numérica y evaluadora lógica de operaciones. Aquí se reciben los datos provenientes de la memoria principal o de los registros, realiza una operación lógica y si es necesario reescribe el resultado de vuelta al registro o memoria.
 
-				\item \textbf{Unidad de Control}: Contiene las instrucciones lógicas del hardware, esta se encarga de decodificar y monitorear la ejecución de las instrucciones. Tambien funciona como árbitro de varios de los servicios del CPU, los cuiales se encuentran sincronizados por un reloj de sistema.
+				\item \textbf{Unidad de Control:} Contiene las instrucciones lógicas del hardware, esta se encarga de decodificar y monitorear la ejecución de las instrucciones. Tambien funciona como árbitro de varios de los servicios del CPU, los cuiales se encuentran sincronizados por un reloj de sistema.
 			\end{itemize}
 
 		\section{Microprocesador}
@@ -119,6 +119,28 @@
 				En un microcomputador la señal de \textit{reset} se genera e forma manual al pulsar un botón o al iniciar el sistema (\textit{Reset} por encendido), sin embargo tambien pueden haber otras fuentes de \textit{reset} como lo son por "Fallo de Alimentación" o por "Desbordamiento del WatchDog Timer".
 
 				El segundo caso, como se explicó anteriormente sucede cuando el contador WDT se desborda al no reiniciar el contador por lo que el microcontrolador ha perdido la secuencia de las instrucciones o ha entrado en un bucle demasiado largo. El primer caso sucede cuando el valor de voltaje cae por debajo del umbral de operación momentáneamente con lo que el capacitor se descarga parcialmente y se produce el reinicio del dispositivo.
+
+				\subsubsection{Estado de Bajo Consumo}
+				Una parte importante en los microcontroladores es la caracteristica de tener un bajo consumo de corriente ya que hay un gran número de aplicaciones que rquieren el uso de baterias como medio de alimentación por lo que un bajo consumo de corriente ayuda a una prolongada duración de la bateria.
+
+				El consumo de corriente en el circuito se sustenta en el uso de compuertas CMOS que al mantenerse en un nivel lógico estático el consumo es prácticamente 0 y solo aumenta cuando el oscilador aumenta la frecuencia de las conmutaciones de los estados de las compuertas lógicas.
+
+				Los microcontroladores comunmente se encuentran en este estado y únicamente se activan al ocurrir un evento externo, realizan una tarea y regresan a este estado por lo que se recomienda tener el microcontrolador con bajo consumo de corriente hasta que ocurra un evento que lo saque de ese letargo.
+
+				\subsubsection{Memoria}
+				La memoria en un microcontrolador es el lugar donde se almacenan el programa que se va a ejecutar y los datos y/o variables que va a utilizar. La memoria de datos es de lectura y escritura y los datos no permanecen en ella una vez que se suspende la alimentación al microcontrolador, es decir, la memoria es volátil (Memorias RAM estáticas). Algunos microcontroladores usan una memoria adicional externa de lectura y escritura no volátil como parte de la memoria de datos, para permitir almacenamiento de datos fijos, para este tipo de memorias se utilizan comunmente EEPROM.
+
+				\begin{itemize}
+					\item \textbf{RAM:} Esta es un tipo de memoria de lectura y escritura de alta velocidad. En la memoria RAM la información almacenada permanece estable indefinidamente mientras no se suprima la alimentación del microcontrolador.
+
+					\item \textbf{ROM:} Si se usa memoria ROM ésta se graba durante la fabricación del dispositivo y no se puede alterar una vez almacenada, por ello el programa debe ser depurado. Los microcontroladores que utilizan este tipo de memorias son aquellos que se fabrican en grandes cantidades ya que su fabricación es bastante rentable gracias a su bajo costo. 
+
+					\item \textbf{EEPROM:} Las memorias EEPROM son memorias no volátiles de lectura y escritura, donde la escritura se realiza por medios eléctricos y se puede lograr individualmente sin la necesidad de un borrado previo, sin embargo a pesar de ser reprogramables cuentan con un número finito de veces.
+
+					\item \textbf{FLASH:} En las memorias FLASH se pueden realizar las operaciones de lectura y escritura celda por celda, pero a diferencia de las anateriores se requiere primero borrar la información de la celda antes de escribir en ella y estas deben borarse por bloques de celdas colocando a 0. A menudo las operaciones de ecritura de información se debe realizar un proceso de lectura-borrado-escritura del bloque de celdas donde se desea escribir la información. Todas las operaciones de borrado, lectura y escritura se realizan con la misma tensión de voltaje
+				\end{itemize}
+
+			\subsection{Arquitectuas}
 
 		\section{PIC32MZ2048EFM100}
 		Es un microcontrolador de 32-bits que permite la conectividad embebida con una unidad de Punto Flotante\cite{PIC32MZ}, esta familia de microcontroladores poseen una gran cantidad de puertos de comunicación lo que permite que sea una opción bastante adecuada para proyectos en los que se necesite el intercambio de información entre varios dispositivos.
