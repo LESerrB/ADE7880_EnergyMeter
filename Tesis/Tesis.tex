@@ -65,8 +65,53 @@
 				\item \textbf{Unidad de Control:} Contiene las instrucciones lógicas del hardware, esta se encarga de decodificar y monitorear la ejecución de las instrucciones. Tambien funciona como árbitro de varios de los servicios del CPU, los cuiales se encuentran sincronizados por un reloj de sistema.
 			\end{itemize}
 
+			\subsection{Arquitecturas de Procesadores}
+
+				\subsubsection{Arquitectura Harvard}
+				El término de Arquitectura Harvard se le conoce a aquellas configuraciones donde las instrucciones y los datos de entrada/salida se almacenan se almacenan por separado en 2 memorias, este término se le conoce por la primer computadora digital automática el "\textit{Harvard Mark I}" (1944) diseñado por IBM y la Universidad de Harvard\cite{cuellar2008sistemas}.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/ArqHrv.PNG}
+					\caption[Arquietctura Harvard]{Arquietctura Harvard}
+					\label{ArqHrv}
+				\end{figure}
+
+				\subsubsection{Arquitectura Von Neumann}
+				Esta arquitectura usa la misma memoria para instrucciones como para datos, utilizando una memoria de lectura/escritura para este proceso. En esta arquitectura no hay diferencia entre datos e instrucciones, todos son números y solo depende del uso que se le asigne.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/ArqVNm.PNG}
+					\caption[Arquietctura Von Neumann]{Arquietctura Von Neumann}
+					\label{ArqVNm}
+				\end{figure}
+
+				En estos casos es común el tener un programa para tomar datos externos, almacenarlos como datos en la memoria y ejecutarlos como instrucciones.
+
+				Actualmente se tienen microprocesadores de ambas arquitecturas y depende de las necesidades de cada situación en la que se beneficiaá del uso de una u otra arquitectura.
+
+				\subsubsection{Puertos}
+				Los puertos son un conjunto de conexiones con las que el procesador puede interactuar con el mundo exterior a través de señales digitales.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/PuertosE-S.PNG}
+					\caption[Puertos de Entrada y Salida]{Puertos de Entrada y Salida}
+					\label{PrtsES}
+				\end{figure}
+
+				Un procesador considera a estos como locaciones de memoria que se escriben o leen datos. A un puerto que toma datos del exterior se le conoce como puertos de entrada (input) y si envía información al exterior entonces es de salida (output). Generalmente a estos puertos se les conoce como Puertos I/O.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/PrtsIO.PNG}
+					\caption[Memoria y Puertos I/O]{Interacción de puertos con la memoria y con el procesador}
+					\label{PrtsIO}
+				\end{figure}
+
 		\section{Microprocesador}
-		El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU.
+		El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU\cite{valdes2007microcontroladores}.
 
 		Los microprocesadores vienen en diferentes presentaciones, 4-Bits, 8-Bits, 16-bits, 32-Bits e incluso en 64-Bits aunque estos últimos no son demasiado comunes como los anteriores. El número de bits corresponde al número de digitos binarios que el microprocesador puede manipular en las operaciones.
 
@@ -140,7 +185,12 @@
 					\item \textbf{FLASH:} En las memorias FLASH se pueden realizar las operaciones de lectura y escritura celda por celda, pero a diferencia de las anateriores se requiere primero borrar la información de la celda antes de escribir en ella y estas deben borarse por bloques de celdas colocando a 0. A menudo las operaciones de ecritura de información se debe realizar un proceso de lectura-borrado-escritura del bloque de celdas donde se desea escribir la información. Todas las operaciones de borrado, lectura y escritura se realizan con la misma tensión de voltaje
 				\end{itemize}
 
-			\subsection{Arquitectuas}
+			\subsection{Arquitecturas CISC y RISC}
+			CISC (Complex Instruction Set Computer) y RISC (Reduced Instruction Set Computer) son dos modelos de computadoras visto desde el repertorio de instrucciones que repercuten en el modelo de arquitectura de la CPU y como lo dice su nombre las computadoras CISC tiene una mayor cantidad de instrucciones miestras que el RISC posee una menor cantidad.
+
+			Las arquitecturas CISC predominaba en un inicio debido a la ambición de hacer los microprocesadores y microcontroladores los más potente posibles. Debido a la complejidad que fue aumentando lo hizo también la complejidad de la CPU y por ende se le debió dedicar un mayor espacio en el circuito integrado a la decodificadción y ejecución de las instrucciones.
+
+			Por el contrario las RISC tienen un repertorio corto de instrucciones sencillas que pueden realizar operaciones simples pero a alta velocidad. La complejidad del CPU disminuye, así que a frecuencia del oscilador puede aumentar y así mejorar la velocidad de ejecución de las operaciones. Esto támbien apoya en su fabricación siendo más sencillos y baratos de producir, por ello esta arquitectura ha sido la predominante en microcontroladores PIC.
 
 		\section{PIC32MZ2048EFM100}
 		Es un microcontrolador de 32-bits que permite la conectividad embebida con una unidad de Punto Flotante\cite{PIC32MZ}, esta familia de microcontroladores poseen una gran cantidad de puertos de comunicación lo que permite que sea una opción bastante adecuada para proyectos en los que se necesite el intercambio de información entre varios dispositivos.
