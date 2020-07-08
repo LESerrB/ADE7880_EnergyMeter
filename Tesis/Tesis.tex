@@ -68,7 +68,7 @@
 			\subsection{Arquitecturas de Procesadores}
 
 				\subsubsection{Arquitectura Harvard}
-				El término de Arquitectura Harvard se le conoce a aquellas configuraciones donde las instrucciones y los datos de entrada/salida se almacenan se almacenan por separado en 2 memorias, este término se le conoce por la primer computadora digital automática el "\textit{Harvard Mark I}" (1944) diseñado por IBM y la Universidad de Harvard\cite{cuellar2008sistemas}.
+				El término de Arquitectura Harvard se le conoce a aquellas configuraciones donde las instrucciones y los datos de entrada/salida se almacenan por separado en 2 memorias, este término se le conoce por la primer computadora digital automática el "\textit{Harvard Mark I}" (1944) diseñado por IBM y la Universidad de Harvard\cite{cuellar2008sistemas}.
 
 				\begin{figure}[!htpb]
 					\centering
@@ -77,8 +77,10 @@
 					\label{ArqHrv}
 				\end{figure}
 
+				La arquitectura Harvard duplica efectivamente el espacio accesible de memoria y la velocidad teórica de ejecución, ya que el procesador puede realizar las operaciones de lectura y escritura sobre los 2 buses a la vez y leer datos e instrucciones en el mismo ciclo\cite{caprile2012desarrollo}.
+
 				\subsubsection{Arquitectura Von Neumann}
-				Esta arquitectura usa la misma memoria para instrucciones como para datos, utilizando una memoria de lectura/escritura para este proceso. En esta arquitectura no hay diferencia entre datos e instrucciones, todos son números y solo depende del uso que se le asigne.
+				Esta arquitectura usa la misma memoria para instrucciones como para datos, es decir, utiliza una memoria de lectura/escritura para estoa procesos. En esta arquitectura no hay diferencia entre datos e instrucciones, todos son números y solo depende del uso que se le asigne. Esto ha permitido el desarrollo de procesaores simples y relativamente eficientes.
 
 				\begin{figure}[!htpb]
 					\centering
@@ -145,7 +147,7 @@
 				Para poder realizar las operaciones internas el microcontrolador depende de un oscilador que genera los impulsos que permiten la sincronización de todas ellas. En la mayoría de los microcontroladores se utiliza como oscilador a un cristal de cuarzo debido a la gran estabilidad de frecuencia que ofrecen estos cristales ya que de estos dependen la velocidad de ejecucion de las tareas.
 
 				\subsubsection{Watchdog Timer (Perro Guardián)}
-				Es un recurso disponible en la mayoría de los microcontroladores, consta de un oscilador (puede ser el principal) y de un contador binario de N-bits. La salida del contador va conctada al circuito \textit{reset} del microcontrolador(\ref{BloqWDT}). El funcionamiento se define como un contador de pulsos que al llegar al desbordamiento reinicia el dispositivo, el fin de este bloque es que el programador evite el desbordamiento y por ende el reinicio del dispositivo, por ello se debe reiniciar el contador desde el programador. En cambio si existe un error en alguna parte del código que evita que se reinicie el contador del perro guardián este reiniciará el microcontrolador y será posible retomar el control y redirigir el programa por la ruta correcta.
+				Es un recurso disponible en la mayoría de los microcontroladores, consta de un oscilador (puede ser el principal) y de un contador binario de N-bits. La salida del contador va conectada al circuito \textit{reset} del microcontrolador(\ref{BloqWDT}). El funcionamiento se define como un contador de pulsos que al llegar al desbordamiento reinicia el dispositivo, el fin de este bloque es que el programador evite el desbordamiento y por ende el reinicio del dispositivo, por ello se debe reiniciar el contador desde el programador. En cambio si existe un error en alguna parte del código que evita que se reinicie el contador del perro guardián este reiniciará el microcontrolador y será posible retomar el control y redirigir el programa por la ruta correcta.
 
 				\begin{figure}[!htpb]
 					\centering
@@ -197,7 +199,7 @@
 
 		La especificaciones del microcontrolador se pueden ver en la tabla.
 
-		\begin{table}[ht]
+		\begin{table}[!htpb]
 				\centering
 				\begin{tabular}{ l | c }
 					\textbf{Nombre} & \textbf{Valor} \\
@@ -269,15 +271,68 @@
 				\caption{Especificaciones PIC32MZ2048EFM100}
 		\end{table}
 
-		\section{Medidor de Energía ADE7880}
-		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el Circuito Integrado.
+		En particular esta familia de microcontroladores posee perifericos que operan a una mayor frecuencia que los microcontroladores tipicos usados para los sistemas embebidos. Esto es posible gracias al microprocesador que posee la CPU el cual contiene varios bloques lógicos que trabajan en conjunto en paralelo, proviendo un alto rendimiento de procesamiento.
 
+		\section{Medidor de Energía ADE7880}
+		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar}.
+
+			\subsection{Gestion de Energía}
+			Este CI posee 4 modos de energía determinados por el estado de los pines PM0 y PM1 estros proveen total control sobre el chip y gracias a que poseen resistencias pull-up internas se pueden copnectar facilmente al microcontrolador.
+
+			Los modos de operación son:
+
+			\begin{table}[!htpb]
+				\centering
+				\begin{tabular}{ l | c | c}
+					\textbf{Modo de Energía} & \textbf{PM1} & \textbf{PM0}\\
+					\hline
+					PSM0 & 0 & 1 \\
+					PSM1 & 0 & 0 \\
+					PSM2 & 1 & 0 \\
+					PSM3 & 1 & 1 \\
+				\end{tabular}
+				\caption[Modos de Suministro de Energía]{Configuración de los pines PM para los modos de suministro de energía}
+			\end{table}
+
+			\begin{itemize}
+				\item \textbf{PSM0 (Normal Power Mode):} Este es el modo de operación completamente funcional.
+				Si el medidor de energía se encuentra en cualquiera de los otros modos y se cambia a este todos los regitros automáticamente son reiniciados a sus valores iniciales, con excepción del registro LPOILVL\footnote{Registro del límite de sobrecorriente durante el modo PSM2} y el registro CONFIG2\footnote{Registro de configuración de armónicos}.
+
+				Cuando se realiza la transición de un modo de energía a otro el CI cambia el estado del pin $\overline{IRQ1}$ a bajo y el bit 15 (RSTDONE) en el registro STATUS1 a alto, especialmente este último es el que indica el fin de la transición ya que durante es 0.
+
+				\item \textbf{PSM1 (Reduced Power Mode):} En este modo el CI mide los valores absolutos promedio de las 3 fases de corriente para almacenarlos en los registros \textit{xIMAV} \footnote{\textit{x:} Canal de corriente  A. B, C}. 
+				Este modo es útil al usar una batería externa. Los puertos de comunicación serial estan activos y se puede utilizar para leer los registros \textit{xIMAV}, sin embargo, a pesar de poder leer estos registros para los demás registros del CI no se garantizan que los valores sean correctos.
+
+				Al entrar en este modo despues de haber estado en en el PSM0 entonces el cálculo de valor absoluto promedio inicia sin retrasos. Los registros \textit{xIMAV} son accesibles en cualquier momento después de que el pin $\overline{IRQ1}$ ha cambiado a un valor de 0 (indicando el inicio del cómputo de valores absolutos promedio).
+
+				\item \textbf{PSM2 (Low Power Mode):} Los puertos de comunicación no son funcionales en eeste modo, se reduce el consumo requerido para monitorear la corriente cuando no hay entrada de voltaje y la fuente de voltaje es provista por una bateria externa.
+
+				Si el pin $\overline{IRQ0}$ está en un nivel lógico bajo al acabar el periodo de medición, entonces significa que todas las fases de corriente se meantuvieron por debajo del límite y, por lo tanto, no hay corriente fluyendo por el sistema, en este punto el microcontrolador externo pone el CI en modo de de espera. Si en cambio el pin $\overline{IRQ1}$ es el que se encuentra en bajo, entonces significa que por lo menos una entrada de corriente está por encima del límite definido y hay corriente fluyendo por el sistema a pesar de que no hay voltaje presente en los pines del CI. Esta situación se conoce como falta neutra, en este punto el microcontrolador externo coloca el CI en el modo PSM1. No es recomendable usar este modo si los registros de ganancia\footnote{PGA1[2:0]} son diferentes a 1 ó 2.
+
+				\item \textbf{PSM3 (Sleep Mode):} En este modo la mayoría de los circuitos internos se encuentran apagados y el consumo de corriente se mantiene a su más bajo nivel. Los puertos I$^2$C, SPI Y HSDC no son funcionales, además los pines de $\overline{RESET}$, MOSI/SDA, SCLK/SCI y $\overline{SS}$/HSA deben permanecer en alto.
+			\end{itemize}
+
+			\subsection{Procedimiento de Encendido}
+			El ADE7880 posee un chip interno que monitorea la fuente de alimentación (VDD). En el encendido el dispositvo permanece inactivo hasta que VDD alcanza los 2.0[V]$\pm$10\%. Al sobrepasar este límite el monitor mantiene el dispositivo en inactivo por 26[ms] para permitir alcanzar el voltaje de 3.3[V]$\pm$10\% a la fuente de voltaje.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/Encendido.PNG}
+				\caption[Encendido del ADE7880]{Procedimiento de encendido}
+				\label{ADEOn}
+			\end{figure}
+
+			Los pines PM0 y PM1 tienen resistencias pull-up, pero es necesario el colocar PM1 en un nivel lógico bajo ya sea por hardware (colocando a tierra) ó a travez del microcontrolador antes de encender el chip, para asegurar que el dispositivo se inicie en PSM0. El tiempo de encendido es de al rededor de 40[ms] tiempo en el cual el pin de $\overline{RESET}$ debe permanecer en un nivel lógico alto.
+
+			Al iniciar en en modo PSM0 el puerto activo es el I$^2$C, si se desea cambiar el puerto de comunicación se tiene que alternar el pin $\overline{SS}$/HSA 3 veces de un nivel lógico de voltaje alto a un nivel de voltaje bajo. Cuando se decide usar un puerto de comunicación este debe bloquearse para evitar que durante la comunicación se alterne por el otro puerto y se pierda la comunicación. Para ello si el puerto activo es el I$^2$C se debe escribir un 1 el bit 1 (I2C\_LOCK) del registro CONFIG2 en caso contrario si el puerto activo es el SPI entonces cualquier escritura al registro CONFIG2 bloqueará este puerto como el activo. En ambos casos el cambio por el otro puerto de comunicación no es posible hasta que se haga un reinicio de hardware o se apgue y vuelva a encender el sistema.
+
+%-----------------------------------------------------------------------------%
 			\subsection{Interfaces de Comunicación}
 			El ADE7880 posee 3 puertos de comunicación serial SPI, I$^2$C Y HSDC, sin embargo por la configuración de los pines solo se pueden usar 2 tipos de configuraciones, una utilizando el puerto SPI únicamente y la segunda es usando los puertos I$^2$C Y HSDC.
 
-			Se incluyen un conjunto de 3 registros que permiten verificar la comunicación con el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar}. Los regsitros LAST\_OP (Address 0xEA01), LAST\_ADD (Address 0xE9FE) and LAST\_RWDATA se encargan de almacenar los datos, la dirección de registro y la naturaleza del acceso al registro (Lectura/Escritura) de la última comunicación exitosa respectivamente. El registro LAST\_RWDATA tiene 3 diferentes direcciones dependiendo de la longitud del registro de la última comunicación.
+			Se incluyen un conjunto de 3 registros que permiten verificar la comunicación con el CI. Los regsitros LAST\_OP (Address 0xEA01), LAST\_ADD (Address 0xE9FE) and LAST\_RWDATA se encargan de almacenar los datos, la dirección de registro y la naturaleza del acceso al registro (Lectura/Escritura) de la última comunicación exitosa respectivamente. El registro LAST\_RWDATA tiene 3 diferentes direcciones dependiendo de la longitud del registro de la última comunicación.
 
-			\begin{table}[ht]
+			\begin{table}[!htpb]
 				\centering
 				\begin{tabular}{ l | c }
 					\textbf{Tipo de comunicación} & \textbf{Dirección de registro} \\
@@ -286,7 +341,7 @@
 					Lectura/ Escritura de 16-Bit & 0xE9FF \\
 					Lectura/ Escritura de 32-Bit & 0xE5FF \\
 				\end{tabular}
-				\caption{Direcciones de los registros de última escritura (LAST\_RWDATA)}
+				\caption[Registros de última escritura]{Direcciones de los registros de última escritura (LAST\_RWDATA)}
 			\end{table}
 
 			Después de cada comunicación exitosa los registros se actualizan con la información de la operación, 0xCA si fue escritura y 0x35 si es escritura y el dato que se leyó o escribió. Las operciones no completadas no se reflejan en estos registros asi como cuando se leen estos registros.
@@ -342,7 +397,7 @@
 					\hline
 					7:2 & Reservados & 0 \\
 				\end{tabular}
-				\caption{Valores del registro CONFIG2 que se deben transmitir para bloquear el puerto I$^2$C}
+				\caption[Valores de bloqueo del puerto I$^2$C]{Valores del registro CONFIG2 que se deben transmitir para bloquear el puerto I$^2$C}
 			\end{table}
 
 			Este registro se accesa como si fuera un registro de 8-Bits por lo que los 6 Bits más significativos deben permanecer como 0. En este caso en particular se transmite 0x02 a la dirección de registro 0xEC01.
