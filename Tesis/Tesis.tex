@@ -274,7 +274,7 @@
 		En particular esta familia de microcontroladores posee perifericos que operan a una mayor frecuencia que los microcontroladores tipicos usados para los sistemas embebidos. Esto es posible gracias al microprocesador que posee la CPU el cual contiene varios bloques lógicos que trabajan en conjunto en paralelo, proviendo un alto rendimiento de procesamiento.
 
 		\section{Medidor de Energía ADE7880}
-		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar}.
+		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar.}.
 
 			\subsection{Gestion de Energía}
 			Este CI posee 4 modos de energía determinados por el estado de los pines PM0 y PM1 estros proveen total control sobre el chip y gracias a que poseen resistencias pull-up internas se pueden copnectar facilmente al microcontrolador.
@@ -296,18 +296,18 @@
 
 			\begin{itemize}
 				\item \textbf{PSM0 (Normal Power Mode):} Este es el modo de operación completamente funcional.
-				Si el medidor de energía se encuentra en cualquiera de los otros modos y se cambia a este todos los regitros automáticamente son reiniciados a sus valores iniciales, con excepción del registro LPOILVL\footnote{Registro del límite de sobrecorriente durante el modo PSM2} y el registro CONFIG2\footnote{Registro de configuración de armónicos}.
+				Si el medidor de energía se encuentra en cualquiera de los otros modos y se cambia a este todos los regitros automáticamente son reiniciados a sus valores iniciales, con excepción del registro LPOILVL\footnote{Registro del límite de sobrecorriente durante el modo PSM2.} y el registro CONFIG2\footnote{Registro de configuración de armónicos.}.
 
 				Cuando se realiza la transición de un modo de energía a otro el CI cambia el estado del pin $\overline{IRQ1}$ a bajo y el bit 15 (RSTDONE) en el registro STATUS1 a alto, especialmente este último es el que indica el fin de la transición ya que durante es 0.
 
-				\item \textbf{PSM1 (Reduced Power Mode):} En este modo el CI mide los valores absolutos promedio de las 3 fases de corriente para almacenarlos en los registros \textit{xIMAV} \footnote{\textit{x:} Canal de corriente  A. B, C}. 
+				\item \textbf{PSM1 (Reduced Power Mode):} En este modo el CI mide los valores absolutos promedio de las 3 fases de corriente para almacenarlos en los registros \textit{xIMAV} \footnote{\textit{x:} Canal de corriente  A. B, C.}. 
 				Este modo es útil al usar una batería externa. Los puertos de comunicación serial estan activos y se puede utilizar para leer los registros \textit{xIMAV}, sin embargo, a pesar de poder leer estos registros para los demás registros del CI no se garantizan que los valores sean correctos.
 
 				Al entrar en este modo despues de haber estado en en el PSM0 entonces el cálculo de valor absoluto promedio inicia sin retrasos. Los registros \textit{xIMAV} son accesibles en cualquier momento después de que el pin $\overline{IRQ1}$ ha cambiado a un valor de 0 (indicando el inicio del cómputo de valores absolutos promedio).
 
 				\item \textbf{PSM2 (Low Power Mode):} Los puertos de comunicación no son funcionales en eeste modo, se reduce el consumo requerido para monitorear la corriente cuando no hay entrada de voltaje y la fuente de voltaje es provista por una bateria externa.
 
-				Si el pin $\overline{IRQ0}$ está en un nivel lógico bajo al acabar el periodo de medición, entonces significa que todas las fases de corriente se meantuvieron por debajo del límite y, por lo tanto, no hay corriente fluyendo por el sistema, en este punto el microcontrolador externo pone el CI en modo de de espera. Si en cambio el pin $\overline{IRQ1}$ es el que se encuentra en bajo, entonces significa que por lo menos una entrada de corriente está por encima del límite definido y hay corriente fluyendo por el sistema a pesar de que no hay voltaje presente en los pines del CI. Esta situación se conoce como falta neutra, en este punto el microcontrolador externo coloca el CI en el modo PSM1. No es recomendable usar este modo si los registros de ganancia\footnote{PGA1[2:0]} son diferentes a 1 ó 2.
+				Si el pin $\overline{IRQ0}$ está en un nivel lógico bajo al acabar el periodo de medición, entonces significa que todas las fases de corriente se meantuvieron por debajo del límite y, por lo tanto, no hay corriente fluyendo por el sistema, en este punto el microcontrolador externo pone el CI en modo de de espera. Si en cambio el pin $\overline{IRQ1}$ es el que se encuentra en bajo, entonces significa que por lo menos una entrada de corriente está por encima del límite definido y hay corriente fluyendo por el sistema a pesar de que no hay voltaje presente en los pines del CI. Esta situación se conoce como falta neutra, en este punto el microcontrolador externo coloca el CI en el modo PSM1. No es recomendable usar este modo si los registros de ganancia\footnote{PGA1[2:0].} son diferentes a 1 ó 2.
 
 				\item \textbf{PSM3 (Sleep Mode):} En este modo la mayoría de los circuitos internos se encuentran apagados y el consumo de corriente se mantiene a su más bajo nivel. Los puertos I$^2$C, SPI Y HSDC no son funcionales, además los pines de $\overline{RESET}$, MOSI/SDA, SCLK/SCI y $\overline{SS}$/HSA deben permanecer en alto.
 			\end{itemize}
@@ -324,7 +324,47 @@
 
 			Los pines PM0 y PM1 tienen resistencias pull-up, pero es necesario el colocar PM1 en un nivel lógico bajo ya sea por hardware (colocando a tierra) ó a travez del microcontrolador antes de encender el chip, para asegurar que el dispositivo se inicie en PSM0. El tiempo de encendido es de al rededor de 40[ms] tiempo en el cual el pin de $\overline{RESET}$ debe permanecer en un nivel lógico alto.
 
-			Al iniciar en en modo PSM0 el puerto activo es el I$^2$C, si se desea cambiar el puerto de comunicación se tiene que alternar el pin $\overline{SS}$/HSA 3 veces de un nivel lógico de voltaje alto a un nivel de voltaje bajo. Cuando se decide usar un puerto de comunicación este debe bloquearse para evitar que durante la comunicación se alterne por el otro puerto y se pierda la comunicación. Para ello si el puerto activo es el I$^2$C se debe escribir un 1 el bit 1 (I2C\_LOCK) del registro CONFIG2 en caso contrario si el puerto activo es el SPI entonces cualquier escritura al registro CONFIG2 bloqueará este puerto como el activo. En ambos casos el cambio por el otro puerto de comunicación no es posible hasta que se haga un reinicio de hardware o se apgue y vuelva a encender el sistema.
+			Al iniciar en en modo PSM0 el puerto activo es el I$^2$C, si se desea cambiar el puerto de comunicación se tiene que alternar el pin $\overline{SS}$/HSA 3 veces de un nivel lógico de voltaje alto a un nivel de voltaje bajo. Cuando se decide usar un puerto de comunicación este debe bloquearse para evitar que durante la comunicación ó combio de modo de energía se alterne por el otro puerto y se pierda la comunicación. Para ello si el puerto activo es el I$^2$C se debe escribir un 1 el bit 1 (I2C\_LOCK) del registro CONFIG2 en caso contrario si el puerto activo es el SPI entonces cualquier escritura al registro CONFIG2 bloqueará este puerto como el activo. En ambos casos el cambio por el otro puerto de comunicación no es posible hasta que se haga un reinicio de hardware o se apague y vuelva a encender el sistema.
+
+			Inicialmente el CI se encuentra en modo de reposo y, por lo tanto, no ejecuta ninguna instrucción, es en este punto donde todos los registros necesarios para la ejecución del programa deben iniciarse. Si el voltaje cae por debajo de los 2.0[V]$\pm10\%$ este entra en estado inactivo y ninguina medición ó cómputo es ejecutada.
+
+			\subsection{Hardware Reset}
+			Este tipo de reset se logra al tener el CI en el modo PSM0 y colocando el pin de $\overline{RESET}$ en un nivel de voltaje bajo, en otros modos de energía el pin no tiene función. Si entonces el pin es alternado de alto-bajo-alto con 10[ms] de retraso entre cambio. Durante el proceso de reinicio el pin $\overline{IRQ1}$ permanece en 1, al termino del proceso este pin es colocado a 0 y todos los registros son devueltos a sus valores iniciales de fábrica. 
+
+			El reinicio por Hardware devuelve el puerto I$^2$C como canal principal de comunicación.
+
+			\subsection{Software Resest}
+			Al igual que el reset por Hardware estaopción solo esta disponible durante el modo PSM0. Para iniciar el reset por Software se utiliza el bit 7 en el registro CONFIG, inicialmente este bit se encuentra en 0, y si es cambiado a 1 entonces entra en modo de Reset, el cual regresa a valores iniciales a la mayoria de los registros, la seleccion de puerto de comunicación se mantiene si se ha bloqueado de manera correcta. Los únicos valores que mantienen sus valores son CONFIG2 y LPOILVL.
+
+			\subsection{Operación del ADE7880}
+				\subsubsection{Entradas analógicas}
+				Se tienen 7 entradas analógicas que forman los canales de corriente y voltaje. Los canales de corriente constan de 4 pares de entradas IxP/IxN\footnote{x: Canales A, B, C y N respectivamente} diferenciales los cuales tienen un máximo de señal $\pm$0.5[V] e igual con respecto a la señal en AGND\footnote{Referencia a tierra para el circuito analógico.}.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/EntAnCrrnt.PNG}
+					\caption[Entradas analógicas de corriente]{Esquema de entradas analógicas de corriente}
+					\label{EntCrnt}
+				\end{figure}
+
+				Todas las entradas poseen un Amplificador programable de ganancia (PGA por sus siglas en inglés) con una selección de 1, 2, 4, 8 ó 16. Las ganancias presentes en IA, IB e IC se colocan en un registro diferente a IN\footnote{Entrada analógica del canal de corriente neutral.} para obtener una ganancia diferente a las 3 primeras.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/AmpGan.PNG}
+					\caption[Amplificadores de Ganancia]{Esquema de los amplificadores de ganancia en las entradasa analógicas}
+					\label{AmpGan}
+				\end{figure}
+
+				El canal de voltaje tiene 3 entradas de voltaje de un sólo extremo, con una entrada máxima de  $\pm$0.5[V] con respecto a VN\footnote{Entrada analógica del canal de voltaje neutral.},
+				de igual manera estas entradas tienen una entrada de señal máxima de $\pm$0.5[V] con respecto a AGND.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/EntAnVlt.PNG}
+					\caption[Entradas analógicas de Voltaje]{Esquema de entradas analógicas de voltaje}
+					\label{EntVolt}
+				\end{figure}
 
 %-----------------------------------------------------------------------------%
 			\subsection{Interfaces de Comunicación}
