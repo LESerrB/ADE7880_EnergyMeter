@@ -347,7 +347,7 @@
 					\label{EntCrnt}
 				\end{figure}
 
-				Todas las entradas poseen un Amplificador programable de ganancia (PGA por sus siglas en inglés) con una selección de 1, 2, 4, 8 ó 16. Las ganancias presentes en IA, IB e IC se colocan en un registro diferente a IN\footnote{Entrada analógica del canal de corriente neutral.} para obtener una ganancia diferente a las 3 primeras.
+				Todas las entradas poseen un Amplificador Programable de Ganancia (PGA por sus siglas en inglés) con una selección de 1, 2, 4, 8 ó 16. Las ganancias presentes en IA, IB e IC se colocan en un registro diferente a IN\footnote{Entrada analógica del canal de corriente neutral.} para obtener una ganancia diferente a las 3 primeras.
 
 				\begin{figure}[!htpb]
 					\centering
@@ -365,6 +365,26 @@
 					\caption[Entradas analógicas de Voltaje]{Esquema de entradas analógicas de voltaje}
 					\label{EntVolt}
 				\end{figure}
+
+				\subsubsection{Convertidor Analógico Digital}
+				A las entradas de los canales de corriente y voltaje se tienen Convertidores Analógicos Digitales $\Sigma$-$\Delta$, estos se encuentran activos en el modo PSM0, y en el PSM1 solo los que miden los canales de corriente se encuentran activos a excepcion del canal de corriente neutral. En los otros modos no estan activos ninguno de los ADC\footnote{Convertidor Analógico Digital.}.
+
+				\begin{figure}[!htpb]
+					\centering
+					\includegraphics[scale = 1.0]{Material de Consulta/ADC_SigDel.PNG}
+					\caption[Convertidor Analógico Digital]{Convertidor Analógico Digital}
+					\label{ADCSigDel}
+				\end{figure}
+
+				El módulo $\Sigma$-$\Delta$ convierte la señal de entrada en un flujo en serie de "1" y "0" a un tiempo determinado por el reloj de muestreo (En el ADE7880 este reloj es de 1.024[MHz]). El DAC\footnote{Convertidor Digital Analógico.} de 1-bit en el bucle de retroalimentación es llevado por el flujo de datos en serie, entonces la la salida del DAC es sutraida de la señal de entrada. Si el bucle de ganancia es lo suficientemente alto el valor promedio de la salida del DAC puede aproximarse al nivel de la señal de entrada. El promedio es pasado entonces a un filtro digital pasa-bajas que produce una palabra de 24-bits proporcional al nivel de la señal de entrada.
+
+				\subsubsection{Filtro Antialias}
+				Este filtro se encuentra a la entrada del ADC y su función es la de prevenir el solapamiento que se presenta en todos los sistemas de muestreo.
+
+				Para sensores de corriente convencionales es recomendable usar filtros RC\footnote{RC: Resistor Capacitor.} con una frecuencia de corte de 5[kHz] para que la atenuación sea suficiente para eliminar los efectos de solapamiento para sensores de corriente convencionales.
+
+				\subsubsection{Función de Transferencia de los ADC}
+				Todos los ADC en el CI estan diseñados para producir el mismo nivel de señal de la salida en el código de 24-bits con signo a la salida. El código del ADC puede variar entre 0x800000 (-8,388,608) y 0x7FFFFF (8,388,607), esto es equivalente a una señal de entrada de $\pm$0.787[V], por lo tanto no debe excederse el rango nominal especificado de $\pm$0.5[V]. Las señales se muestrean a una velocidad de 8[kSPs]\footnote{kSPs: Mil muestras por segundo (Kilo Samples per second).}.
 
 %-----------------------------------------------------------------------------%
 			\subsection{Interfaces de Comunicación}
@@ -509,7 +529,9 @@
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	
 	\chapter{Conclusiones}
+
 	\chapter{Glosario}
+	Frecuencia de corte ($\omega$C) o también llamada frecuencia de esquina o frecuencia crítica. Es  la  frecuencia  donde  la  respuesta  en  amplitud  está  3  dB  por  abajo  del  valor  de  la banda de paso.
 	
 	\bibliography{Bibliografia}
 	\bibliographystyle{apalike}
