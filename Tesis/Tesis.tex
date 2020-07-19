@@ -73,7 +73,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/ArqHrv.PNG}
-					\caption[Arquietctura Harvard]{Arquietctura Harvard}
+					\caption[Arquietctura Harvard]{Arquietctura Harvard.}
 					\label{ArqHrv}
 				\end{figure}
 
@@ -85,7 +85,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/ArqVNm.PNG}
-					\caption[Arquietctura Von Neumann]{Arquietctura Von Neumann}
+					\caption[Arquietctura Von Neumann]{Arquietctura Von Neumann.}
 					\label{ArqVNm}
 				\end{figure}
 
@@ -99,7 +99,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/PuertosE-S.PNG}
-					\caption[Puertos de Entrada y Salida]{Puertos de Entrada y Salida}
+					\caption[Puertos de Entrada y Salida]{Puertos de Entrada y Salida.}
 					\label{PrtsES}
 				\end{figure}
 
@@ -108,7 +108,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/PrtsIO.PNG}
-					\caption[Memoria y Puertos I/O]{Interacción de puertos con la memoria y con el procesador}
+					\caption[Memoria y Puertos I/O]{Interacción de puertos con la memoria y con el procesador.}
 					\label{PrtsIO}
 				\end{figure}
 
@@ -125,7 +125,7 @@
 		\begin{figure}[!htpb]
 			\centering
 			\includegraphics[scale = 1.0]{Material de Consulta/EsqMicro.PNG}
-			\caption[Esquema básico general de un microprocesador]{Esquema básico general de un microprocesador}
+			\caption[Esquema básico general de un microprocesador]{Esquema básico general de un microprocesador.}
 			\label{EsqMicro}
 		\end{figure}
 
@@ -139,7 +139,7 @@
 			\begin{figure}[!htpb]
 				\centering
 				\includegraphics[scale = 1.0]{Material de Consulta/BloqMicro.PNG}
-				\caption[Esquema de bloques de un microprocesador]{Esquema de bloques de un microprocesador}
+				\caption[Esquema de bloques de un microprocesador]{Esquema de bloques de un microprocesador.}
 				\label{BloqMicro}
 			\end{figure}
 
@@ -152,7 +152,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/BloqWDT.PNG}
-					\caption[Bloque WatchDog Timer]{Bloque WatchDog Timer}
+					\caption[Bloque WatchDog Timer]{Bloque WatchDog Timer.}
 					\label{BloqWDT}
 				\end{figure}
 
@@ -195,18 +195,20 @@
 			Por el contrario las RISC tienen un repertorio corto de instrucciones sencillas que pueden realizar operaciones simples pero a alta velocidad. La complejidad del CPU disminuye, así que a frecuencia del oscilador puede aumentar y así mejorar la velocidad de ejecución de las operaciones. Esto támbien apoya en su fabricación siendo más sencillos y baratos de producir, por ello esta arquitectura ha sido la predominante en microcontroladores PIC.
 
 		\section{PIC32MZ2048EFM100}
-		Es un microcontrolador de 32-bits que permite la conectividad embebida con una unidad de Punto Flotante\cite{PIC32MZ}, esta familia de microcontroladores poseen una gran cantidad de puertos de comunicación lo que permite que sea una opción bastante adecuada para proyectos en los que se necesite el intercambio de información entre varios dispositivos.
+		Es un microcontrolador de 32-bits que permite la conectividad embebida con una unidad de Punto Flotante, esta familia de microcontroladores poseen una gran cantidad de puertos de comunicación lo que permite que sea una opción bastante adecuada para proyectos en los que se necesite el intercambio de información entre varios dispositivos.\cite{PIC32MZ}
 
-		La especificaciones del microcontrolador se pueden ver en la tabla.
+		La especificaciones del microcontrolador se pueden ver en la tabla \ref{EspPic32}.
 
-		\begin{table}[!htpb]
+		\newpage
+
+		\begin{table}[!ht]
 				\centering
 				\begin{tabular}{ l | c }
 					\textbf{Nombre} & \textbf{Valor} \\
 					\hline
 					Familia & PIC32MZEF \\
 					\hline
-					Velocidad Max CPU [MHz] & 200 \\
+					Velocidad Máx. CPU [MHz] & 200 \\
 					\hline
 					Tamaño de Memoria Programable [KB] & 2048 \\
 					\hline
@@ -214,21 +216,21 @@
 					\hline
 					Auxiliary Flash [KB] & 160 \\
 					\hline
-					Crypto Engine & Yes \\
+					Crypto Engine & Sí \\
 					\hline
 					Range Temperatura [°C] & -40 to 125 \\
 					\hline
 					Rango de Voltaje Operacional [V] & 2.2 to 3.6 \\
 					\hline
-					Direct Memory Access Channels & 8 \\
+					Canales De Acceso Directo a la Memoria & 8 \\
 					\hline
 					Canales SPI & 6 \\
 					\hline
 					Canales I2C & 5 \\
 					\hline
-					Interfaz CODEC (I2S,AC97) & Yes \\
+					Interfaz CODEC (I2S,AC97) & Sí \\
 					\hline
-					Peripheral Pin Select / Pin Muxing & Yes \\
+					Selección de Pines Perifericos / Pin Muxing & Sí \\
 					\hline
 					Ethernet & 10/100 Base-TX Mac \\
 					\hline
@@ -236,7 +238,7 @@
 					\hline
 					Número de Modulos USB & 1 \\
 					\hline
-					Interfaz USB & High Speed \\
+					Interfaz USB & Alta Velocidad \\
 					\hline
 					Números de Modulos CAN & 2 \\
 					\hline
@@ -244,37 +246,38 @@
 					\hline
 					Entrada ADC & 40 \\
 					\hline
-					Resolucion Max ADC (Bits) & 12 \\
+					Resolución Máx. ADC (Bits) & 12 \\
 					\hline
-					Max Rango de Muestreo ADC [ksps] & 18000 \\
+					Máx. Rango de Muestreo ADC [ksps] & 18000 \\
 					\hline
 					Entradas de Captura & 9 \\
 					\hline
-					Standalone Output Compare/Standard PWM & 9 \\
+					Comparación de Salida Independiente/PWM Estándard & 9 \\
 					\hline
-					Max 16-bit Digital Timers & 9 \\
+					Núm. Máx. de Timers Digitales de 16-bit & 9 \\
 					\hline
-					Parallel Port & PMP \\
+					Puerto Paralelo & PMP \\
 					\hline
-					Number of Comparators & 2 \\
+					Número de Comparadores & 2 \\
 					\hline
-					Internal Oscillator & 8 [MHz], 32 [kHz] \\
+					Oscilador Interno & 8 [MHz], 32 [kHz] \\
 					\hline
-					Hardware RTCC/RTC & Yes \\
+					Hardware RTCC/RTC & Sí \\
 					\hline
-					Max I/O Pins & 78 \\
+					Máx. I/O Pins & 78 \\
 					\hline
-					Pincount & 100 \\
+					Núm. de Pines & 100 \\
 					\hline
-					Serial Quad Interface & Yes \\
+					Interfaz Quad Serial & Sí \\
 				\end{tabular}
-				\caption{Especificaciones PIC32MZ2048EFM100}
+				\caption{Especificaciones PIC32MZ2048EFM100.}
+				\label{EspPic32}
 		\end{table}
 
 		En particular esta familia de microcontroladores posee perifericos que operan a una mayor frecuencia que los microcontroladores tipicos usados para los sistemas embebidos. Esto es posible gracias al microprocesador que posee la CPU el cual contiene varios bloques lógicos que trabajan en conjunto en paralelo, proviendo un alto rendimiento de procesamiento.
 
 		\section{Medidor de Energía ADE7880}
-		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado asi a partir de aqui para simplificar.}.
+		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado así a partir de aquí para simplificar.}.
 
 			\subsection{Gestion de Energía}
 			Este CI posee 4 modos de energía determinados por el estado de los pines PM0 y PM1 estros proveen total control sobre el chip y gracias a que poseen resistencias pull-up internas se pueden copnectar facilmente al microcontrolador.
@@ -291,7 +294,7 @@
 					PSM2 & 1 & 0 \\
 					PSM3 & 1 & 1 \\
 				\end{tabular}
-				\caption[Modos de Suministro de Energía]{Configuración de los pines PM para los modos de suministro de energía}
+				\caption[Modos de Suministro de Energía]{Configuración de los pines PM para los modos de suministro de energía.}
 			\end{table}
 
 			\begin{itemize}
@@ -318,7 +321,7 @@
 			\begin{figure}[!htpb]
 				\centering
 				\includegraphics[scale = 0.8]{Material de Consulta/Encendido.PNG}
-				\caption[Encendido del ADE7880]{Procedimiento de encendido}
+				\caption[Encendido del ADE7880]{Curva de Voltaje de encendido.}
 				\label{ADEOn}
 			\end{figure}
 
@@ -343,7 +346,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/EntAnCrrnt.PNG}
-					\caption[Entradas analógicas de corriente]{Esquema de entradas analógicas de corriente}
+					\caption[Entradas analógicas de corriente]{Esquema de entradas analógicas de corriente.}
 					\label{EntCrnt}
 				\end{figure}
 
@@ -352,7 +355,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/AmpGan.PNG}
-					\caption[Amplificadores de Ganancia]{Esquema de los amplificadores de ganancia en las entradasa analógicas}
+					\caption[Amplificadores de Ganancia]{Esquema de los amplificadores de ganancia en las entradasa analógicas.}
 					\label{AmpGan}
 				\end{figure}
 
@@ -362,7 +365,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/EntAnVlt.PNG}
-					\caption[Entradas analógicas de Voltaje]{Esquema de entradas analógicas de voltaje}
+					\caption[Entradas analógicas de Voltaje]{Esquema de entradas analógicas de voltaje.}
 					\label{EntVolt}
 				\end{figure}
 
@@ -372,7 +375,7 @@
 				\begin{figure}[!htpb]
 					\centering
 					\includegraphics[scale = 1.0]{Material de Consulta/ADC_SigDel.PNG}
-					\caption[Convertidor Analógico Digital]{Convertidor Analógico Digital}
+					\caption[Convertidor Analógico Digital]{Convertidor Analógico Digital.}
 					\label{ADCSigDel}
 				\end{figure}
 
@@ -386,7 +389,73 @@
 				\subsubsection{Función de Transferencia de los ADC}
 				Todos los ADC en el CI estan diseñados para producir el mismo nivel de señal de la salida en el código de 24-bits con signo a la salida. El código del ADC puede variar entre 0x800000 (-8,388,608) y 0x7FFFFF (8,388,607), esto es equivalente a una señal de entrada de $\pm$0.787[V], por lo tanto no debe excederse el rango nominal especificado de $\pm$0.5[V]. Las señales se muestrean a una velocidad de 8[kSPs]\footnote{kSPs: Mil muestras por segundo (Kilo Samples per second).}.
 
-%-----------------------------------------------------------------------------%
+			\subsection{Canal de Corriente del ADC}
+			Las salidas que producen el ADC en el canal de corriente son 2 palabras de 24-bits signadas en complemento y se encuentra disponible a 8[kSPs]. Con la señal analógica específica de entrada de $\pm$0.5[V], el ADC produce un valor máximo que oscila entre -5,326,737 (0xAEB86F) y +5,326,737 (0x514791).
+
+			La entrada IN corresponde a la entrada de corriente neutral de un sistema trifásico. En caso de no contar con línea neutral de corriente se debe conectar a AGND.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/CanalCorriente.PNG}
+				\caption[Canal de Corriente]{Ruta de la señal del Canal de Corriente.}
+				\label{CnlCorrADC}
+			\end{figure}
+
+				\subsubsection{Registros de Ganancia de Ondas de Corriente}
+				En cada fase hay un multiplicador de señal.La onda de corriente puede ser cambiada a $\pm$100 escribiendo en el registro correspondiente. Cuando se cambian estos registros por ende los cálculos de la corriente son modificados, esto es, se afectan las correspondientes fases activa, reactiva ó aparente y el cálculo de corriente RMS así como también se escalonan las muestras de onda.
+
+				El DSP\footnote{DSP: Procesador Digital de Señales.} trabaja en 28-bits y los registros xIGAIN en 24-bits se acceden como registros de 32-bits y ya que los puertos de comunicación serie trabajan en 8, 16, 32 bits, los resgistros se accesan como si fueran registros de 32-bits y en el caso del DSP los 4-bits más significativos son colocados con "0"; en el otro caso, los registros xIGAIN además de poner los últimos bits en "0" los bits 24-27 son colocados con el mismo valor que el bit 23.
+
+				\subsubsection{Filtro Pasa Altas del Canal de Corriente}
+				La salida del ADC pueden tener un offset, el cual puede crear errores en el cálculo de la potencia y los valores RMS de las señales. Los filtros pasa altas (HPF\footnote{HPF: High Pass Filter}) son colocados en la ruta de la señal de la corriente de fase y neutro y de los voltajes de fase. Si se habilita el HPF elimina cualquier offset de DC en el canal de corriente.
+
+				\subsubsection{Muestreo de Canal de Corriente}
+				Las ondas de muestreo del canal de corriente son tomadas de la salida del HPF y almacenados en registros de 24-bits signados IxWV y a una velocidad de 8[kSPs]. Todos los cálculos de RMS y de potencia deben permanecer ininterrumpidos durante este proceso.
+
+				El bit 17 del registro STATUS0 es colocado en 1 cuando los registros IxWV están disponibles para la lectura a través de los canales de comunicación serial. Este CI posee un puerto de capturade datos de alta velocidad (HSDC) diseñado específicamente para proveer rápido acceso a los registros de muestreo de las formas de onda.
+
+			\subsection{Canal de Voltaje del ADC}
+			Las salidas del ADC de los canales de voltaje son similares a las de los canales de corriente con 2 palabras en complemento signados a 24-bits. Con la señal analógica de entrada específica de $\pm$0.5[V], el ADC produce un valor máximo que oscila entre -5,326,737 (0xAEB86F) y +5,326,737 (0x514791).
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/CanalVoltaje.PNG}
+				\caption[Canal de Voltaje]{Ruta de la señal del Canal de Voltaje.}
+				\label{CnlVoltADC}
+			\end{figure}
+
+				\subsubsection{Registro de Ganancia de Ondas Voltaje}
+				Al igual que con los registros de ganancia de corriente, existe un multiplicador para la señal que puede cambiado por $\pm$100escribiendo los correspondientes 2 números signados en complemento de 24-bits a los registros de ganancia de ondas de voltaje.
+
+				\subsubsection{Filtro Paso Altas del del Canal de Voltaje}
+				Como se explico con el HPF del canal de corriente, las salidas del ADC pueden contener offsets de DC que pueden crear errores en los cálculos de RMS y potencia. Los HPFs son colocados en en las rutas de la señal de la fase de voltaje, similar a los del canal de corriente. Bit0 (HPFEN) del registro CONFIG3 activa ó desactiva los filtros.
+
+				\subsubsection{Muestreo del Canal de Voltaje}
+				Las muestras del canal de voltaje son tomadas a la salida del HPF y almacenados en registros de 24-bits signados a una velocidad de 8[kSPs]. Del mismo modo que con el canal de corriente los cálculos permanecen ininterrumpidos durante el muestroe y se señaliza en el bit 17 del registro STATUS0 cuando los registros de VxWV están disponibles para ser consultados por los canales de comunicación serial.
+
+			\subsection{Procesador Digital de Señales}
+			El ADE7880 posee un Procesador Digital de Señales de función fija que computa todos los valores de potencia y RMS. Contiene memoria de programa ROM  y memoria de datos RAM. El programa que se usa para calcular estos valores se guarda en la memoria ROM y el procesador lo ejecuta cada 8[kHz] y para señalar que ha acabado el computo se coloca el bit 17 en "1" en el registro STATUS0, tambien se puede colocar el mismo bit en el registro MASK0 para habilitar la interrupción $\overline{IRQ0}$. Los registros usados para el DSP estan localizados en la memoria RAM entre las direcciones 0x438 a 0x43BE y un ancho de 28-bits.
+
+			Al usarse un pipelinede 2 etapas es necesario escribir 2 veces la inicialización de un registro para asegurarse que se escriba correctamente en la memoria RAM. Si se requieren 2 ó más registros, para inicializarlos se debe esscribir el último registro 2 veces. Al inicializar el medidor de energía el DSP se encuentra en reposo al igual que los otros con los registros inicializados con "0", para inicializar el DSP se escribe en el registro RUN 0x0001.
+
+			Como protección a la integridad de los datos almacenados en la memoria RAM, se tiene un mecanismo de protección contra escritura, deshabilitado inicialmente, para habilitarlo es necesario escribir 0xAD a la dirección 0xE7FE seguido de 0x80 en la dirección 0xE7E3. Para deshabilitarla de nuevo se escribe 0xAD a la dirección 0xE7FE seguido de 0x00 en la dirección 0xE7E3. Cuando el CI sale del modo PSM0 es recomendable desactivar el DSP escribiendo 0x0000.
+
+			\subsection{Interrupciones}
+			Cuenta con 2 pines de interrupción $\overline{IRQ0}$ E $\overline{IRQ1}$ cada uno manejado por registros de 32-bits de enmascaramiento activando los registros MASK0 y MASK1 estos registros activan la interrupción colocando en 1 el bit correspondiente de la funcion de la cual se desae conocer el estado.
+
+			Si el bit de enmascaramiento se encuentra con un valor de "1" en el registro correspondiente esto, entonces producirá una salida en el pin $\overline{IRQx}$ de activo en bajo.
+
+			Para determinar la fuente de la interrupción el microcontrolador debe realizar una lectura en los registros e identificar el bit en alto correspondiente. Para borrar la bandera del registro STATUSx se debe escribir de nuevo en el registro con la bandera con la bandera establecida en "1". Después de una interrupción el pin cambia a un valor lógico bajo, el registro de STATUSx es leido y la fuente de la interrupción es identificada. Entonces el registro es escrito de vuelta sin ningun cambio para limpiar el estado de la bandera de vuelta a 0. El estado del pin $\overline{IRQx}$ se mantiene en bajo hasta que el estado de la bandera es cancelado.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/Interrupcion.PNG}
+				\caption[Interrupciones]{Interrupciones.}
+				\label{Intrr}
+			\end{figure}
+
+			Inicialmente todas las interrupciones se encuentran desactivadas por lo que la interrupcion RSTDONE es una excepción.
+
 			\subsection{Interfaces de Comunicación}
 			El ADE7880 posee 3 puertos de comunicación serial SPI, I$^2$C Y HSDC, sin embargo por la configuración de los pines solo se pueden usar 2 tipos de configuraciones, una utilizando el puerto SPI únicamente y la segunda es usando los puertos I$^2$C Y HSDC.
 
@@ -401,7 +470,7 @@
 					Lectura/ Escritura de 16-Bit & 0xE9FF \\
 					Lectura/ Escritura de 32-Bit & 0xE5FF \\
 				\end{tabular}
-				\caption[Registros de última escritura]{Direcciones de los registros de última escritura (LAST\_RWDATA)}
+				\caption[Registros de última escritura]{Direcciones de los registros de última escritura (LAST\_RWDATA).}
 			\end{table}
 
 			Después de cada comunicación exitosa los registros se actualizan con la información de la operación, 0xCA si fue escritura y 0x35 si es escritura y el dato que se leyó o escribió. Las operciones no completadas no se reflejan en estos registros asi como cuando se leen estos registros.
@@ -435,11 +504,11 @@
 			\begin{figure}[!htpb]
 				\centering
 				\includegraphics[scale = 0.8]{Pruebas de Comunicación/ConfigSPI.PNG}
-				\caption[Configuración SPI del PIC32MZ]{Configuración SPI del PIC32MZ}
+				\caption[Configuración SPI del PIC32MZ]{Configuración SPI del PIC32MZ.}
 				\label{ConfigSPI} 
 				\hfill \break
 				\includegraphics[scale = 0.8]{Pruebas de Comunicación/ConfigI2C.PNG}
-				\caption[Configuración I2C del PIC32MZ]{Configuración I2C del PIC32MZ}
+				\caption[Configuración I2C del PIC32MZ]{Configuración I2C del PIC32MZ.}
 				\label{ConfigI2C}
 			\end{figure}
 
@@ -457,7 +526,7 @@
 					\hline
 					7:2 & Reservados & 0 \\
 				\end{tabular}
-				\caption[Valores de bloqueo del puerto I$^2$C]{Valores del registro CONFIG2 que se deben transmitir para bloquear el puerto I$^2$C}
+				\caption[Valores de bloqueo del puerto I$^2$C]{Valores del registro CONFIG2 que se deben transmitir para bloquear el puerto I$^2$C.}
 			\end{table}
 
 			Este registro se accesa como si fuera un registro de 8-Bits por lo que los 6 Bits más significativos deben permanecer como 0. En este caso en particular se transmite 0x02 a la dirección de registro 0xEC01.
@@ -482,7 +551,7 @@
 		\begin{figure}[!htpb]
 			\centering
 			\includegraphics[scale = 0.5]{Pruebas de Comunicación/DREADY_TimeComp.PNG}
-			\caption[Comunicación SPI con los registros de voltaje y corriente]{Comunicación SPI con los registros de voltaje y corriente}
+			\caption[Comunicación SPI con los registros de voltaje y corriente]{Comunicación SPI con los registros de voltaje y corriente.}
 			\label{ComSPI} 
 		\end{figure}
 
@@ -500,7 +569,7 @@
 			\subfigure[Canal de Voltaje C]{
 				\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS_140220-000001.png}
 			}
-			\caption[Gráficas de la primer prueba de los Canales de Voltaje]{Gráficas de la primer prueba de los Canales de Voltaje}
+			\caption[Gráficas de la primer prueba de los Canales de Voltaje]{Gráficas de la primer prueba de los Canales de Voltaje.}
 			\label{CanalVoltaje}
 		\end{figure}
 
@@ -514,7 +583,7 @@
 			\subfigure[Canal de Corriente C]{
 				\includegraphics[scale = 0.6]{Pruebas de Muestreo/QS2.png}
 			}
-			\caption[Gráficas de la primer prueba de los Canales de Corriente]{Gráficas de la primer prueba de los Canales de Corriente}
+			\caption[Gráficas de la primer prueba de los Canales de Corriente]{Gráficas de la primer prueba de los Canales de Corriente.}
 			\label{CanalCorriente}
 		\end{figure}
 
@@ -527,21 +596,59 @@
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		%COLOCAR IMAGEN DEL OSCILOSCOPIO DE LOS DATOS ENVIADOS POR EL HSDC%
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Conclusiones %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Conclusiones}
-
+	Hasta el momento el canal que se tenia seleccionado como principal en un inicio (SPI) no cumplió con las funciones requeridas para el proyecto por lo que se tuvo que cambiar por el $I^2C$ y HSDC, en un inicio y debido a la configuración se tuvo que restructurar las conexiones de comunicación, sin embargo esto tambien ocasionó contratiempos en la comunicación con el microcontrolador ya que la interfaz de programación añadía unas lineas para verificar que el canal de comunicación se encuentre disponible para la transmisión de datos.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Glosario %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Glosario}
-	Frecuencia de corte ($\omega$C) o también llamada frecuencia de esquina o frecuencia crítica. Es  la  frecuencia  donde  la  respuesta  en  amplitud  está  3  dB  por  abajo  del  valor  de  la banda de paso.
-	
+	\begin{description}
+		\item[\LARGE B]
+		\hfill
+		\begin{itemize}
+			\item Bandera: Se le conoce como bandera a un bit en un registro que denota un valor binario que tiene un significado para el programa.
+		\end{itemize}
+
+		\item[\LARGE F]
+		\hfill
+		\begin{itemize}
+			\item Frecuencia de corte ($\omega$C) ó también llamada frecuencia de esquina o frecuencia crítica: Es la frecuencia donde la respuesta en amplitud está 3[dB] por abajo del valor de la banda de paso.
+		\end{itemize}
+
+		\item[\LARGE O]
+		\hfill
+		\begin{itemize}
+			\item Offset: Tensión de voltaje de desequilibrio que se presenta debido a el uso de amplificadores operacionales cuando la señal de entrada es muy baja.\cite{areny2005sensores}
+		\end{itemize}
+
+		\item[\LARGE P]
+		\hfill
+		\begin{itemize}
+			\item Pipeline ó Registro de Arquitectura Paralela: Registro de datos en los que se permite la ejecución de las instrucciones de manera simultanea con la siguiente instrucción. Esta configuración requiere de un reloj de dos fases donde una se aplica al registro de direccionamiento y una al registro de datos.\cite{mano1994arquitectura}
+		\end{itemize}
+
+		\item[\LARGE V]
+		\hfill
+		\begin{itemize}
+			\item Valor Lógico de Voltaje: En electrónica digital se utilizan sistemas y circuitos en los que solo existen 2 estados posibles representados mediante 2 niveles de tensión diferentes Alto (1) y Bajo (0). En circuitos digitales TTL (Transistor-Transistor) pueden variar entre 2.8 y 5.0[V] mientras que los valores bajos varían entre 0 y 0.8[V]. Los valores entre 0.8 y 2.8[V] no están definidos y nuca deben utilizarse.
+			%http://clrueda.docentes.upbbga.edu.co/web_digitales/Tema_0/introlevels.html
+		\end{itemize}
+	\end{description}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Bibliografia %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\bibliography{Bibliografia}
 	\bibliographystyle{apalike}
 	
-	\appendix
-	\chapter{Hojas de Datos de la Familia PIC32MZ}
-		\includepdf[pages = {1,5,6,19,327,365,366,652,653,654,657,658,659,660,676,677,678,679}]{Material de Consulta/PIC32MZ}
+	%\appendix
+	%\chapter{Hojas de Datos de la Familia PIC32MZ}
+	%	\includepdf[pages = {1,5,6,19,327,365,366,652,653,654,657,658,659,660,676,677,678,679}]{Material de Consulta/PIC32MZ}
 
-	\chapter{Hojas de Datos del Medidor de Energía ADE7880}
-		\includepdf[pages = {1,4,5,6,7,8,9,10,12,13,19,23,24,66,76,77,78,79,80,81,82,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106}]{Material de Consulta/ADE7880}
+	%\chapter{Hojas de Datos del Medidor de Energía ADE7880}
+	%	\includepdf[pages = {1,4,5,6,7,8,9,10,12,13,19,23,24,66,76,77,78,79,80,81,82,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106}]{Material de Consulta/ADE7880}
 
 	\backmatter%@sglvgdor
 \end{document}
