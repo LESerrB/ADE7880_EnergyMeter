@@ -279,10 +279,17 @@
 		\section{Medidor de Energía ADE7880}
 		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado así a partir de aquí para simplificar.}.
 
+		\begin{figure}[!htpb]
+			\centering
+			\includegraphics[scale = 0.8]{Material de Consulta/ADE7880FuncDiag.PNG}
+			\caption[Diagrama de Bloques del ADE7880]{Diagrama de bloques funcional del ADE7880.}
+			\label{FuncDiag}
+		\end{figure}
+
 			\subsection{Gestion de Energía}
 			Este CI posee 4 modos de energía determinados por el estado de los pines PM0 y PM1 estros proveen total control sobre el chip y gracias a que poseen resistencias pull-up internas se pueden copnectar facilmente al microcontrolador.
 
-			Los modos de operación son:
+			Los modos de operación se especifican en la siguiente tabla:
 
 			\begin{table}[!htpb]
 				\centering
@@ -308,7 +315,7 @@
 
 				Al entrar en este modo despues de haber estado en en el PSM0 entonces el cálculo de valor absoluto promedio inicia sin retrasos. Los registros \textit{xIMAV} son accesibles en cualquier momento después de que el pin $\overline{IRQ1}$ ha cambiado a un valor de 0 (indicando el inicio del cómputo de valores absolutos promedio).
 
-				\item \textbf{PSM2 (Low Power Mode):} Los puertos de comunicación no son funcionales en eeste modo, se reduce el consumo requerido para monitorear la corriente cuando no hay entrada de voltaje y la fuente de voltaje es provista por una bateria externa.
+				\item \textbf{PSM2 (Low Power Mode):} Los puertos de comunicación no son funcionales en este modo, se reduce el consumo requerido para monitorear la corriente cuando no hay entrada de voltaje y la fuente de voltaje es provista por una bateria externa.
 
 				Si el pin $\overline{IRQ0}$ está en un nivel lógico bajo al acabar el periodo de medición, entonces significa que todas las fases de corriente se meantuvieron por debajo del límite y, por lo tanto, no hay corriente fluyendo por el sistema, en este punto el microcontrolador externo pone el CI en modo de de espera. Si en cambio el pin $\overline{IRQ1}$ es el que se encuentra en bajo, entonces significa que por lo menos una entrada de corriente está por encima del límite definido y hay corriente fluyendo por el sistema a pesar de que no hay voltaje presente en los pines del CI. Esta situación se conoce como falta neutra, en este punto el microcontrolador externo coloca el CI en el modo PSM1. No es recomendable usar este modo si los registros de ganancia\footnote{PGA1[2:0].} son diferentes a 1 ó 2.
 
@@ -317,6 +324,8 @@
 
 			\subsection{Procedimiento de Encendido}
 			El ADE7880 posee un chip interno que monitorea la fuente de alimentación (VDD). En el encendido el dispositvo permanece inactivo hasta que VDD alcanza los 2.0[V]$\pm$10\%. Al sobrepasar este límite el monitor mantiene el dispositivo en inactivo por 26[ms] para permitir alcanzar el voltaje de 3.3[V]$\pm$10\% a la fuente de voltaje.
+
+			En la imagen \ref{ADEOn} se muestra el nivel de voltaje y las acciones que toma el CI de a cuerdo a este.
 
 			\begin{figure}[!htpb]
 				\centering
@@ -337,7 +346,7 @@
 			El reinicio por Hardware devuelve el puerto I$^2$C como canal principal de comunicación.
 
 			\subsection{Software Resest}
-			Al igual que el reset por Hardware estaopción solo esta disponible durante el modo PSM0. Para iniciar el reset por Software se utiliza el bit 7 en el registro CONFIG, inicialmente este bit se encuentra en 0, y si es cambiado a 1 entonces entra en modo de Reset, el cual regresa a valores iniciales a la mayoria de los registros, la seleccion de puerto de comunicación se mantiene si se ha bloqueado de manera correcta. Los únicos valores que mantienen sus valores son CONFIG2 y LPOILVL.
+			Al igual que el reset por Hardware esta opción solo esta disponible durante el modo PSM0. Para iniciar el reset por Software se utiliza el bit 7 en el registro CONFIG, inicialmente este bit se encuentra en 0, y si es cambiado a 1 entonces entra en modo de Reset, el cual regresa a valores iniciales a la mayoria de los registros, la seleccion de puerto de comunicación se mantiene si se ha bloqueado de manera correcta. Los únicos valores que mantienen sus valores son CONFIG2 y LPOILVL.
 
 			\subsection{Operación del ADE7880}
 				\subsubsection{Entradas analógicas}
@@ -491,12 +500,31 @@
 			Debido a que para este proyecto es necesario el recopilar una gran cantidad de muestras a alta velocidad la documentación del Circuito Integrado ADE7880 recomienda, para la lectura de estos registros en específico, utilizar una interfaz propia de Analog Devices para este circuito llamada High Speed Data Capture (Captura de Datos a Alta Velocidad) por lo que es necesario configurar el microprocesador de manera que se pueda usar la comunicación I$^2$C como interfaz serial principal y la comunicación HSDC como secundaria usando el canal SPI del microcontrolador como esclavo, que recibirá toda la información de los registros de voltaje y corriente enviados por esta interfaz.
 
 		\section{Entorno de Desarrollo MPLABX}
-		Microchip provee un entorno de desarrollo y un compilador 
+		Microchip provee un entorno de desarrollo y un compilador además de una variedad de herramientas para facilitar la configuración de sus dispositivos, de las cuales es MPLAB Harmony, TCP Discoverer y MPFS Generator resultan de lás más útiles para desarrollar proyectos enfocados en los sistemas embebidos en dispositivos de la familia PIC32.
+
 			\subsection{Herramienta de configuración MPLAB Harmony}
+			Esta herramienta es un agregado para crear soluciones de firmware para sistemas embebidos usando los microcontroladores PIC32 de Microchip. MPLAB Harmony consta de librerías portables, modulares y compatibles de Microchip y asociados así como también provee la ventaja de facilitar el desarrollo de código capaz de ser reutilizable en aplicaciopnes embebidas que utilicen a los PIC32 como microcontrolador principal.
+
+			Esta herramienta es diseñada casi por completo en leguaje C tomando elementos de la programación orientada a objetos y la flexibilidad de un Sistema Operativo en Tiempo Real (RTOS) además de proveer módulos de software que son fáciles de usar, configurar y trabajar en conjunto con otros módulos.
+
+			La portabilidad que ofrece Harmony al momento de estar desarrollando firmware se basa en la simplicidad de sus librerías lo cual reduce en gran medida el trabajo y el costo en desarrollar una aplicación para un dispositivo. Las librerías de periféricos y drivers presentes permiten que la aplicación pueda comunicarse de manera consitente a traves de funciones con los perifericos, evitando que, en caso de que los haya, los diversos módulos no entren en conflicto en la ejecución y operen de manera correcta. Esta forma de trabajar facilita que al momento de desarrollar las aplicaciones las funciones solo requieran pequeños cambios que se adapten a las necesidades del proyecto ya que evitan que la aplicación interactue directamente con el periférico en el microcontrolador.
+
+			Estas características permiten al código ser reutilizado en varios dispósitivos que compartan caracteristicas similares y, en dado caso, solo necesitar pequeños cambios para adaptarlos al nuevo dispositivo y poder acoplarlo en nuevos proyectos ya que cada módulo de aplicación maneja sus propios recursos.
+
+			La estructura que se maneja MPLAB es para facilitar la configurabilidad los proyectos ya que normalmente estos son creados de modo que se aisla el código necesario para configurar un sistema de los códigos de librerías y de aplicaciiones.
+
+			El archivo main es considerado la parte principal de cualquier código en este tipo de proyectos consiste de un super "loop" que se encarga de mantener activos los módulos de driver y servicios del sistema para que cuando sean necesarios, sean llamados fácilmente por una función que permita obtener lo más rapido una respuesta con la cual sea posible continuar la operación de la aplicación activa. 
+
+			Harmony crea sus proyectos de forma que estos se ejecuten como una máquina de estados y cada módulo pueda ejecutarse de manera repetitiva e indefinidamente mientras el dispositivo se encuentre activo, de esta manera cada módulo puede desempeñar las tareas que se le son asignadas para que la aplicación siga en funcionamiento.
+
+			Los archivos pertenecientes a la aplicación se mantienen separados a los archivos de configuración, de esta manera una misma aplicación puede tener más de una configuración.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FIRMWARE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DESARROLLO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\chapter{Desarrollo}
+		En este capítulo de explicará la forma en la que se fue elaborando el proyecto.
+
 		\section{Firmware}
 			\subsection{Inicialización}
 			La programación del proyecto se realiza por parte del entorno de desarrollo de Microchip MPLAB X, mientras que la conficuración de los puertos se realiza con la herramienta proporcionada por el mismo MPLAB Harmony debido a que la configuración manual sería demasiado complicada debido a la cantidad de puertos, pines y servicios disponibles por parte del microcontrolador. ya que esta es una actualización del módulo de medición de energía por lo que la inicialización esta parcialmente completa, sin embargo al realizar el cambio de canal de comunicación principal de SPI (\ref{ConfigSPI}) a I2C(\ref{ConfigI2C}) y HSDC(Este puerto utiliza la interfaz SPI del microcontrolador por lo que se reconectan los pines pero se deja la configuración ) se cambió las configuraciones de estos canales. Todas las demás siguieron igual a como se tenían en la primer versión del módulo.
@@ -597,12 +625,12 @@
 		%COLOCAR IMAGEN DEL OSCILOSCOPIO DE LOS DATOS ENVIADOS POR EL HSDC%
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Conclusiones %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CONCLUSIONES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Conclusiones}
 	Hasta el momento el canal que se tenia seleccionado como principal en un inicio (SPI) no cumplió con las funciones requeridas para el proyecto por lo que se tuvo que cambiar por el $I^2C$ y HSDC, en un inicio y debido a la configuración se tuvo que restructurar las conexiones de comunicación, sin embargo esto tambien ocasionó contratiempos en la comunicación con el microcontrolador ya que la interfaz de programación añadía unas lineas para verificar que el canal de comunicación se encuentre disponible para la transmisión de datos.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Glosario %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% GLOSARIO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Glosario}
 	\begin{description}
@@ -610,6 +638,18 @@
 		\hfill
 		\begin{itemize}
 			\item Bandera: Se le conoce como bandera a un bit en un registro que denota un valor binario que tiene un significado para el programa.
+		\end{itemize}
+
+		\item[\LARGE C]
+		\hfill
+		\begin{itemize}
+			\item Compilador: 
+		\end{itemize}
+
+		\item[\LARGE D]
+		\hfill
+		\begin{itemize}
+			\item Driver: .
 		\end{itemize}
 
 		\item[\LARGE F]
@@ -630,6 +670,12 @@
 			\item Pipeline ó Registro de Arquitectura Paralela: Registro de datos en los que se permite la ejecución de las instrucciones de manera simultanea con la siguiente instrucción. Esta configuración requiere de un reloj de dos fases donde una se aplica al registro de direccionamiento y una al registro de datos.\cite{mano1994arquitectura}
 		\end{itemize}
 
+		\item[\LARGE S]
+		\hfill
+		\begin{itemize}
+			\item Sistema Embebido: 
+		\end{itemize}
+
 		\item[\LARGE V]
 		\hfill
 		\begin{itemize}
@@ -643,12 +689,21 @@
 	\bibliography{Bibliografia}
 	\bibliographystyle{apalike}
 	
-	%\appendix
+	\appendix
 	%\chapter{Hojas de Datos de la Familia PIC32MZ}
 	%	\includepdf[pages = {1,5,6,19,327,365,366,652,653,654,657,658,659,660,676,677,678,679}]{Material de Consulta/PIC32MZ}
 
-	%\chapter{Hojas de Datos del Medidor de Energía ADE7880}
-	%	\includepdf[pages = {1,4,5,6,7,8,9,10,12,13,19,23,24,66,76,77,78,79,80,81,82,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106}]{Material de Consulta/ADE7880}
+	\chapter{Pines del Medidor de Energía ADE7880}
+		\label{PinesADE7880}
+		\includepdf[pages = {12,13}]{Material de Consulta/ADE7880}
+
+	\chapter{Parámetros de Comunicación Medidor de Energía ADE7880}
+		\label{ComADE7880}
+		\includepdf[pages = {8,9,10}]{Material de Consulta/ADE7880}
+
+	\chapter{Tablas de Direcciones de Registros del Medidor de Energía ADE7880}
+		\label{RegADE7880}
+		\includepdf[pages = {87,88,93,94,100,102,105,106}]{Material de Consulta/ADE7880}
 
 	\backmatter%@sglvgdor
 \end{document}
