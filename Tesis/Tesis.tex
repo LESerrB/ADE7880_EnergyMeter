@@ -50,7 +50,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTRODUCCIÓN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Introducción}
-
+%-------------------------------- COMPUTADORA --------------------------------%
 		\section{Computadora}
 		Una computadora esta conformada por hardware y software. La parte de Hardware consta de 4 componentes: el procesador, que funciona como el cerebro; la unidad de entrada, por la cual los programas y los datos son ingresados; la unidad de salida por donde son presentados los los resultados y la memoria que es en donde se almacena el software y los datos.
 
@@ -111,14 +111,14 @@
 					\caption[Memoria y Puertos I/O]{Interacción de puertos con la memoria y con el procesador.}
 					\label{PrtsIO}
 				\end{figure}
-
+%------------------------------ MICROPROCESADOR ------------------------------%
 		\section{Microprocesador}
 		El procesador en una computadora, esta comprendido de varios circuitos integrados, mientras que un microprocesador es un procesador empaquetado en un único circuito integrado. Una microcomputadora usa un microprocesador como su CPU\cite{valdes2007microcontroladores}.
 
 		Los microprocesadores vienen en diferentes presentaciones, 4-Bits, 8-Bits, 16-bits, 32-Bits e incluso en 64-Bits aunque estos últimos no son demasiado comunes como los anteriores. El número de bits corresponde al número de digitos binarios que el microprocesador puede manipular en las operaciones.
 
 		El acceso de la memoria principal toma mucho más tiempo que el tiempo de reloj disponible por el CPU, por ello es que los microprocesadores de 32 y 64 Bits poseen una textit{memoria caché} de alta velocidad.
-
+%------------------------------ MICROCONTROLADOR -----------------------------%
 		\section{Microcontrolador}
 		Una microcomputadora se compone de 3 bloques fundamentales: CPU, Memoria y los puertos de entrada/salida. Estos se conectan entre si mediante grupos de lineas eléctricas denominados buses; los cuales pueden ser de direcciones, si transportan direcciones de memoria, o de datos, si en cambio transportan datos o instrucciones, o de control si estos conducen diversas señales de control.
 
@@ -193,7 +193,7 @@
 			Las arquitecturas CISC predominaba en un inicio debido a la ambición de hacer los microprocesadores y microcontroladores los más potente posibles. Debido a la complejidad que fue aumentando lo hizo también la complejidad de la CPU y por ende se le debió dedicar un mayor espacio en el circuito integrado a la decodificadción y ejecución de las instrucciones.
 
 			Por el contrario las RISC tienen un repertorio corto de instrucciones sencillas que pueden realizar operaciones simples pero a alta velocidad. La complejidad del CPU disminuye, así que a frecuencia del oscilador puede aumentar y así mejorar la velocidad de ejecución de las operaciones. Esto támbien apoya en su fabricación siendo más sencillos y baratos de producir, por ello esta arquitectura ha sido la predominante en microcontroladores PIC.
-
+%----------------------------------- PIC32 -----------------------------------%
 		\section{PIC32MZ2048EFM100}
 		Es un microcontrolador de 32-bits que permite la conectividad embebida con una unidad de Punto Flotante, esta familia de microcontroladores poseen una gran cantidad de puertos de comunicación lo que permite que sea una opción bastante adecuada para proyectos en los que se necesite el intercambio de información entre varios dispositivos.\cite{PIC32MZ}
 
@@ -275,7 +275,7 @@
 		\end{table}
 
 		En particular esta familia de microcontroladores posee perifericos que operan a una mayor frecuencia que los microcontroladores tipicos usados para los sistemas embebidos. Esto es posible gracias al microprocesador que posee la CPU el cual contiene varios bloques lógicos que trabajan en conjunto en paralelo, proviendo un alto rendimiento de procesamiento.
-
+%---------------------------------- ADE7880 ----------------------------------%
 		\section{Medidor de Energía ADE7880}
 		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado así a partir de aquí para simplificar.}.
 
@@ -373,7 +373,7 @@
 
 				\begin{figure}[!htpb]
 					\centering
-					\includegraphics[scale = 1.0]{Material de Consulta/EntAnVlt.PNG}
+					\includegraphics[scale = 0.8]{Material de Consulta/EntAnVlt.PNG}
 					\caption[Entradas analógicas de Voltaje]{Esquema de entradas analógicas de voltaje.}
 					\label{EntVolt}
 				\end{figure}
@@ -383,7 +383,7 @@
 
 				\begin{figure}[!htpb]
 					\centering
-					\includegraphics[scale = 1.0]{Material de Consulta/ADC_SigDel.PNG}
+					\includegraphics[scale = 0.8]{Material de Consulta/ADC_SigDel.PNG}
 					\caption[Convertidor Analógico Digital]{Convertidor Analógico Digital.}
 					\label{ADCSigDel}
 				\end{figure}
@@ -498,9 +498,30 @@
 
 			\subsubsection{HSDC (High Speed Data Capture)}
 			Debido a que para este proyecto es necesario el recopilar una gran cantidad de muestras a alta velocidad la documentación del Circuito Integrado ADE7880 recomienda, para la lectura de estos registros en específico, utilizar una interfaz propia de Analog Devices para este circuito llamada High Speed Data Capture (Captura de Datos a Alta Velocidad) por lo que es necesario configurar el microprocesador de manera que se pueda usar la comunicación I$^2$C como interfaz serial principal y la comunicación HSDC como secundaria usando el canal SPI del microcontrolador como esclavo, que recibirá toda la información de los registros de voltaje y corriente enviados por esta interfaz.
+%---------------------------------- MPLAB X ----------------------------------%
+		\section{Entorno de Desarrollo MPLAB X}
+		Microchip provee un entorno de desarrollo y un compilador además de una variedad de herramientas para facilitar la configuración de sus dispositivos, de las cuales es MPLAB Harmony, TCP/IP Discoverer y MPFS Generator resultan de lás más útiles para desarrollar proyectos enfocados en los sistemas embebidos en dispositivos de la familia PIC32.
 
-		\section{Entorno de Desarrollo MPLABX}
-		Microchip provee un entorno de desarrollo y un compilador además de una variedad de herramientas para facilitar la configuración de sus dispositivos, de las cuales es MPLAB Harmony, TCP Discoverer y MPFS Generator resultan de lás más útiles para desarrollar proyectos enfocados en los sistemas embebidos en dispositivos de la familia PIC32.
+		Esta herramienta de desarrollo se le conoce como Entorno de Desarrollo Integrado (IDE) debido a que provee un entorno (Fig. \ref{Prin}) amigable y simple para desarrollar código para sistemas embebidos que utilicen microcontroladores de Microchip, cuenta con un editor de código en C, un manejador de archivos y un depurador de código con múltiples herramientas que facilitan el análisis en tiempo de ejecución.
+
+		\begin{figure}[!hpb]
+			\centering
+			\includegraphics[scale = 0.8]{Material de Consulta/VentPrin.PNG}
+			\caption[Ventana Principal]{Ventana Principal MPLAB X.}
+			\label{Prin}
+		\end{figure}
+
+		El manejador de archivos del IDE (Fig. \ref{ProjMan}) se encarga de organizarlos para que puedan ser enviados a los analizadores de lenguaje para ser ensamblados y compilados y finalmente enlazados al espacio de memoria
+		junto a las librerías del microcontrolador para poder crear los archivos necesarios que se vargaran a la memoria del microcontrolador. 
+
+		\begin{figure}[!htpb]
+			\centering
+			\includegraphics[scale = 0.8]{Material de Consulta/ProjMan.PNG}
+			\caption[Manejador de Archivos]{Manejador de Archivos de MPLAB X.}
+			\label{ProjMan}
+		\end{figure}
+
+		Para asegurarse que cada módulo trabaje de manera correcta con los otros el IDE tiene un depurador que realiza la ejecución de las pruebas de la aplicación simulando un microcontrolador o directamente sobre el hardware ayudandose de varias herramientas para controlar la ejecución del programa como: pausar usando de breakpoints y visualizar el valor de banderas y variables cuando el programa se haya detenido, avanzar linea por linea la ejecución de un código, reiniciar el contador del programa y finalmente detener la ejecución de una aplicación.
 
 			\subsection{Herramienta de configuración MPLAB Harmony}
 			Esta herramienta es un agregado para crear soluciones de firmware para sistemas embebidos usando los microcontroladores PIC32 de Microchip. MPLAB Harmony consta de librerías portables, modulares y compatibles de Microchip y asociados así como también provee la ventaja de facilitar el desarrollo de código capaz de ser reutilizable en aplicaciopnes embebidas que utilicen a los PIC32 como microcontrolador principal.
@@ -519,15 +540,70 @@
 
 			Los archivos pertenecientes a la aplicación se mantienen separados a los archivos de configuración, de esta manera una misma aplicación puede tener más de una configuración.
 
+			\subsection{Generador MPFS}
+			Para poder visualizar las páginas web en un sistema embebido no basta con solo con cargar la página en la memoria del microcontrolador ya que así no podria interactuar con las variables presentes en las aplicaciones. Por ello es necesario primero crear una imagen MPFS y añadir las variables dinámicas para agregar un encabezado que se encargará de enlazar la página web con la aplicación del microcontrolador para que interactuen entre sí y con el usuario final.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.6]{Material de Consulta/GenMPFS.PNG}
+				\caption[Generador MPFS]{Ventana del Generador MPFS.}
+				\label{MPFS}
+			\end{figure}
+
+			Las páginas web que se crean para interactuar con el microcontrolador es necesario colocar las variables dinámicas de la página web entre "~", de esta manera los cambios que realice el micocontrolador se visualizaran en la página web y viceversa las instrucciones que se envíen desde la página web el microcontrolador las realizará.
+
+			\subsection{TCPIP Discoverer}
+			Esta herramienta permite a la computadora de escritorio encontrar los dispositivos de Microchip que están conectados a la misma red local, mostrando las direcciones MAC e IP de las tarjetas de red con lo que ya se pueden acceder a las páginas web almacenadas en la memoria del microcontrolador. Con ello se pueden realizar pruebas de conexión y de visualización de las páginas web del sistema.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.5]{Material de Consulta/TCPIPdcvr.PNG}
+				\caption[TCPIP Discoverer]{Ventana TCPIP Discoverer.}
+				\label{TCPIP}
+			\end{figure}
+
+			También existe una aplicación (\ref{TCPIP2}) en la Microsoft Store que hace lo mismo y es más rápida de utilizar.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/DispTCP.PNG}
+				\caption[Dispositivos TCPIP]{Ventana de Dispositivos TCPIP.}
+				\label{TCPIP2}
+			\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DESARROLLO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Desarrollo}
-		En este capítulo de explicará la forma en la que se fue elaborando el proyecto.
+		En este capítulo se explicará la forma en la que se fue elaborando el proyecto. La programación del proyecto se realiza por parte del entorno de desarrollo de Microchip MPLAB X, mientras que la configuración de los puertos se realiza con la herramienta proporcionada por el mismo MPLAB Harmony debido a que la configuración manual sería demasiado complicada debido a la cantidad de puertos, pines y servicios disponibles por parte del microcontrolador.
 
+%---------------------------------- FIRMWARE ---------------------------------%
 		\section{Firmware}
-			\subsection{Inicialización}
-			La programación del proyecto se realiza por parte del entorno de desarrollo de Microchip MPLAB X, mientras que la conficuración de los puertos se realiza con la herramienta proporcionada por el mismo MPLAB Harmony debido a que la configuración manual sería demasiado complicada debido a la cantidad de puertos, pines y servicios disponibles por parte del microcontrolador. ya que esta es una actualización del módulo de medición de energía por lo que la inicialización esta parcialmente completa, sin embargo al realizar el cambio de canal de comunicación principal de SPI (\ref{ConfigSPI}) a I2C(\ref{ConfigI2C}) y HSDC(Este puerto utiliza la interfaz SPI del microcontrolador por lo que se reconectan los pines pero se deja la configuración ) se cambió las configuraciones de estos canales. Todas las demás siguieron igual a como se tenían en la primer versión del módulo.
+%+++++++++++++++++++++++++++++++++ ENCENDIDO +++++++++++++++++++++++++++++++++%
+			\subsection{Procedimiento de Encendido del Sistema}
+			Como se mencinó en el capítulo dedicado al ADE7880, es necesario el suministrarle 3.3[V] y con ello también requiere un periodo de inactividad para asegurar un voltaje estable para trabajar. Debido a esto y para tener los requerimientos necesarios para trabajar adecuadamente el microcontrolador PIC32MZEFM100 es el encargado de monitorear estos cambios.
+
+			Una vez que el voltaje es estable en el dispositivo se lleva a cabo un procedimiento de reinicio al ADE7880 por parte del PIC. Los pasos que deben llevarse a cabo son los siguientes esto con el objetivo de que este trabaje de manera correcta.
+
+			% DIAGRAMA DE FLUJO DE LA FUNCIÓN DE RESET DEL ADE7880 %
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/Diagrama de Flujo HW Reset.PNG}
+				\caption[Inicialización del ADE7880]{Diagrama de flujo del reinicio del ADE7880.}
+				\label{HWRST}
+			\end{figure}
+
+			Para iniciar el proceso de reinicio del ADE7880 se pone en bajo voltaje el pin de $\overline{RESET}$ durante 10[s] después se regresa a alto con esto el dispositivo entra en "Modo de Reinicio", este indica que el CI esta listo para usarse al colocar el pin $\overline{IRQ1}$ en bajo.
+%++++++++++++++++++++++++++++++ INICIALIZACION +++++++++++++++++++++++++++++++%
+			\subsection{Inicialización de Comunicación}
+			Ya que esta es una actualización del módulo de medición de energía por lo que la inicialización esta parcialmente completa, sin embargo al realizar el cambio de canal de comunicación principal de SPI (\ref{ConfigSPI}) a I2C(\ref{ConfigI2C}) y HSDC(Este puerto utiliza la interfaz SPI del microcontrolador por lo que se reconectan los pines pero se deja la configuración ) se cambió las configuraciones de estos canales. Todas las demás siguieron igual a como se tenían en la primer versión del módulo.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/Diagrama de Flujo Comunicacion.PNG}
+				\caption[Inicialización de Comunicación]{Diagrama de flujo de Inicialización de Comunicación.}
+				\label{DFConCom}
+			\end{figure}
 
 			\begin{figure}[!htpb]
 				\centering
@@ -539,7 +615,7 @@
 				\caption[Configuración I2C del PIC32MZ]{Configuración I2C del PIC32MZ.}
 				\label{ConfigI2C}
 			\end{figure}
-
+%++++++++++++++++++++++++++++++++ CONFIG I2C +++++++++++++++++++++++++++++++++%
 			\subsection{Configuración del puerto I$^2$C}
 			Este puerto se activa al encender el dispositivo o al realizar un reinicio de hardware, entonces el puerto I$^2$C queda seleccionado como interfaz de comunicación. Para evitar que al hacer cambios en el nivel de voltaje del pin $\overline{SS}$/HSA se cambie a la interfaz de comunicación SPI, se debe bloquear el puerto I$^2$C para ello se debe poner a 1 el Bit 1 (I2C\_LOCK) del registro CONFIG2, esto previene que al realizar cambios de voltaje en el pin $\overline{SS}$/HSA y el cambio a SPI no es posible hasta que se realize un reinicio de hardware o se reinicie todo el sistema.
 
@@ -558,17 +634,17 @@
 			\end{table}
 
 			Este registro se accesa como si fuera un registro de 8-Bits por lo que los 6 Bits más significativos deben permanecer como 0. En este caso en particular se transmite 0x02 a la dirección de registro 0xEC01.
-
+%++++++++++++++++++++++++++++++++ CONFIG HSDC ++++++++++++++++++++++++++++++++%
 			\subsection{Configuración del puerto HSDC}
 			Para configurar el puerto HSDC se debe escribir primero al registro HSDC\_CFG [0xE706] a traves del puerto I$^2$C la configuración con la que se van a estar enviando los datos a traves del puerto HSDC. Ya que se configura el puerto se habilita colocando el bit 6 (HSDCEN) en el registro CONFIG [0xE618] a 1, con esto se activa la comunicación.
 
-			La configuracion que se ha decidido usar es tener el reloj a 8[MHz] con la transmision de registros en paquetes de 32-bits, no se agrega una brecha de 7 ciclos de reloj entre transmisiones y unicamente se transmitira el contenido de los registros de voltaje y corriente: IAWV, VAWV, IBWV, VBWV, ICWV, VCWV, e INWV, lo que permite que se realice la comunicación de manera más rápida. El pin de selccion de esclavo ($\overline{SS}$ ó Chip Select) se mantiene como activo en bajo. %AUN SE ESTA PROBNADO SI FUNCIONARIA CON ACYIVO E BAJO O SE DEBE USAR COMO ACTIVO EN ALTO
+			La configuracion que se ha decidido usar es tener el reloj a 8[MHz] con la transmision de registros en paquetes de 32-bits, no se agrega una brecha de 7 ciclos de reloj entre transmisiones y unicamente se transmitira el contenido de los registros de voltaje y corriente: IAWV, VAWV, IBWV, VBWV, ICWV, VCWV, e INWV, lo que permite que se realice la comunicación de manera más rápida. El pin de selccion de esclavo ($\overline{SS}$ ó Chip Select) se mantiene como activo en bajo. %AUN SE ESTA PROBNADO SI FUNCIONARIA CON ACTIVO E BAJO O SE DEBE USAR COMO ACTIVO EN ALTO
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% RESULTADOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Resultados}
 	Como se explicó al principio el desarrollo de este proyecto se pensó como una mejora a los medidores de energía anteriormente fabricados por el Instituto de Ingeniería por lo que este, solo se centró únicamente en la lectura de muestras a alta velocidad por parte del microcontrolador.
-
+%------------------------------------ SPI ------------------------------------%
 		\section{Lectura de Datos Usando el Canal SPI}
 		En un principio el sistema medidor de energía estaba pensado para realizar la comunicación entre el microprocesador y el medidor ADE7880 con interfaz SPI sin embargo al momento de realizar las primeras pruebas, los registros correspondientes a los canales de medición de voltaje y corriente, pasado un tiempo los valores que se recuperan de los registros pierden coherencia lo que hace que los resultados sean inutiles para su análisis.
 
@@ -614,7 +690,7 @@
 			\caption[Gráficas de la primer prueba de los Canales de Corriente]{Gráficas de la primer prueba de los Canales de Corriente.}
 			\label{CanalCorriente}
 		\end{figure}
-
+%----------------------------------- HSDC ------------------------------------%
 		\section{Lectura de Datos usando el canal HSDC}
 		Las primeras pruebas que se realizaron usando este canal de comunicación inicia de manera correcta al configurar los valores necesarios en el registro correspondiente del ADE7880, se comprobó usando el osciloscopio que los paquetes de datos se envíen y reciban de manera correcta por el canal I2C para despues comprobar que el puerto HSDC realmente envíe información.
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -638,18 +714,20 @@
 		\hfill
 		\begin{itemize}
 			\item Bandera: Se le conoce como bandera a un bit en un registro que denota un valor binario que tiene un significado para el programa.
+
+			\item Bit: Voz tomada del inglés bit (acrónimo de bi[nary digi]t), que significa, en informática, ‘unidad de medida de información equivalente a la elección entre dos posibilidades igualmente probables’.%https://www.rae.es/dpd/bit 01/18/2020
 		\end{itemize}
 
 		\item[\LARGE C]
 		\hfill
 		\begin{itemize}
-			\item Compilador: 
+			\item Compilador: Es un traductor que transforma un programa entero de un lenguaje de programación (llamado código fuente) a otro. %Clocksin, William (1997). Clause and effect. Springer-Verlag. p. 93. ISBN 978-3-540-62971-9.
 		\end{itemize}
 
 		\item[\LARGE D]
 		\hfill
 		\begin{itemize}
-			\item Driver: .
+			\item Driver ó Controlador de Dispositivo: Componente software que permite que un dispositivo se entienda con el sistema operativo y pueda ser utilizado por las aplicaciones.
 		\end{itemize}
 
 		\item[\LARGE F]
@@ -670,10 +748,16 @@
 			\item Pipeline ó Registro de Arquitectura Paralela: Registro de datos en los que se permite la ejecución de las instrucciones de manera simultanea con la siguiente instrucción. Esta configuración requiere de un reloj de dos fases donde una se aplica al registro de direccionamiento y una al registro de datos.\cite{mano1994arquitectura}
 		\end{itemize}
 
+		\item[\LARGE R]
+		\hfill
+		\begin{itemize}
+			\item Registro: Un área pequeña de almacenamiento de alta velocidad donde se almacenan datos referentes a la ejecución de una instrucción particular. Los datos almacenados en un registro específico tienen un significado especial para la lógica de la computadora. %https://glosarios.servidor-alicante.com/informatica/registro
+		\end{itemize}
+
 		\item[\LARGE S]
 		\hfill
 		\begin{itemize}
-			\item Sistema Embebido: 
+			\item Sistema Embebido: Es un sistema de computación diseñado para realizar una o algunas funciones dedicadas frecuentemente en un sistema de computación en tiempo real.\cite{aguirre2014sistema}
 		\end{itemize}
 
 		\item[\LARGE V]
@@ -690,8 +774,9 @@
 	\bibliographystyle{apalike}
 	
 	\appendix
-	%\chapter{Hojas de Datos de la Familia PIC32MZ}
-	%	\includepdf[pages = {1,5,6,19,327,365,366,652,653,654,657,658,659,660,676,677,678,679}]{Material de Consulta/PIC32MZ}
+	\chapter{Características y pines PIC32MZ2048EFM100}
+		%\includepdf[pages = {19,327,365,366,652,653,654,657,658,659,660,676,677,678,679}]{Material de Consulta/PIC32MZ}
+		\includepdf[pages = {1,5,6}]{Material de Consulta/PIC32MZ}
 
 	\chapter{Pines del Medidor de Energía ADE7880}
 		\label{PinesADE7880}
