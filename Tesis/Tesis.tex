@@ -193,6 +193,101 @@
 			Las arquitecturas CISC predominaba en un inicio debido a la ambición de hacer los microprocesadores y microcontroladores los más potente posibles. Debido a la complejidad que fue aumentando lo hizo también la complejidad de la CPU y por ende se le debió dedicar un mayor espacio en el circuito integrado a la decodificadción y ejecución de las instrucciones.
 
 			Por el contrario las RISC tienen un repertorio corto de instrucciones sencillas que pueden realizar operaciones simples pero a alta velocidad. La complejidad del CPU disminuye, así que a frecuencia del oscilador puede aumentar y así mejorar la velocidad de ejecución de las operaciones. Esto támbien apoya en su fabricación siendo más sencillos y baratos de producir, por ello esta arquitectura ha sido la predominante en microcontroladores PIC.
+%----------------------------- SISTEMAS EMBEBIDOS-----------------------------%
+		\section{Sistemas Embebidos}
+		Un sistema embebido posee Software junto con Hardware que trabajan en conjunto a fin de lograr que estos puedan realizar funciones específicas y repetitivas en tiempo real, esto gracias a la miniaturizacion de componentes electrónicos y a su reducción de costos se permitió el desarrollo de los sistemas embebidos.
+		
+		Usualmente estos dispositivos se centran en facilitar la comunicación entre varios dispositivos con el fin de buscar una mayor interoperabilidad de sistemas y componentes, sin embargo, debido a su tamaño tienen fuertes limitaciones como lo son las lineas de comunicación con el ambiente. El funcionamiento de los sistemas embebdios se logra al utilizar un microcopntrolador que es el que se encarga de realizar todos las funciones en una pequeña pieza de circuito integrado. El microcontrolador es una pieza que incluye un microprocesador optimizado para funciones de control embebidas, comunmente en monitorear señales. Las señales se obtienen a partir de sensores que son dispositivos eléctrico y/o mecánicos encargados de transformar magnitudes físicas en eléctricas medibles por el microcontrolador.
+
+		Cualquier funcionalidad en un sistema embebido se compone de 3 aspectos: procesamiento, almacenamiento y comunicación. El procesamiento es la transfomración de de datos, el almacenamiento la retención de estos y la comunicación en la transferencia de un dispositivo a otro. De acuerdo con lo anterior la memoria es la parte más importante para el funcionamiento ya que es la que almacenará datos y subrutinas y bibliotecas del programa principal, por ello es necesario dividir este almacenamiento en 2 memorias separadas la memoria RAM y la ROM.
+
+		La memoria RAM tiene la posibilidad tanto de leer como escribir a altas velocidades pero con la desventaja de ser una memoria volátil, es decir, debe permanecer con alimentacion eléctrica todo el tiempo o de lo contrario se perderán los datos almacenados en ella. Caso contrario con la memoria ROM que esta puede contener un patrón permanente de datos que no pueden alterarse y a diferencia de la RAM, es no volátil por lo cual puede almacenar funciones de uso frecuente como subrutinas de bibliotecas, programas del sistema entre otros.
+
+			\subsection{Protocolos de Comunicación}
+			Para poder establecer la comunicación entre dispositivos es necesario definir las normas que indican como se establecerá. Los puntos principales que definen un protocolo de comunicación son:
+
+			\begin{itemize}
+				\item Sintaxis: Se encarga de definir el formato y el nivel de la señal.
+
+				\item Semántica: Es la que incluye la información de control para la coordinación y manejo de errores.
+
+				\item Temporización: Indica la secuencia y la velocidad de sincronización entre ambas partes.
+			\end{itemize}
+
+			Los protocolos que se usan en los sistemas embebidos se basan en protocolos de comunicación utilizados en computadoras. Los protocolos más comúnes son las comunicaciones en paralelo y serie en donde el primero transmite bits de una sola vez, sin embargo, este tipo de comunicación tiene la desventaja de ser más suceptible al ruido eléctrico debido a que deben utilizar una gran cantidad de lineas lo que a su vez hace que se sacrifiquen muchos pines del microcontrolador. En cambio con la comunicación serial los bits son enviados uno a uno, haciendo la comuinicación más lenta.
+
+			Esta comunicación tiene dos modos de transmisión la Síncrona que consta en el envío de una trama que configura un bloque de información comenzando con un conjunto de bits de inicio y uno de fin con lo que se sincronizan los relojes de ambas partes para poder entablar comunicación. Un sistema de comunicación Síncrono se basa en 2 registros que comparten un reloj, esto permite que una palabra de N-bits se pueda transmitir en N ciclos de reloj de un dispositivo maestro a los dispositivos esclavos. En una comunicación Síncrona el dispositivo maestro es el que controla todos los aspectos de la comunicación, indica la velocidad de transmisión, el tamaño de la palabra y el dispositivo receptor\cite{moyanoclase}.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.7]{Material de Consulta/SincCom.PNG}
+				\caption[Comunicación Síncrona]{Transmisión sincrona de una palabra\cite{perez2016protocolos}.}
+				\label{SincCom}
+			\end{figure}
+			
+			La comunicación Asíncrona el dispositivo emisor es el que decide el momento en el que se va a enviar el mensaje, por ello el emisor debe enviar un bit de cabecera que va al inicio de cada caracter y un o dos bits de finalización, con esto se busca que ambas partes puedan sincronizar sus relojes y decodificar el mensaje.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/AsincCom.PNG}
+				\caption[Comunicación Síncrona]{Transmisión asincrona de una palabra.}
+				\label{AsincCom}
+			\end{figure}
+
+			\subsection{BUS Inter-Integrated Circuited (I2C)}
+			Es un protocolo de comunicación serial desarrollado por Phillips Semiconductors al principio de los años 80's con el fin de proveer una forma simple de comuniocación entre CI de las TVs. Los dispositivos periféricos en los sistemas embebidos comunmente son conectados al microcontrolador como dispositivos mapeados de memoria de E/S, estos usan al microcontrolador como bus de datos y como direccionamiento paralelo. Esto resulta con la desventaja de resultar en demasiadas líneas de comunicación en los PCBs para interconectarlos.
+
+			El bus I$^2$C permite enlazar múltiples CI y sensores gracias a que es un bus de direccionamiento, esto es, se asigna un campo de dirección de 7 ó 10 bits dentro del mensaje que permite que los mensajes lleguen al dispositivo seleccionado por el maestro.
+
+			La comunicación usa ina línea de datos en serie (SDA) y una de pulsos de reloj (SCL) ambas bidireccionales de colector abierto, esto para permitir una conexión de varios dispositivos al mismo bus. Cada dispositivo tiene una dirección única con la cual el maestro puede acceder a la transferencia de datos de cada uno evitando que otro dispósitivo conectado al mismo bus reciba datos que no le corresponden. Este protocolo admite la operación multimaestro con detección de coliciones y arbitraje para evitar que 2 ó más dispositivos que actuen como maestros inicien transferencias de datos al mismo tiempo. Las señales de reloj se producen en pulsaciones, una por cada bit transferido. Los datos son válidos mientras el reloj esté en alto.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/ConectionI2C.PNG}
+				\caption[Conexión I$^2$C entre dispositivos]{Ejemplo de la conexión I$^2$C entre varios dispositivos.}
+				\label{I2CConEx}
+			\end{figure}
+
+			Esrta interfaz está orientada a la transferencia en paquetes de 8-bits, es decir, en bytes. En un inicio la única velocidad permitida era de 100[KHz] que se denomino como estándar, pero con el paso del tiempo y dependiendo del dispositivo se pueden configurar a mayores velocidades, alcanzando transferencias de 400[Kbits/s] (Modo rápido), 1[Mbit/s] (Rápido +), y 3.4[Mbits/s] en modo de alta velocidad (HS).
+
+			Todas las transiciones del bus comienzan con un bit de inicio generado por el maestro. El inicio se indica cuando el maestro pone la línea de SDA en bajo mientras SCL está en alto. Cuando se produce esta condición el bus se considera ocupado. Todas las transferencias son de 1 byte cada una seguida de un bit de ACK (Acknowledgement ó recibido). Cada transferencia empieza por el bit más significativo (MSB), en caso de que el dispositivo esclavo se encuentre ocupado es posible que este ponga la linea de SCL en vajo, forzando al maestro a que espere que el esclavo libere la línea.
+
+			El bit ACK segenera una vez que el dispositivo de transmisión libera la linea SDA, en caso de que no se reconozca el byte recibido el esclavo no coloca la linea SDA en bajo y entonces genera un bit de NACK (Not Acknowledgement ó no recibido).
+
+			Inmediatamente después de la condición de inicio, se emite una dirección secundaria (7 ó 10 bits) esto es para indicar la dirección de memoria a acceder en el dispositivo esclavo, más un bit de indicación de lactura/escritura. Comúnmente un nivel lógico bajo significará una operación de escritura mientras que un nivel lógico alto será una operación de lectura.
+
+			El bit de alto es una transición de bajo a alto en la línea de datos mientras la linea de reloj permanece en alto. Después de la señal de parada el bus vuelve a estar libre.
+
+			%https://www.digikey.com.mx/es/articles/why-the-inter-integrated-circuit-bus-makes-connecting-ics-so-easy
+
+			%https://www.esacademy.com/en/library/technical-articles-and-documents/miscellaneous/i2c-bus/general-introduction/history-of-the-i2c-bus.html
+
+			\subsection{BUS Serial Peripheral Interface (SPI)}
+			Es un estándar de comunicación desarrollado por Motorolaen 1985 diseñado para la intercomunicación entre dispositivos a corta distancia. Utiliza un bus de 4 líneas de manera síncrona con estructura tipo maestro-esclavo, donde el maestro es el encargado de direccioinar al dispositivo al que se desea comunicar los datos para iniciar la trasferencia.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.8]{Material de Consulta/ConectionSPI.PNG}
+				\caption[Conexión SPI entre dispositivos]{Ejemplo de la conexión SPI entre varios dispositivos.}
+				\label{SPIConEx}
+			\end{figure}
+
+			Esta interfaz provee la ventaja de ser direccionada de manera simple por hardware ya que ofrece flexibilidad para la cantidad de bits transferidos además de controlar la cantidad de dispositivos que se pueden conectar al dispositivo maestro gracias a que opera con canales duplex y una o más lineas para la habilitación de dispositivos, logrando alcanzar velocidades de hasta 50[MHz], bastante útil para transferir flujos de datos largos.
+
+			El dispositivo maestro por lo general es un microcontrolador que suministera y controla el reloj (SCLK) y las líneas de de selección de dispositivo (CS). La comunicación se logra a traves de las 2 líneas de datos una para el envío (MOSI) y una para la recepción (MISO) de paquetes de datos. Estas líneas actúan conjuntamente en todos los dispositivos esclavos por lo que paera que no sucedan colisiones el dispositivo maestro elegirá el dispositivo activo con la linea de CS. Esto límita la cantidad de dispositivos esclavos que puede manejar el maestro por los pines disponibles.
+
+			Los modos de muestreo de reloj en este protocolo se controlan desde el dispositivo maestro. Los atributros que definen el modo en el que se muestrean los datos son la polaridad (CPOL) y la fase (CPHA), estos son los que controlan el flanco de reloj activo donde se muestrean los datos. La polarización indica la lógica en la que se presenta activo el reloj.
+
+			\begin{figure}[!htpb]
+				\centering
+				\includegraphics[scale = 0.6]{Material de Consulta/CLK_SPI.PNG}
+				\caption[Modos de reloj SPI]{Modos de muestreo del reloj en dispositivos SPI.}
+				\label{SPICLK}
+			\end{figure}
+
+			Los sensores son los dispositivos que más incorporan este protocolo esto debido a que presentan un amplia variedad de transferencia de datos digitales. Muchos de los diseñadores de CI han incrementando las funcionalidades como lo son los aisladores que ofrecen, como lo dice su nombre, aislamiento entre 2 dispositivos que se comunican a traves de SPI además de funcionar como extensor útil de la interfaz, aunque si se realiza esto último la velocidad del reloj se verá disminuida a razon de pérdida de 1[Mbit/s] por cada 10[m].
+			%https://www.digikey.com.mx/es/articles/why-how-to-use-serial-peripheral-interface-simplify-connections-between-multiple-devices
+			
 %----------------------------------- PIC32 -----------------------------------%
 		\section{PIC32MZ2048EFM100}
 		Es un microcontrolador de 32-bits que permite la conectividad embebida con una unidad de Punto Flotante, esta familia de microcontroladores poseen una gran cantidad de puertos de comunicación lo que permite que sea una opción bastante adecuada para proyectos en los que se necesite el intercambio de información entre varios dispositivos.\cite{PIC32MZ}
@@ -350,7 +445,7 @@
 
 			\subsection{Operación del ADE7880}
 				\subsubsection{Entradas analógicas}
-				Se tienen 7 entradas analógicas que forman los canales de corriente y voltaje. Los canales de corriente constan de 4 pares de entradas IxP/IxN\footnote{x: Canales A, B, C y N respectivamente} diferenciales los cuales tienen un máximo de señal $\pm$0.5[V] e igual con respecto a la señal en AGND\footnote{Referencia a tierra para el circuito analógico.}.
+				Contiene 7 entradas analógicas que forman los canales de corriente y voltaje. Los canales de corriente constan de 4 pares de entradas IxP/IxN\footnote{x: Canales A, B, C y N respectivamente} diferenciales los cuales tienen un máximo de señal $\pm$0.5[V] e igual con respecto a la señal en AGND\footnote{Referencia a tierra para el circuito analógico.}.
 
 				\begin{figure}[!htpb]
 					\centering
@@ -359,7 +454,7 @@
 					\label{EntCrnt}
 				\end{figure}
 
-				Todas las entradas poseen un Amplificador Programable de Ganancia (PGA por sus siglas en inglés) con una selección de 1, 2, 4, 8 ó 16. Las ganancias presentes en IA, IB e IC se colocan en un registro diferente a IN\footnote{Entrada analógica del canal de corriente neutral.} para obtener una ganancia diferente a las 3 primeras.
+				Todas las entradas poseen un Amplificador Programable de Ganancia (PGA por sus siglas en inglés) con una selección de x1, x2, x4, x8 ó x16. Las ganancias presentes en IA, IB e IC se colocan en un registro diferente a IN\footnote{Entrada analógica del canal de corriente neutra.} para obtener una ganancia diferente a las 3 primeras.
 
 				\begin{figure}[!htpb]
 					\centering
@@ -388,7 +483,7 @@
 					\label{ADCSigDel}
 				\end{figure}
 
-				El módulo $\Sigma$-$\Delta$ convierte la señal de entrada en un flujo en serie de "1" y "0" a un tiempo determinado por el reloj de muestreo (En el ADE7880 este reloj es de 1.024[MHz]). El DAC\footnote{Convertidor Digital Analógico.} de 1-bit en el bucle de retroalimentación es llevado por el flujo de datos en serie, entonces la la salida del DAC es sutraida de la señal de entrada. Si el bucle de ganancia es lo suficientemente alto el valor promedio de la salida del DAC puede aproximarse al nivel de la señal de entrada. El promedio es pasado entonces a un filtro digital pasa-bajas que produce una palabra de 24-bits proporcional al nivel de la señal de entrada.
+				El módulo $\Sigma$-$\Delta$ convierte la señal de entrada en un flujo en serie de 1 y 0 a un tiempo determinado por el reloj de muestreo (En el ADE7880 este reloj es de 1.024[MHz]). El DAC\footnote{Convertidor Digital Analógico.} de 1-bit en el bucle de retroalimentación es llevado por el flujo de datos en serie, entonces la la salida del DAC es sutraida de la señal de entrada. Si el bucle de ganancia es lo suficientemente alto el valor promedio de la salida del DAC puede aproximarse al nivel de la señal de entrada. El promedio es pasado entonces a un filtro digital pasa-bajas que produce una palabra de 24-bits proporcional al nivel de la señal de entrada.
 
 				\subsubsection{Filtro Antialias}
 				Este filtro se encuentra a la entrada del ADC y su función es la de prevenir el solapamiento que se presenta en todos los sistemas de muestreo.
@@ -575,7 +670,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DESARROLLO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\chapter{Desarrollo}
-		En este capítulo se explicará la forma en la que se fue elaborando el proyecto. La programación del proyecto se realiza por parte del entorno de desarrollo de Microchip MPLAB X, mientras que la configuración de los puertos se realiza con la herramienta proporcionada por el mismo MPLAB Harmony debido a que la configuración manual sería demasiado complicada debido a la cantidad de puertos, pines y servicios disponibles por parte del microcontrolador.
+		En este capítulo se explicará la forma en la que se fue elaborando el proyecto. La programación del proyecto se realiza por parte del entorno de desarrollo de Microchip MPLAB X, mientras que la configuración de los puertos se realiza con la herramienta proporcionada por el mismo MPLAB Harmony debido a que la configuración manual sería demasiado complicada debido a la cantidad de puertos, pines y servicios disponibles por parte del microcontrolador que se utilizan para este dispositivo además de la medición de energía.
 
 %---------------------------------- FIRMWARE ---------------------------------%
 		\section{Firmware}
