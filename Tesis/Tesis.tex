@@ -370,6 +370,14 @@
 		\end{table}
 
 		En particular esta familia de microcontroladores posee perifericos que operan a una mayor frecuencia que los microcontroladores tipicos usados para los sistemas embebidos. Esto es posible gracias al microprocesador que posee la CPU el cual contiene varios bloques lógicos que trabajan en conjunto en paralelo, proviendo un alto rendimiento de procesamiento.
+
+		Este microcontrolador usa una interfaz ICD (In Circuit Debugger) que es un depurador/programador que ofrece una solución de programación integrada y una herramienta de depuración rápida y sencilla. Utiliza 2 pines PGECx1 y PGEDx1 para las operaciones de depuración y programación, las líneas de este puerto deben quedar lo más cercano al circuito integrado conel fin de que existan la menor cantidad de interferencias y de pérdida de velocidad por distancia.
+
+		Cuando se desarrolla un proyecto en el que queden pines sin usar estos por lo general deberán colocarse como salidas y se deberán poner en un nivel lógico bajo para que no haya interferencias externas que puedan afectar el desempeño del CI. La memoria disponible en este CI es de 4GB que son espacios de direcciones virtuales unificadas. Este puede ser particionado para que para ser usado por el kernel y por el usuario y en particular esta familia permite la ejecución desde la memoria de datos.
+
+		La comunicación SPI presente en este microcopntrolador permiteque se pueda configurar como maestro ó esclavo, posee 4 modos de reloj y con opción de transferencia de paquetes de datos de 8, 16, 32-bits en buffers separados para el envío y recepción e interrupciones al termino de las transferencias. Esta interfaz de comunicación puede operar tanto en modo de reposo como en suspensión.
+
+		La interfaz I$^2$C tiene soporte completo tanto para modo esclavo como para multi maestro. Cada módulo ofrece, además del soporte maestro-esclavo, direccionamientode 7 y 10-bits para ambos modos, transferencias bidireccionales y sincronizacion serial que puede configurarse como mecanismo "handshake" para suspender y a reanudar la transferencia serial. Al poseer un modo multimaestro tiene la capacidad de detectar colisiones y arbitrarear las transferencias acorde a la comunicación.
 %---------------------------------- ADE7880 ----------------------------------%
 		\section{Medidor de Energía ADE7880}
 		Este Circuito Integrado es un medidor de energía eléctrica trifasica de alta precisión, con interfaces de comunicación serial I$^2$C y SPI. Es adecuado para la medición de energía electrica activa, reactiva y aparente en varias configuraciones trifásicas, además posee registros de muestreo de formas de onda para todas las salidas del Convertidor Análogico Digital incluido en el CI\footnote{Circuito Integrado ADE7880 renombrado así a partir de aquí para simplificar.}.
